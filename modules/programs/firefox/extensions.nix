@@ -4,7 +4,7 @@
   ...
 }: let
   inherit (lib.options) mkOption;
-  inherit (lib.attrsets) attrNames listToAttrs nameValuePair;
+  inherit (lib.attrsets) attrNames listToAttrs nameValuePair optionalAttrs;
   inherit (lib.lists) elem map;
   inherit (lib.types) attrsOf submodule path str enum;
   inherit (lib.trivial) warnIfNot;
@@ -20,7 +20,14 @@
     betterttv = "firefox@betterttv.net";
     frankerfacez = "frankerfacez@frankerfacez.com";
     disable-twitch-extensions = "disable-twitch-extensions@rootonline.de";
+    sidebery = "{3c078156-979c-498b-8990-85f7987dd929}";
     bento = "{cb7f7992-81db-492b-9354-99844440ff9b}";
+  };
+
+  langToExtension = lang: nameValuePair lang {
+    addonID = "langpack-${lang}@firefox.mozilla.org";
+    installUrl = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+    installMode = "force_installed";
   };
 
   cfg = config.modules.programs.firefox;
@@ -29,6 +36,7 @@ in {
     type = attrsOf (submodule (
       {name, ...}: {
         options = {
+
 	  shortID = mkOption {
 	    visible = false;
 	    type = str;
@@ -71,15 +79,11 @@ in {
     description = "Firefox extension settings by shortID";
   };
 
-  config.modules.programs.firefox.extensions = listToAttrs (
-    map (
-      lang:
-      nameValuePair lang {
-	addonID = "langpack-${lang}@firefox.mozilla.org";
-	installUrl = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
-	installMode = "force_installed";
-      }
-    ) cfg.languagePacks
-  );
+  config = {
+    modules.programs.firefox.extensions = 
+    listToAttrs (
+      (map langToExtension cfg.languagePacks)
+    ) // {sidebery = {};};
+  };
 }
 

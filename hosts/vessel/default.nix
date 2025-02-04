@@ -1,14 +1,15 @@
-{pkgs, ... }:
 {
+  pkgs, 
+  ... 
+}: {
   imports = [ 
-      ./hardware-configuration.nix
-      ./disk-config.nix
-     
-      ./modules
-    ];
+    ./hardware-configuration.nix
+    ./disk-config.nix
+
+    ./modules
+  ];
   
-  environment.systemPackages = with pkgs; 
-  [
+  environment.systemPackages = with pkgs; [
     (python3.withPackages (ps: with ps; [
       dbus-python
     ]))

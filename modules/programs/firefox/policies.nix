@@ -38,7 +38,7 @@ in {
   ExtensionSettings = (mkExtensions cfg.extensions) // {
     # Blocks about:debugging
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1778559
-    "*".installation_mode = "blocked";
+    #"*".installation_mode = "blocked";
   };
   ExtensionUpdate = false;
 

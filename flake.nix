@@ -21,6 +21,11 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
+    textfox = {
+      url = "/home/nyoo/dev/textfox";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Secret manager
     agenix = {
       url = "github:ryantm/agenix";

@@ -1,9 +1,7 @@
 {
   cfg,
-}: let
-  inherit (cfg.theme.colors) backgroundDark background foreground;
-
-in {
+  ...
+}: {
   # Source : 
   # https://github.com/schizofox/schizofox/blob/cdf69b2a445ff12680657a3bd44ce7c406bf2ae6/flake/modules/home-manager/firefox/preferences/default.nix
   #
@@ -31,13 +29,12 @@ in {
   #  - 3=resume previous session
   # Note: this breaks 'browser.setup.homepage', so we should handle
   # this behaviour there instead.
-  "browser.startup.page" = 1;
-  "browser.startup.homepage" = cfg.homePage;
+  "browser.startup.page" = 0;
 
   # NEWTAB page
   #  - true=Firefox Home (default)
   #  - false=blank page
-  "browser.newtabpage.enabled" = true;
+  "browser.newtabpage.enabled" = false;
 
   # Disable sponsored content on Firefox Home (Activity Stream)
   "browser.newtabpage.activity-stream.showSponsored" = false;
@@ -47,8 +44,6 @@ in {
   "browser.newtabpage.activity-stream.default.sites" = "";
 
   # Disable using the OS's geolocation service
-  # Note: we disable geolocation for *all* OSes, although
-  # Schizofox is only officially supported on Linux.
   "geo.provider.use_geoclue" = false; # Linux
   "geo.provider.use_corelocation" = false; # Darwin
   "geo.provider.ms-windows-location" = false; # Windows
@@ -224,6 +219,21 @@ in {
   "browser.urlbar.quicksuggest.enabled" = false;
   "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
   "browser.urlbar.suggest.quicksuggest.sponsored" = false;
+  "browser.urlbar.suggest.quicksuggest.addons" = false;
+  "browser.urlbar.suggest.quicksuggest.bookmark" = false;
+  "browser.urlbar.suggest.quicksuggest.calculator" = false;
+  "browser.urlbar.suggest.quicksuggest.engines" = false;
+  "browser.urlbar.suggest.quicksuggest.history" = false;
+  "browser.urlbar.suggest.quicksuggest.mdn" = false;
+  "browser.urlbar.suggest.quicksuggest.openpage" = false;
+  "browser.urlbar.suggest.quicksuggest.pocket" = false;
+  "browser.urlbar.suggest.quicksuggest.recentsearches" = false;
+  "browser.urlbar.suggest.quicksuggest.remotetab" = false;
+  "browser.urlbar.suggest.quicksuggest.searches" = false;
+  "browser.urlbar.suggest.quicksuggest.topsites" = false;
+  "browser.urlbar.suggest.quicksuggest.trending" = false;
+  "browser.urlbar.suggest.quicksuggest.weather" = false;
+  "browser.urlbar.suggest.quicksuggest.yelp" = false;
 
   # Disable live search suggestions
   # Note: Both must be true for live search to work in the location bar
@@ -594,7 +604,7 @@ in {
 
   # Set/enforce what items to clear on shutdown
   # Note: If "history" is true, downloads will also be cleared
-  "privacy.clearOnShutdown.cache" = true;
+  "privacy.clearOnShutdown.cache" = false;
   # "privacy.clearOnShutdown_v2.cache" = security.sanitizeOnShutdown.sanitize.cache;
   "privacy.clearOnShutdown.downloads" = false;
   "privacy.clearOnShutdown.formdata" = false;
@@ -604,7 +614,7 @@ in {
   "privacy.clearOnShutdown.siteSettings" = false;
 
   # Set Session Restore to clear on shutdown
-  "privacy.clearOnShutdown.openWindows" = true; #  Not needed if Session Restore is not used
+  "privacy.clearOnShutdown.openWindows" = false; #  Not needed if Session Restore is not used
 
   ## SANITIZE ON SHUTDOWN: RESPECTS "ALLOW" SITE EXCEPTIONS FF103+ | v2 migration is FF128+ ***/
   # Set "Cookies" and "Site Data" to clear on shutdown (if 2810 is true) [SETUP-CHROME]
@@ -754,13 +764,12 @@ in {
   "layout.css.moz-document.content.enabled" = true;
 
   # Set default page colors
-  "browser.display.background_color.dark" = "#${background}";
-  "browser.display.focus_background_color.dark" = "#${backgroundDark}";
-  "browser.display.foreground_color.dark" = "#${foreground}";
-  "browser.display.focus_text_color" = "#${foreground}";
+  "browser.display.background_color.dark" = "#${cfg.theme.backgroundColor}";
+  "browser.display.focus_background_color.dark" = "#${cfg.theme.backgroundColor}";
+  "browser.display.foreground_color.dark" = "#${cfg.theme.foregroundColor}";
+  "browser.display.focus_text_color" = "#${cfg.theme.foregroundColor}";
 
   # Enable Dark Theme Default
-  "extensions.activeThemeID" = "firefox-compact-dark@mozilla.org";
   "ui.systemUsesDarkTheme" = 1;
 
   # Do not tell what plugins do we have enabled.
@@ -772,7 +781,6 @@ in {
   # Disable Firefox View Button
   # Note: currently does not work, and must be managed imperatively.
   # XXX: Enterprise policy might be able to resolve this.
-  # temp-fix: this is hidden in userChrome.css
   "browser.tabs.firefox-view" = false;
 
   # Disable bookmarks bar 
@@ -947,7 +955,13 @@ in {
   "browser.search.modernConfig" = false;
 
   # Canvas fingerprint protection
-  "privacy.resistFingerprinting" = true;
+  "privacy.resistFingerprinting" = false;
+
+  # Be aware this breaks resistfingerprinting (not by much)
+  # However firefox rfp should not be held to the highest scrutiny
+  # because that is what tor is for. Firefox lets us comprimise for looks
+  "privacy.fingerprintingProtection" = true;
+  "privacy.fingerprintingProtection.overrides" = "+AllTargets,-CSSPrefersColorScheme";
   "privacy.trackingprotection.cryptomining.enabled" = true;
   "privacy.trackingprotection.fingerprinting.enabled" = true;
 
