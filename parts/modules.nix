@@ -12,18 +12,6 @@
   inherit
     (lib.lists)
     foldl
-    length
-    reverseList
-    ;
-
-  inherit
-    (lib.strings)
-    concatStringsSep
-    ;
-
-  inherit
-    (lib.options)
-    mkOption
     ;
 
   inherit
@@ -31,65 +19,35 @@
     readDir
     ;
 
-  setAttrAlongPath = attrPath: value: let
-    backWalk = acc: n:
-      acc
-      // {
-        ${n} = acc // {imports = value;};
-      };
-  in
-    removeAttrs (foldl backWalk {imports = value;} (reverseList attrPath)) ["imports"];
-
   mkModuleTree = path: let
-    mkModuleTree' = dirList: let
-      filePath = path + ("/" + (concatStringsSep "/" dirList));
-      allFiles = readDir filePath;
-      dirFiles = attrNames (filterAttrs (_: v: v == "directory") allFiles);
-    in
-      # End branch when a module file is found
-      # There shouldn't be multiple module files sharing a parent folder
-      if allFiles ? "module.nix"
-      then {imports = [(filePath + "/module.nix")];}
-      # Directory case
-      else
-        foldl (
-          acc: file: let
-            subDirList = dirList ++ [file];
-            result = mkModuleTree' subDirList;
-          in
-            # A module file leaf
-            if (length (attrNames result) == 1)
-            then
-              acc
-              // {
-                ${file} = result;
-                imports =
-                  (acc.imports or [])
-                  ++ result.imports
-                  ++ [
-                    {
-                      options = setAttrAlongPath subDirList (mkOption {
-                        readOnly = true;
-                        internal = true;
-                      });
-                    }
-                  ];
-              }
-            # Branch contains module file
-            else if (result != {})
-            then
-              acc
-              // {
-                ${file} = result;
-                imports = (acc.imports or []) ++ result.imports;
-              }
-            else acc
-        ) {}
-        dirFiles;
+    allFiles = readDir path;
+    dirFiles = attrNames (filterAttrs (_: v: v == "directory") allFiles);
   in
-    removeAttrs (mkModuleTree' []) ["imports"];
+    # End branch when a module file is found
+    # There shouldn't be multiple module files sharing a parent folder
+    if allFiles ? "module.nix"
+    then {imports = [(path + "/module.nix")];}
+    # Directory case
+    else
+      foldl (
+        acc: file: let
+          result = mkModuleTree (path + "/${file}");
+        in
+          # Branch(s) with module leaf
+          if (result != {})
+          then
+            acc
+            // {
+              ${file} = result;
+              all.imports = (acc.all.imports or []) ++ (result.imports or result.all.imports);
+            }
+          # Branch with no module file
+          else acc
+      ) {}
+      dirFiles;
 in {
   # Disable apply function which breaks set accessing
   disabledModules = ["${inputs.flake-parts.outPath}/modules/nixosModules.nix"];
+
   flake.nixosModules = mkModuleTree ../modules;
 }
