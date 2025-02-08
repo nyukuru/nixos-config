@@ -13,8 +13,8 @@
 
     modules = self.nixosModules;
     # Option definitions and wrappers
-    system = modules.system.all;
-    programs = modules.programs.all;
+    system = modules.system;
+    programs = modules.programs;
     # Defines sane defaults
     common = modules.common;
     # Specification defaults for specific archetypes

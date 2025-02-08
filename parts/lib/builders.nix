@@ -6,6 +6,7 @@
 }: let
   inherit (lib) nixosSystem;
   inherit (lib.attrsets) recursiveUpdate;
+  inherit (lib.lists) map;
 
   # TODO clean this.
   mkNixosSystem = {
@@ -35,7 +36,7 @@
                 nixpkgs.hostPlatform = system;
               }
             ]
-            ++ modules;
+            ++ map (n: n.all or n) modules;
         }
     );
 in {
