@@ -4,9 +4,7 @@
   lib,
   ...
 }: let
-  inherit (inputs) self nixpkgs;
   inherit (lib) nixosSystem;
-  inherit (lib.modules) mkDefault;
   inherit (lib.attrsets) recursiveUpdate;
 
   # TODO clean this.

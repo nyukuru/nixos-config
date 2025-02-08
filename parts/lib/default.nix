@@ -30,7 +30,6 @@
     secrets = callLibs ./secrets.nix;
   });
 
-
   # Compose all imported libraries
   extensions = composeManyExtensions [
     myLib
@@ -41,5 +40,6 @@
 
 in {
   perSystem._module.args.lib = lib';
+  _module.args.lib = lib';
   flake.lib = lib';
 }    

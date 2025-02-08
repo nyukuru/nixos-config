@@ -1,27 +1,20 @@
-{inputs, ...}: {
+{inputs, self, ...}: {
   flake.nixosConfigurations = let
-    inherit (inputs.self) lib;
+    inherit (self) lib;
 
     inherit (lib.builders) mkNixosSystem;
     inherit (lib.lists) concatLists flatten;
 
     hw = inputs.nixos-hardware.nixosModules;
 
-    # TODO change module importing
-
-    # NixOS modules here
-    modulePath = ../modules;
-
+    modules = self.nixosModules;
     # Option definitions and wrappers
-    system = modulePath + /system;
-    programs = modulePath + /programs;
-
+    system = modules.system;
+    programs = modules.programs;
     # Defines sane defaults
-    defaults = modulePath + /core;
-    common = defaults + /common;
-
+    common = modules.common;
     # Specification defaults for specific archetypes
-    laptop = defaults + /forms/laptop;
+    laptop = modules.forms.laptop;
 
     mkModules = {
       forms ? [],

@@ -2,13 +2,20 @@
   lib,
   ...
 }: let
-  inherit (lib.attrsets) attrNames mapAttrsToList getAttr;
-  inherit (lib.lists) head elem;
+  inherit (lib.attrsets) attrNames attrValues mapAttrsToList getAttr isAttrs;
+  inherit (lib.lists) head elem any filter;
 
   attrHead = x: getAttr (head (attrNames x)) x;
   # Inefficient but fine for now
-  attrAny = pred: x: elem true (mapAttrsToList (_: pred) x);
+  attrAny = pred: elem true (mapAttrsToList (_: pred));
+
+  hasAttrRecursive = set: e:
+    if set ? ${e} then true
+    else any hasAttrRecursive (filter isAttrs (attrValues set));
+
 in {
-  inherit attrHead;
-  inherit attrAny;
+  inherit 
+    attrHead
+    attrAny
+    hasAttrRecursive;
 }

@@ -1,7 +1,7 @@
 {
   imports = [
-  ./system.nix
-  ./programs.nix
+  ./system
+  ./programs
   #./style.nix
   ];
 }

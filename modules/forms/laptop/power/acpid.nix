@@ -1,6 +1,4 @@
 {
-  ...
-}: {
   services = {
     acpid = {
       enable = true;

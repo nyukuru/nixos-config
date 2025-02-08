@@ -1,16 +1,11 @@
 {
   config,
   pkgs,
-  lib,
   ...
-}: let 
-  inherit (lib.modules) mkDefault;
-
-in {
+}: {
   imports = [
     ./auto-cpufreq.nix
     ./acpid.nix
-    ./undervolt.nix
     ./upower.nix
   ];
   

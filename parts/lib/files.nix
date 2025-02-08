@@ -1,6 +1,14 @@
-{ lib, ...}: let
-  inherit (builtins) map attrNames readDir head split baseNameOf;
-  inherit (lib) filterAttrs;
+{
+  lib,
+  ...
+}: let
+  inherit (lib.strings) readFile concatMapStringsSep;
+  inherit (lib.lists) map;
+  inherit (lib.attrsets) mapAttrs attrNames filterAttrs;
+
+  # Provide functions reference outside of builtins
+  readDir = builtins.readDir;
+  baseNameOf = builtins.baseNameOf;
 
   filesIn = dir: (map
     (filename: dir + "/${filename}")
@@ -13,7 +21,22 @@
         (_: val: val == "directory")
         (readDir dir))));
 
-  fileNameOf = path: (head (split "\\." (baseNameOf path)));
+  concatMapFiles = list:
+    concatMapStringsSep "\n" (x: readFile x) list;
+
+  recursiveFileTree = dir:
+    mapAttrs 
+      (n: v:
+	if v == "directory" 
+	then recursiveFileTree (dir + "/${n}")
+	else dir + "/${n}")
+      (readDir dir);
 in {
-  inherit filesIn dirsIn fileNameOf;
+  inherit 
+    dirsIn 
+    filesIn 
+    readDir
+    baseNameOf
+    concatMapFiles
+    recursiveFileTree;
 }

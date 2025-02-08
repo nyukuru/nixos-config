@@ -1,9 +1,9 @@
 {
-  modules.programs = {
-    nvim = {
-      enable = true;
-    };
+  imports = [
+    ./nvim
+  ];
 
+  modules.programs = {
     zsh = {
       enable = true;
       starship.enable = true;
