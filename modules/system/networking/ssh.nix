@@ -14,19 +14,20 @@ in {
 
     # Traps attackers trying to access an open default ssh port
     tarpit = {
-      enable = mkEnableOption "Endlessh tarpit" // {default = (cfg.port != 22);};
+      enable = mkEnableOption "Endlessh tarpit" // {default = cfg.port != 22;};
       port = mkOption {
         type = int;
-	default = 22;
-	apply = p: if (p != cfg.port)
-	  then p
-	  else if (p == 22)
-	    then 22
-	    else 21;
-	description = ''
-	  Port opened to the endlessh server, 22 would be the most effective as a trap.
-	  Ensure this is not the same port opened for the real ssh server.
-	'';
+        default = 22;
+        apply = p:
+          if (p != cfg.port)
+          then p
+          else if (p == 22)
+          then 22
+          else 21;
+        description = ''
+          Port opened to the endlessh server, 22 would be the most effective as a trap.
+          Ensure this is not the same port opened for the real ssh server.
+        '';
       };
     };
 
@@ -45,59 +46,59 @@ in {
     services = {
       openssh = {
         enable = true;
-	openFirewall = true;
-	ports = [cfg.port];
-	#logLevel = "VERBOSE";
+        openFirewall = true;
+        ports = [cfg.port];
+        #logLevel = "VERBOSE";
 
-	startWhenNeeded = mkDefault true;
+        startWhenNeeded = mkDefault true;
 
         settings = {
-	  PermitRootLogin = mkDefault "no"; 
+          PermitRootLogin = mkDefault "no";
 
           # Security
-	  PasswordAuthentication = false;
-	  AuthenticationMethods = "publickey";
-	  ChallengeResponseAuthentication = false;
+          PasswordAuthentication = false;
+          AuthenticationMethods = "publickey";
+          ChallengeResponseAuthentication = false;
           KbdInteractiveAuthentication = false;
-	  AllowStreamLocalForwarding = false;
-	  AllowTcpForwarding = "yes";
-	  X11Forwarding = false;
+          AllowStreamLocalForwarding = false;
+          AllowTcpForwarding = "yes";
+          X11Forwarding = false;
 
-	  PerSourceMaxStartups = 1;
-	  ClientAliveCountMax = 5;
-	  ClientAliveInterval = 60;
-	  MaxAuthTries = 7;
+          PerSourceMaxStartups = 1;
+          ClientAliveCountMax = 5;
+          ClientAliveInterval = 60;
+          MaxAuthTries = 7;
 
-	  KexAlgorithms = [
-	    "curve25519-sha256"
-	    "curve25519-sha256@libssh.org"
-	    "diffie-hellman-group16-sha512"
-	    "diffie-hellman-group18-sha512"
-	    "diffie-hellman-group-exchange-sha256"
-	    "sntrup761x25519-sha512@openssh.com"
-	  ];
+          KexAlgorithms = [
+            "curve25519-sha256"
+            "curve25519-sha256@libssh.org"
+            "diffie-hellman-group16-sha512"
+            "diffie-hellman-group18-sha512"
+            "diffie-hellman-group-exchange-sha256"
+            "sntrup761x25519-sha512@openssh.com"
+          ];
 
-	  Macs = [
-	    "hmac-sha2-512-etm@openssh.com"
-	    "hmac-sha2-256-etm@openssh.com"
-	    "umac-128-etm@openssh.com"
-	  ];
+          Macs = [
+            "hmac-sha2-512-etm@openssh.com"
+            "hmac-sha2-256-etm@openssh.com"
+            "umac-128-etm@openssh.com"
+          ];
 
           /*
-	  Ciphers = [
-	    "aes256-gcn@openssh.com"
-	    "aes128-gcm@openssh.com"
-	    "aes256-ctr"
-	    "aes192-ctr"
-	    "aes128-ctr"
-	  ];
-	  */
-	};
+          Ciphers = [
+            "aes256-gcn@openssh.com"
+            "aes128-gcm@openssh.com"
+            "aes256-ctr"
+            "aes192-ctr"
+            "aes128-ctr"
+          ];
+          */
+        };
       };
       endlessh = mkIf cfg.tarpit.enable {
         inherit (cfg.tarpit) port;
-	openFirewall = true;
-	extraOptions = ["-v" "-s"];
+        openFirewall = true;
+        extraOptions = ["-v" "-s"];
       };
     };
   };

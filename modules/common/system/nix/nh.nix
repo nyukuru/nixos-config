@@ -1,6 +1,5 @@
 {lib, ...}: let
   inherit (lib.modules) mkDefault;
-
 in {
   programs.nh = {
     enable = mkDefault true;

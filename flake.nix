@@ -3,13 +3,13 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    
+
     # Preconfigured configs for specific devices
     # most useful for the pci information.
     nixos-hardware = {
       url = "github:nixos/nixos-hardware";
     };
-   
+
     # Self-explanatory.
     impermanence = {
       url = "github:nix-community/impermanence";
@@ -52,7 +52,7 @@
     };
   };
 
-  outputs = inputs: 
+  outputs = inputs:
     inputs.flake-parts.lib.mkFlake {inherit inputs;} {
       systems = [
         "x86_64-linux"
@@ -61,8 +61,7 @@
       imports = [
         ./hosts
         ./parts
-	./packages
+        ./packages
       ];
-   };
+    };
 }
-

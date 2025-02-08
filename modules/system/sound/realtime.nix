@@ -20,9 +20,11 @@ in {
     enable = mkEnableOption "Realtime sound optimizations.";
 
     alsaSeq = {
-      enable = mkEnableOption "ALSA Sequencer kernel modules." // {
-        default = true;
-      };
+      enable =
+        mkEnableOption "ALSA Sequencer kernel modules."
+        // {
+          default = true;
+        };
     };
 
     soundcardPci = mkOption {
@@ -30,24 +32,23 @@ in {
       # Might be able to default to an onboard?
       default = null;
       description = ''
-        The PCI ID of your primary soundcard.
+               The PCI ID of your primary soundcard.
 
-	To find the PCI ID of your soundcard(s) use:
-          'lspci | grep -i audio'
+        To find the PCI ID of your soundcard(s) use:
+                 'lspci | grep -i audio'
       '';
     };
 
     rtcqs = {
-	enable = mkEnableOption "RealTime Config QuickScan package.";
-	irq = mkOption {
-	  type = nullOr (coercedTo int toString str);
-	  default = null;
-	  description = ''
-	    The IRQ of the soundcard to allow rtcqs to check if it is busy.
-	  '';
-	};
+      enable = mkEnableOption "RealTime Config QuickScan package.";
+      irq = mkOption {
+        type = nullOr (coercedTo int toString str);
+        default = null;
+        description = ''
+          The IRQ of the soundcard to allow rtcqs to check if it is busy.
+        '';
+      };
     };
-
   };
   config = mkIf (config.modules.system.sound.enable && cfg.enable) {
     boot = {
@@ -55,14 +56,15 @@ in {
         "vm.swappiness" = 10;
       };
 
-      kernelModules = []
-      ++ optionals cfg.alsaSeq.enable ["snd-seq" "snd-rawmidi"];
+      kernelModules =
+        []
+        ++ optionals cfg.alsaSeq.enable ["snd-seq" "snd-rawmidi"];
 
       kernelParams = ["threadirqs"];
 
       postBootCommands = optionalString (cfg.soundcardPci != null) ''
-        ${getExe' pkgs.pciutils "setpci"} -v -d *:* latency_timer=b0
-	${getExe' pkgs.pciutils "setpci"} -v -s ${cfg.soundcardPci} latency_timer=ff
+               ${getExe' pkgs.pciutils "setpci"} -v -d *:* latency_timer=b0
+        ${getExe' pkgs.pciutils "setpci"} -v -s ${cfg.soundcardPci} latency_timer=ff
       '';
     };
     # TODO wrap the bin name and with irq from options.
@@ -73,7 +75,6 @@ in {
         "/run/current-system/sw/lib"
         "/etc/profiles/per-user/$USER/lib"
       ]);
-
     in {
       CLAP_PATH = mkDefault (makeSearchPath' "clap");
       DSSI_PATH = mkDefault (makeSearchPath' "dssi");
@@ -85,38 +86,43 @@ in {
     };
 
     security.pam.loginLimits = [
-      { domain = "@audio";
-	item = "memlock";
-	type = "-";
-	value = "unlimited";
+      {
+        domain = "@audio";
+        item = "memlock";
+        type = "-";
+        value = "unlimited";
       }
-      { domain = "@audio";
+      {
+        domain = "@audio";
         item = "rtprio";
-	type = "-";
-	value = 99;
+        type = "-";
+        value = 99;
       }
-      { domain = "@audio";
+      {
+        domain = "@audio";
         item = "nice";
-	type = "-";
-	value = -11;
+        type = "-";
+        value = -11;
       }
-      { domain = "@audio";
+      {
+        domain = "@audio";
         item = "nofile";
-	type = "soft";
-	value = 99999;
+        type = "soft";
+        value = 99999;
       }
-      { domain = "@audio";
+      {
+        domain = "@audio";
         item = "nofile";
-	type = "hard";
-	value = 99999;
+        type = "hard";
+        value = 99999;
       }
     ];
 
     services.udev = {
       extraRules = ''
-        KERNEL=="rtc0", GROUP="audio"
-	KERNEL=="hpet", GROUP="audio"
-	DEVPATH=="/devices/virtual/misc/cpu_dma_latency", OWNER="root", GROUP="audio", MODE="0660"
+               KERNEL=="rtc0", GROUP="audio"
+        KERNEL=="hpet", GROUP="audio"
+        DEVPATH=="/devices/virtual/misc/cpu_dma_latency", OWNER="root", GROUP="audio", MODE="0660"
       '';
     };
   };

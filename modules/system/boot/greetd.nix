@@ -23,10 +23,10 @@ in {
 
     command = mkOption {
       type = str;
-      default = 
+      default =
         if wm == null
-	then "${getExe config.users.defaultUserShell}"
-	else "${getExe wm}";
+        then "${getExe config.users.defaultUserShell}"
+        else "${getExe wm}";
       description = ''
         Command executed by the greeter upon login / autologin.
       '';
@@ -37,7 +37,8 @@ in {
       default = [
         "--time"
         "--remember"
-        "--asterisks-char" "\"-\""
+        "--asterisks-char"
+        "\"-\""
       ];
       description = ''
         Command line arguments applied to the greeter.
@@ -49,10 +50,10 @@ in {
 
       user = mkOption {
         type = enum (attrNames config.users.users);
-	default = attrHead (filterAttrs (n: _: n != "root") config.users.users);
-	description = ''
-	  Determines which user is automatically logged in.
-	'';
+        default = attrHead (filterAttrs (n: _: n != "root") config.users.users);
+        description = ''
+          Determines which user is automatically logged in.
+        '';
       };
     };
   };
@@ -61,17 +62,18 @@ in {
     services.greetd = {
       enable = true;
       vt = 1;
-      
+
       settings = {
         # default greeter that requires login
         default_session = {
           user = "greeter";
           command = concatStringsSep " " ([
-            (getExe cfg.package)
-            "--cmd ${cfg.command}"
-          ] ++ cfg.greeterArgs);
+              (getExe cfg.package)
+              "--cmd ${cfg.command}"
+            ]
+            ++ cfg.greeterArgs);
         };
- 
+
         # autologin start wm
         initial_session = mkIf cfg.autologin.enable {
           inherit (cfg.autologin) user;

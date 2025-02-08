@@ -6,7 +6,6 @@
 }: let
   inherit (lib.modules) mkDefault;
   inherit (lib.meta) getExe';
-
 in {
   config.boot = {
     consoleLogLevel = mkDefault 3;
@@ -34,7 +33,7 @@ in {
         enable = mkDefault true;
 
         # some emergency tooling
-        storePaths = with pkgs; [ util-linux cryptsetup sbctl ];
+        storePaths = with pkgs; [util-linux cryptsetup sbctl];
         extraBin = {
           fdisk = getExe' pkgs.util-linux "fdisk";
           lsblk = getExe' pkgs.util-linux "lsblk";
@@ -61,7 +60,7 @@ in {
       # halt ; calls HLT
       # nomwait ; use acpi_idle driver
       "idle=nowait"
-      
+
       # Virtualization passthrough
       "iommu=pt"
 

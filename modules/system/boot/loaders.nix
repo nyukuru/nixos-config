@@ -14,7 +14,7 @@
       efiSupport = mkDefault true;
       device = mkDefault "nodev";
       memtest86.enable = cfg.memtest86.enable;
-    }; 
+    };
 
     systemd-boot = {
       enable = true;
@@ -28,11 +28,11 @@
 in {
   options.modules.system.boot.loader = {
     type = mkOption {
-      type = enum [ "grub" "systemd-boot" ]; 
+      type = enum ["grub" "systemd-boot"];
       default = "systemd-boot";
       description = ''
-        Which bootloader to use for the device, in general
-	use systemd-boot for UEFI devices and grub for legacy boot.
+               Which bootloader to use for the device, in general
+        use systemd-boot for UEFI devices and grub for legacy boot.
       '';
     };
 

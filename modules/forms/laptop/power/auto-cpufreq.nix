@@ -1,9 +1,5 @@
-{
-  lib,
-  ...
-}: let
+{lib, ...}: let
   inherit (lib.modules) mkDefault;
-
 in {
   services = {
     auto-cpufreq = {

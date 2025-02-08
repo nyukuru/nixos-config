@@ -15,10 +15,10 @@
       languagePacks = ["en-US"];
       extensions = {
         "ublock-origin" = {};
-	"skip-redirect" = {};
-	"frankerfacez" = {};
-	"disable-twitch-extensions" = {};
-      }; 
+        "skip-redirect" = {};
+        "frankerfacez" = {};
+        "disable-twitch-extensions" = {};
+      };
     };
   };
 }

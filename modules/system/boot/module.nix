@@ -27,16 +27,16 @@ in {
 
   config.boot = {
     kernelParams = mkIf cfg.silent.enable [
-    "quiet"
+      "quiet"
 
-    # Errors or worse
-    "loglevel=3"
-    "udev.log_level=3"
-    "rd.udev.log_level=3"
+      # Errors or worse
+      "loglevel=3"
+      "udev.log_level=3"
+      "rd.udev.log_level=3"
 
-    # Disable systemd messaging
-    "systemd.show_status=false"
-    "rd.systemd.show_status=false"
+      # Disable systemd messaging
+      "systemd.show_status=false"
+      "rd.systemd.show_status=false"
     ];
   };
 }

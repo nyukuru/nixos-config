@@ -1,11 +1,10 @@
 {lib, ...}: let
   inherit (lib.modules) mkDefault;
-
 in {
   documentation = {
     enable = mkDefault true;
 
-    # Whether to install documentation distributed in packages’ /share/doc. 
+    # Whether to install documentation distributed in packages’ /share/doc.
     # Usually plain text and/or HTML. This also includes “doc” outputs.
     doc.enable = mkDefault false;
 

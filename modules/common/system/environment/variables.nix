@@ -1,7 +1,6 @@
-{lib, ...}: let 
+{lib, ...}: let
   inherit (lib.modules) mkOptionDefaultAttr;
-
-in {  
+in {
   environment.variables = mkOptionDefaultAttr {
     EDITOR = "nvim";
     VISUAL = "nvim";

@@ -5,10 +5,10 @@
   mkForceAttr = mapAttrsRecursive (_: v: mkForce v);
   mkDefaultAttr = mapAttrsRecursive (_: v: mkDefault v);
   mkOptionDefaultAttr = mapAttrsRecursive (_: v: mkOptionDefault v);
-
 in {
-  inherit 
+  inherit
     mkForceAttr
     mkDefaultAttr
-    mkOptionDefaultAttr;
+    mkOptionDefaultAttr
+    ;
 }

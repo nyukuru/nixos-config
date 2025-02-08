@@ -1,6 +1,9 @@
-{pkgs, lib, ...}: let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   inherit (lib.modules) mkDefault mkForce;
-
 in {
   imports = [
     # Default firewall rules.
@@ -21,13 +24,17 @@ in {
     nameservers = [
       # Cloudflare
       # https://developers.cloudflare.com/1.1.1.1/ip-addresses/
-      "1.1.1.2" "2606:4700:4700::1112"
-      "1.0.0.2" "2606:4700:4700::1002"
+      "1.1.1.2"
+      "2606:4700:4700::1112"
+      "1.0.0.2"
+      "2606:4700:4700::1002"
 
       # Quad9
       # https://www.quad9.net/service/service-addresses-and-features/
-      "9.9.9.9" "2620:fe::9"
-      "149.112.112.112" "2620:fe::fe"
+      "9.9.9.9"
+      "2620:fe::9"
+      "149.112.112.112"
+      "2620:fe::fe"
     ];
 
     # Allows some shorthand to access hosts

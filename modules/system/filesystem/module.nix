@@ -1,6 +1,6 @@
 {
   inputs,
-  config, 
+  config,
   lib,
   pkgs,
   ...
@@ -25,21 +25,24 @@ in {
 
     btrfs = {
       scrub = {
-        enable = mkEnableOption "Automatically scrubbing (error correct) of btrfs subvolumes." // {
-	  default = elem "btrfs" cfg.enabledFilesystems;};
+        enable =
+          mkEnableOption "Automatically scrubbing (error correct) of btrfs subvolumes."
+          // {
+            default = elem "btrfs" cfg.enabledFilesystems;
+          };
         interval = mkOption {
           type = str;
           default = "Sun"; #Every Sunday
-	  description = ''
-	    Systemd time to hook the service with.
-	  '';
+          description = ''
+            Systemd time to hook the service with.
+          '';
         };
         subvolumes = mkOption {
           type = listOf str;
           default = ["/"];
-	  description = ''
-	    Subvolumes to scrub.
-	  '';
+          description = ''
+            Subvolumes to scrub.
+          '';
         };
       };
     };
@@ -54,7 +57,7 @@ in {
     services = {
       btrfs.autoScrub = mkIf (elem "btrfs" cfg.enabledFilesystems) {
         inherit (cfg.btrfs.scrub) enable interval;
-	fileSystems = cfg.btrfs.scrub.subvolumes;
+        fileSystems = cfg.btrfs.scrub.subvolumes;
       };
     };
 
@@ -62,21 +65,25 @@ in {
       unitConfig.ConditionACPower = true;
       serviceConfig = {
         Nice = 19;
-	IOScedulingClass = "idle";
+        IOScedulingClass = "idle";
       };
     };
 
     environment.systemPackages = optional (elem "btrfs" cfg.enabledFilesystems) pkgs.btrfs-progs;
 
-    warnings = 
+    warnings =
       if (cfg.enabledFilesystems == [])
-      then [''
-        There are no filesystems configured, this may cause issues mounting and accessing.
-      '']
+      then [
+        ''
+          There are no filesystems configured, this may cause issues mounting and accessing.
+        ''
+      ]
       else if !(elem "vfat" cfg.enabledFilesystems)
-      then [''
-        'vfat' is not included in enabled filsystems (defaultly the boot partiotion in UEFI systems).
-      '']
+      then [
+        ''
+          'vfat' is not included in enabled filsystems (defaultly the boot partiotion in UEFI systems).
+        ''
+      ]
       else [];
   };
 }

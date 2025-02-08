@@ -24,11 +24,12 @@
     bento = "{cb7f7992-81db-492b-9354-99844440ff9b}";
   };
 
-  langToExtension = lang: nameValuePair lang {
-    addonID = "langpack-${lang}@firefox.mozilla.org";
-    installUrl = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
-    installMode = "force_installed";
-  };
+  langToExtension = lang:
+    nameValuePair lang {
+      addonID = "langpack-${lang}@firefox.mozilla.org";
+      installUrl = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+      installMode = "force_installed";
+    };
 
   cfg = config.modules.programs.firefox;
 in {
@@ -36,54 +37,52 @@ in {
     type = attrsOf (submodule (
       {name, ...}: {
         options = {
+          shortID = mkOption {
+            visible = false;
+            type = str;
+            default = name;
+            readOnly = true;
+            apply = p:
+              warnIfNot
+              (elem p (attrNames addonIDs) || (elem p cfg.languagePacks))
+              "Extension ${p} does not have a predefined addonID"
+              p;
+          };
 
-	  shortID = mkOption {
-	    visible = false;
-	    type = str;
-	    default = name;
-	    readOnly = true;
-	    apply = p: warnIfNot
-	      (elem p (attrNames addonIDs) || (elem p cfg.languagePacks))
-	      "Extension ${p} does not have a predefined addonID"
-	      p;
-	  };
+          installMode = mkOption {
+            type = enum ["force_installed" "normal_installed"];
+            default = "force_installed";
+            description = ''
+              Installation mode of the extension
 
-	  installMode = mkOption {
-	    type = enum ["force_installed" "normal_installed"];
-	    default = "force_installed";
-	    description = ''
-	      Installation mode of the extension
+              'force_installed' : Extension is automatically installed but
+              enabled to be uninstalled by the user.
 
-	      'force_installed' : Extension is automatically installed but
-	      enabled to be uninstalled by the user.
+              'normal_installed' : Extensions is automatically installed but
+              can be removed by the user.
+            '';
+          };
 
-	      'normal_installed' : Extensions is automatically installed but
-	      can be removed by the user.
-	    '';
-	  };
+          installUrl = mkOption {
+            type = str;
+            default = "https://addons.mozilla.org/firefox/downloads/latest/${name}/latest.xpi";
+            description = "URL at which the addon xpi is hosted.";
+          };
 
-	  installUrl = mkOption {
-	    type = str;
-	    default = "https://addons.mozilla.org/firefox/downloads/latest/${name}/latest.xpi";
-	    description = "URL at which the addon xpi is hosted.";
-	  };
-
-	  addonID = mkOption {
-	    type = str;
-	    default = addonIDs.${name} or "";
-	    description = "Mozilla defined ID of the extension.";
-	  };
-	};
-      }));
+          addonID = mkOption {
+            type = str;
+            default = addonIDs.${name} or "";
+            description = "Mozilla defined ID of the extension.";
+          };
+        };
+      }
+    ));
     default = {};
     description = "Firefox extension settings by shortID";
   };
 
   config = {
-    modules.programs.firefox.extensions = 
-    listToAttrs (
-      (map langToExtension cfg.languagePacks)
-    ) // {sidebery = {};};
+    modules.programs.firefox.extensions =
+      listToAttrs (map langToExtension cfg.languagePacks) // {sidebery = {};};
   };
 }
-

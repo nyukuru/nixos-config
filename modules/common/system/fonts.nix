@@ -4,8 +4,7 @@
   ...
 }: let
   inherit (lib.modules) mkDefault;
-
-in { 
+in {
   fonts = {
     packages = with pkgs; [
       material-icons
@@ -19,12 +18,11 @@ in {
       defaultFonts = mkDefault rec {
         emoji = ["Twitter Color Emoji" "Material Icons Sharp"];
         monospace = ["JetBrainsMono Nerd Font Mono"] ++ emoji;
-	sansSerif = ["JetBrainsMono Nerd Font Mono"] ++ emoji; 
-	serif = ["Noto Serif"] ++ emoji; 
+        sansSerif = ["JetBrainsMono Nerd Font Mono"] ++ emoji;
+        serif = ["Noto Serif"] ++ emoji;
       };
     };
   };
-
 
   console = {
     font = "${pkgs.tamzen}/share/consolefonts/TamzenForPowerline8x16.psf";

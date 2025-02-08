@@ -14,9 +14,11 @@ in {
     enable = mkEnableOption "Yubikey device support and tooling.";
 
     cliTools = {
-      enable = mkEnableOption "CLI based yubikey tooling." // {
-        default = true;
-      };
+      enable =
+        mkEnableOption "CLI based yubikey tooling."
+        // {
+          default = true;
+        };
     };
 
     guiTools = {
@@ -33,16 +35,17 @@ in {
       udev.packages = with pkgs; [yubikey-personalization];
     };
 
-    environment.systemPackages = with pkgs; [ ]
-    ++ optionals cfg.cliTools.enable [
-      yubikey-manager
-      yubikey-personalization
-      yubico-piv-tool
-    ]
-    ++ optionals cfg.guiTools.enable [
-      yubikey-manager-qt
-      yubikey-personalization-gui
-      yubioath-flutter
-    ];
+    environment.systemPackages = with pkgs;
+      []
+      ++ optionals cfg.cliTools.enable [
+        yubikey-manager
+        yubikey-personalization
+        yubico-piv-tool
+      ]
+      ++ optionals cfg.guiTools.enable [
+        yubikey-manager-qt
+        yubikey-personalization-gui
+        yubioath-flutter
+      ];
   };
 }

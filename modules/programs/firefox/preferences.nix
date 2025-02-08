@@ -1,8 +1,5 @@
-{
-  cfg,
-  ...
-}: {
-  # Source : 
+{cfg, ...}: {
+  # Source :
   # https://github.com/schizofox/schizofox/blob/cdf69b2a445ff12680657a3bd44ce7c406bf2ae6/flake/modules/home-manager/firefox/preferences/default.nix
   #
   # Important resources:
@@ -783,7 +780,7 @@
   # XXX: Enterprise policy might be able to resolve this.
   "browser.tabs.firefox-view" = false;
 
-  # Disable bookmarks bar 
+  # Disable bookmarks bar
   "browser.toolbars.bookmarks.visibility" = "never";
   "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
 

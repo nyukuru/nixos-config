@@ -1,20 +1,21 @@
 {
   cfg,
   lib,
-  pkgs, 
+  pkgs,
   ...
 }: let
   inherit (lib.attrsets) concatMapAttrs mapAttrs;
 
-  mkExtensions = extensions: concatMapAttrs 
+  mkExtensions = extensions:
+    concatMapAttrs
     (_: extension: {
       ${extension.addonID} = {
-	install_url = extension.installUrl;
-	installation_mode = extension.installMode;
-	default_area = "menupanel";
+        install_url = extension.installUrl;
+        installation_mode = extension.installMode;
+        default_area = "menupanel";
       };
-    }) extensions;
-
+    })
+    extensions;
 in {
   AppAutoUpdate = false;
 
@@ -35,11 +36,13 @@ in {
     Value = true;
   };
 
-  ExtensionSettings = (mkExtensions cfg.extensions) // {
-    # Blocks about:debugging
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1778559
-    #"*".installation_mode = "blocked";
-  };
+  ExtensionSettings =
+    (mkExtensions cfg.extensions)
+    // {
+      # Blocks about:debugging
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1778559
+      #"*".installation_mode = "blocked";
+    };
   ExtensionUpdate = false;
 
   # Firefox Home

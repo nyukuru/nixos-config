@@ -1,5 +1,6 @@
-{ inputs, ...}: {
+{inputs, ...}: {
   imports = [inputs.treefmt-nix.flakeModule];
+
   perSystem = {
     inputs',
     config,
@@ -10,16 +11,14 @@
     formatter = config.treefmt.build.wrapper;
 
     treefmt = {
-      projectRootFile = ../flake.nix;
-
       settings = {
-        global.excludes = [ ".git/*" ];
+        global.excludes = [".git/*"];
       };
 
       programs = {
         alejandra = {
-	  enable = true;
-	};
+          enable = true;
+        };
       };
     };
   };

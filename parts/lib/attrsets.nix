@@ -1,7 +1,4 @@
-{
-  lib,
-  ...
-}: let
+{lib, ...}: let
   inherit (lib.attrsets) attrNames attrValues mapAttrsToList getAttr isAttrs;
   inherit (lib.lists) head elem any filter;
 
@@ -10,12 +7,13 @@
   attrAny = pred: elem true (mapAttrsToList (_: pred));
 
   hasAttrRecursive = set: e:
-    if set ? ${e} then true
+    if set ? ${e}
+    then true
     else any hasAttrRecursive (filter isAttrs (attrValues set));
-
 in {
-  inherit 
+  inherit
     attrHead
     attrAny
-    hasAttrRecursive;
+    hasAttrRecursive
+    ;
 }

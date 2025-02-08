@@ -13,7 +13,6 @@
 
   cfg = config.modules.system.filesystem.impermanence;
   filesystemNames = attrNames config.filesystems;
-
 in {
   imports = [
     inputs.impermanence.nixosModules.impermanence
@@ -25,11 +24,11 @@ in {
 
       snapshotDays = mkOption {
         type = int;
-	default = 5;
-	description = ''
-	  The amount of days an old root will stay in persistence to allow
-	  for recovery.
-	'';
+        default = 5;
+        description = ''
+          The amount of days an old root will stay in persistence to allow
+          for recovery.
+        '';
       };
     };
     tmpfs = {
@@ -48,15 +47,16 @@ in {
       type = listOf (enum filesystemNames);
       default = optional (elem "/" filesystemNames) "/";
       description = ''
-        Subvolumes to be deleted during impermanence purges. 
+        Subvolumes to be deleted during impermanence purges.
       '';
     };
   };
 
   # TODO implement tmpfs
-  config = mkIf cfg.btrfs.enable (let 
+  config = mkIf cfg.btrfs.enable (let
     # These are the same under disko btrfs systems.
-    persistMountPoint = if cfg.persistPart != null
+    persistMountPoint =
+      if cfg.persistPart != null
       then config.fileSystems.${cfg.persistPart}.mountPoint
       else null;
   in {
@@ -71,18 +71,18 @@ in {
       "L /var/lib/NetworkManager/seen-bssides - - - - /persist/var/lib/NetworkManager/seen-bssids"
       "L /var/lib/NetworkManager/timestamps - - - - /persist/var/lib/NetworkManager/timestamps"
     ];
-    
+
     environment.persistence.${persistMountPoint} = {
       directories = [
         "/etc/nixos"
-	"/etc/nix"
-	"/etc/NetworkManager/system-connections"
-	"/var/log"
-	"/var/lib/nixos"
-	"/var/lib/bluetooth"
-	"/var/lib/systemd/coredump"
+        "/etc/nix"
+        "/etc/NetworkManager/system-connections"
+        "/var/log"
+        "/var/lib/nixos"
+        "/var/lib/bluetooth"
+        "/var/lib/systemd/coredump"
 
-	"/etc/ssh"
+        "/etc/ssh"
       ];
 
       files = [
@@ -91,57 +91,58 @@ in {
 
       users.nyoo = {
         directories = [
-	  "uni"
-	  "dev"
-	  "nixos-config"
-	];
+          "uni"
+          "dev"
+          "nixos-config"
+        ];
       };
     };
 
     boot.initrd.systemd.services.impermanence = {
       description = "Purge BTRFS impermanent subvolumes and make snapshots.";
       wantedBy = ["initrd.target"];
-      after = optional config.modules.system.encryption 
+      after =
+        optional config.modules.system.encryption
         "systemd-cryptsetup@.service";
       before = ["sysroot.mount"];
       unitConfig.DefaultDependencies = "no";
       serviceConfig.Type = "oneshot";
       script = let
         opt = part: config.fileSystems.${part}.options;
-	dev = part: config.fileSystems.${part}.device;
-	mnt = part: config.fileSystems.${part}.mountPoint;
-
+        dev = part: config.fileSystems.${part}.device;
+        mnt = part: config.fileSystems.${part}.mountPoint;
       in ''
-        mkdir /btrfs_tmp
-	
-	${concatMapStringsSep "\n" (part: ''
-	  mount -o ${concatStringsSep "," (opt part)} ${dev part} ${"/btrfs_tmp" + (mnt part)}
-	'') cfg.impermanentParts}
+               mkdir /btrfs_tmp
 
-	if [[ -e /btrfs_tmp/root ]]; then
-	  mkdir -p /btrfs_tmp/old_roots
-	  timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
-	  mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$timestamp"
-	fi
+        ${concatMapStringsSep "\n" (part: ''
+            mount -o ${concatStringsSep "," (opt part)} ${dev part} ${"/btrfs_tmp" + (mnt part)}
+          '')
+          cfg.impermanentParts}
 
-	delete_subvolume_recursively() {
-	  IFS=$'\n'
-	  for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-	    delete_subvolume_recursively "/btrfs_tmp/$i"
-	  done
-	  btrfs subvolume delete "$i"
-	}
+        if [[ -e /btrfs_tmp/root ]]; then
+          mkdir -p /btrfs_tmp/old_roots
+          timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
+          mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$timestamp"
+        fi
 
-	for i in $(find /btrfs_tmp/old_roots/ -maxdept 1 -mtime +5); do
-	  delete_subvolume_recursively "$i"
-	done
+        delete_subvolume_recursively() {
+          IFS=$'\n'
+          for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+            delete_subvolume_recursively "/btrfs_tmp/$i"
+          done
+          btrfs subvolume delete "$i"
+        }
 
-        btrfs subvolume create /btrfs_tmp/root
-	umount /btrfs_tmp
+        for i in $(find /btrfs_tmp/old_roots/ -maxdept 1 -mtime +5); do
+          delete_subvolume_recursively "$i"
+        done
+
+               btrfs subvolume create /btrfs_tmp/root
+        umount /btrfs_tmp
       '';
     };
     assertions = [
-      { 
+      {
         assertion = cfg.persistPart != null;
         message = ''
           Persist partition not defined while impermanence module is enabled.
@@ -150,9 +151,9 @@ in {
       {
         assertion = cfg.impermanenceParts != [];
         message = ''
-          There are no impermanence subvolumes assigned in the impermanence module,
-	  this makes the module pointless and should be fixed by either disabling the
-	  module or adding the root partition to impermanenceParts.
+                 There are no impermanence subvolumes assigned in the impermanence module,
+          this makes the module pointless and should be fixed by either disabling the
+          module or adding the root partition to impermanenceParts.
         '';
       }
     ];

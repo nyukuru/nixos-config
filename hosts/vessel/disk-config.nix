@@ -1,9 +1,5 @@
-{
-  inputs,
-  ...
-}:
-{
-  imports = [ inputs.disko.nixosModules.default ];
+{inputs, ...}: {
+  imports = [inputs.disko.nixosModules.default];
 
   disko.devices = {
     disk = {
@@ -32,23 +28,23 @@
                 name = "crypted-1";
                 content = {
                   type = "btrfs";
-                  extraArgs = [ "-f" "-L fsroot" ];
+                  extraArgs = ["-f" "-L fsroot"];
                   subvolumes = {
                     "/root" = {
                       mountpoint = "/";
-                      mountOptions = [ "subvol=root" "compress=zstd" "noatime" ];
+                      mountOptions = ["subvol=root" "compress=zstd" "noatime"];
                     };
                     "/home" = {
                       mountpoint = "/home";
-                      mountOptions = [ "subvol=home" "compress=zstd" "noatime" ];
+                      mountOptions = ["subvol=home" "compress=zstd" "noatime"];
                     };
                     "/nix" = {
                       mountpoint = "/nix";
-                      mountOptions = [ "subvol=nix" "compress=zstd" "noatime" ];
+                      mountOptions = ["subvol=nix" "compress=zstd" "noatime"];
                     };
                     "/persist" = {
                       mountpoint = "/persist";
-                      mountOptions = [ "subvol=perist" "compress=zstd" "noatime" ];
+                      mountOptions = ["subvol=perist" "compress=zstd" "noatime"];
                     };
                     "/swap" = {
                       mountpoint = "/.swapvol";

@@ -1,6 +1,6 @@
 {
-  pkgs, 
-  lib, 
+  pkgs,
+  lib,
   config,
   ...
 }: let
@@ -15,21 +15,22 @@ in {
     enable = mkEnableOption "Firewall." // {default = true;};
   };
 
-  config = mkMerge [{
-    networking.firewall.enable = cfg.enable;
-  }
+  config = mkMerge [
+    {
+      networking.firewall.enable = cfg.enable;
+    }
 
-  (mkIf (config.modules.system.networking.enable && cfg.enable) {
-    networking = {
-      firewall = {
-        package = pkgs.nftables;
-        pingLimit = "1/minute burst 5 packets";
-      };
+    (mkIf (config.modules.system.networking.enable && cfg.enable) {
+      networking = {
+        firewall = {
+          package = pkgs.nftables;
+          pingLimit = "1/minute burst 5 packets";
+        };
 
-      nftables = {
-        enable = true;
+        nftables = {
+          enable = true;
+        };
       };
-    };
-  })];
+    })
+  ];
 }
-  

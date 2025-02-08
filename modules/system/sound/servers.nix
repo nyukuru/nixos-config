@@ -14,8 +14,8 @@ in {
       type = enum ["pulseaudio" "pipewire"];
       default = "pipewire";
       description = ''
-        Determines your sound server. Pipewire is the newer and more sane option.
-	Pulseaudio should only be chosen if forced by hardware compatability.
+               Determines your sound server. Pipewire is the newer and more sane option.
+        Pulseaudio should only be chosen if forced by hardware compatability.
       '';
     };
   };
@@ -24,18 +24,17 @@ in {
     (mkIf (cfg.type == "pipewire") {
       security.rtkit.enable = mkForce true;
 
-
       services.pipewire = {
         enable = mkForce true;
-	audio.enable = mkDefault true;
-	pulse.enable = mkDefault true;
-	alsa.enable = mkDefault true;
-	wireplumber.enable = mkDefault true;
+        audio.enable = mkDefault true;
+        pulse.enable = mkDefault true;
+        alsa.enable = mkDefault true;
+        wireplumber.enable = mkDefault true;
       };
 
       systemd.user.services = {
         pipewire.wantedBy = ["default.target"];
-	pipewire-pulse.wantedBy = ["default.target"];
+        pipewire-pulse.wantedBy = ["default.target"];
       };
     })
 

@@ -14,7 +14,7 @@ in {
   };
 
   config = mkIf cfg.enable {
-    boot.kernelModules = [ "uhid" ];
+    boot.kernelModules = ["uhid"];
 
     security.tpm2 = {
       enable = true;

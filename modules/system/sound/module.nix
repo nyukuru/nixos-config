@@ -4,7 +4,7 @@
   ...
 }: let
   inherit (lib.options) mkEnableOption;
-  
+
   cfg = config.modules.system.sound;
 in {
   imports = [

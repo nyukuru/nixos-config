@@ -1,6 +1,9 @@
-{pkgs, lib, ...}: let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   inherit (lib.modules) mkDefault;
-
 in {
   imports = [
     ./nyoo.nix

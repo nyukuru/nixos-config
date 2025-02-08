@@ -1,9 +1,11 @@
-{lib, pkgs, ...}: let
+{
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib.modules) mkDefault mkForce;
-
 in {
   nixpkgs = {
-
     config = {
       # It's better to be alerted when an installed package
       # or a package attempting to be installed has been deliberartely

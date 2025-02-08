@@ -5,7 +5,6 @@
 }: let
   inherit (lib.modules) mkDefault;
   inherit (lib.attrsets) mapAttrsToList;
-
 in {
   imports = [
     # Nixpkgs option defaults
@@ -17,8 +16,7 @@ in {
   ];
 
   nix = let
-    GB = x: toString(x * 1024 * 1024 * 1024);
-
+    GB = x: toString (x * 1024 * 1024 * 1024);
   in {
     package = mkDefault pkgs.lix;
 
@@ -68,13 +66,13 @@ in {
         "ca-derivations"
         "no-url-literals"
       ];
-      
+
       # Complete declaritive purity.
       #pure-eval = true;
 
       warn-dirty = mkDefault false;
 
-      # Alert if a third party is changing the config. 
+      # Alert if a third party is changing the config.
       accept-flake-config = mkDefault false;
 
       substituters = [

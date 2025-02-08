@@ -4,7 +4,6 @@
   fetchFromGitHub ? pkgs.fetchFromGitHub,
   lib ? pkgs.lib,
 }:
-
 stdenvNoCC.mkDerivation {
   pname = "plymouth-hellonavi-theme";
   version = "1.0.0";
