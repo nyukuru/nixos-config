@@ -9,6 +9,11 @@
 
   cfg = config.modules.style;
 in {
+
+  imports = [
+    ./textfox
+  ];
+
   options.modules.style = {
     wallpaper = mkOption {
       type = nullOr path;

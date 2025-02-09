@@ -23,8 +23,7 @@
     allFiles = readDir path;
     dirFiles = attrNames (filterAttrs (_: v: v == "directory") allFiles);
   in
-    # End branch when a module file is found
-    # There shouldn't be multiple module files sharing a parent folder
+    # Leaf case
     if allFiles ? "module.nix"
     then {imports = [(path + "/module.nix")];}
     # Directory case

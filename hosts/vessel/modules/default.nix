@@ -2,6 +2,6 @@
   imports = [
     ./system
     ./programs
-    #./style.nix
+    ./style.nix
   ];
 }

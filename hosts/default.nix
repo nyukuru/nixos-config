@@ -2,41 +2,54 @@
   inputs,
   self,
   ...
-}: {
-  flake.nixosConfigurations = let
-    inherit (self) lib;
+}: let 
 
-    inherit (lib.builders) mkNixosSystem;
-    inherit (lib.lists) concatLists flatten;
+  inherit 
+    (self) 
+    lib;
 
-    hw = inputs.nixos-hardware.nixosModules;
+  inherit 
+    (lib.builders) 
+    mkNixosSystem;
 
-    modules = self.nixosModules;
-    # Option definitions and wrappers
-    system = modules.system;
-    programs = modules.programs;
-    # Defines sane defaults
-    common = modules.common;
-    # Specification defaults for specific archetypes
-    laptop = modules.forms.laptop;
+  inherit 
+    (lib.lists)
+    map;
 
-    mkModules = {
-      forms ? [],
-      extraModules ? [],
-    }:
-      flatten (
-        concatLists [
-          [common system programs]
-          forms
-          extraModules
-        ]
-      );
-  in {
+  hw = inputs.nixos-hardware.nixosModules;
+
+  modules = self.nixosModules;
+  # Default modules
+  system = modules.system;
+  programs = modules.programs;
+  common = modules.common;
+  style = modules.style.options;
+
+  # Forms
+  laptop = modules.forms.laptop;
+
+  mkModules = {
+    form ? {},
+    extraModules ? [],
+  }:
+    map (m: m.all or m) (
+      extraModules
+      ++ [
+	common
+	system
+	programs
+	style
+	form
+      ]);
+	
+in {
+  flake.nixosConfigurations = {
+
     vessel = mkNixosSystem {
       hostname = "vessel";
       system = "x86_64-linux";
       modules = mkModules {
-        forms = [laptop];
+        form = laptop;
         extraModules = [hw.dell-xps-15-9520-nvidia];
       };
     };

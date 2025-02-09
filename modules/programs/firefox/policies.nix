@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  inherit (lib.attrsets) concatMapAttrs mapAttrs;
+  inherit (lib.attrsets) concatMapAttrs;
 
   mkExtensions = extensions:
     concatMapAttrs
