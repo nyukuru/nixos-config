@@ -1,0 +1,21 @@
+diff --git a/chrome/overwrites.css b/chrome/overwrites.css
+index 2dbd8d5..49b9d98 100644
+--- a/chrome/overwrites.css
++++ b/chrome/overwrites.css
+@@ -1,3 +1,16 @@
++* {
++  font-family: var(--tf-font-family);
++  font-size: var(--tf-font-size);
++}
++
++body {
++  background-color: var(--tf-bg);
++}
++
++::placeholder {
++  text-transform: lowercase;
++}
++
+ :root {
+   --toolbar-color: currentColor !important;
+   --link-color: var(--tf-accent) !important;

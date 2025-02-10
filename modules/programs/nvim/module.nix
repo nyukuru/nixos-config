@@ -4,12 +4,49 @@
   config,
   ...
 }: let
-  inherit (lib.options) mkOption mkEnableOption mkPackageOption;
-  inherit (lib.modules) mkIf;
-  inherit (lib.strings) hasSuffix;
-  inherit (lib.files) filesIn concatMapFiles;
-  inherit (lib.lists) map optionals filter elem;
-  inherit (lib.types) nullOr listOf package path str;
+
+  inherit 
+    (lib.options)
+    mkPackageOption
+    mkEnableOption
+    mkOption
+    ;
+
+  inherit
+    (lib.modules)
+    mkIf
+    ;
+
+  inherit 
+    (lib.strings)
+    hasSuffix
+    ;
+
+  inherit
+    (lib.files)
+    concatMapFiles
+    ;
+
+  inherit
+    (lib.filesystem)
+    listFilesRecursive
+    ;
+
+  inherit
+    (lib.lists)
+    optionals
+    filter
+    elem
+    map
+    ;
+
+  inherit
+    (lib.types)
+    package
+    nullOr
+    listOf
+    path
+    str;
 
   cfg = config.modules.programs.nvim;
 in {
@@ -72,7 +109,7 @@ in {
       variables.EDITOR = "nvim";
 
       systemPackages = let
-        allFiles = optionals (cfg ? configDir) (filesIn cfg.configDir);
+        allFiles = optionals (cfg.configDir != null) (listFilesRecursive cfg.configDir);
         vimFiles = filter (x: (hasSuffix ".vim" x) && !(elem (baseNameOf x) cfg.exclude.vim)) allFiles;
         luaFiles = filter (x: (hasSuffix ".lua" x) && !(elem (baseNameOf x) cfg.exclude.lua)) allFiles;
       in [
@@ -84,7 +121,8 @@ in {
 
           plugins =
             cfg.plugins.start
-            ++ (map (x: {
+            ++ (map 
+	      (x: {
                 plugin = x;
                 optional = true;
               })

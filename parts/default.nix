@@ -1,8 +1,9 @@
 {
   imports = [
-    ./lib # functions that will be extended into nixpkgs.lib
+    ./lib
 
     ./modules.nix
     ./format.nix
+    ./keys.nix
   ];
 }

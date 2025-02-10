@@ -3,10 +3,22 @@
   config,
   ...
 }: let
-  inherit (inputs.nixpkgs) lib;
 
-  inherit (lib.fixedPoints) composeManyExtensions;
-  inherit (lib.attrsets) recursiveUpdate;
+  inherit 
+    (inputs.nixpkgs)
+    lib
+    ;
+
+  inherit 
+    (lib.fixedPoints)
+    composeManyExtensions
+    ;
+
+  inherit 
+    (lib.attrsets)
+    recursiveUpdate
+    ;
+
 
   # An overlay of my library to go onto nixpkgs'
   myLib = final: prev: let
@@ -18,17 +30,11 @@
         });
   in
     recursiveUpdate prev {
-      # Functions for file and directories
       files = callLibs ./files.nix;
-      # Builders for systems
       builders = callLibs ./builders.nix;
-      # Some helper functions for lists
       lists = callLibs ./lists.nix;
-      # Helper functions for attrsets
       attrsets = callLibs ./attrsets.nix;
-      # More helper functions...
       modules = callLibs ./modules.nix;
-      # Agenix creation
       secrets = callLibs ./secrets.nix;
     };
 
@@ -39,6 +45,7 @@
   ];
 
   lib' = lib.extend extensions;
+
 in {
   perSystem._module.args.lib = lib';
   _module.args.lib = lib';

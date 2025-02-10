@@ -4,12 +4,43 @@
   lib,
   ...
 }: let
-  inherit (lib.options) mkOption mkEnableOption mkPackageOption;
-  inherit (lib.modules) mkIf mkDefault;
-  inherit (lib.strings) concatStringsSep;
-  inherit (lib.attrsets) attrHead attrNames filterAttrs;
-  inherit (lib.types) str listOf enum;
-  inherit (lib.meta) getExe;
+
+  inherit 
+    (lib.options)
+    mkPackageOption
+    mkEnableOption
+    mkOption
+    ;
+
+  inherit
+    (lib.modules)
+    mkIf
+    ;
+
+  inherit
+    (lib.strings)
+    concatStringsSep
+    ;
+
+  inherit
+    (lib.attrsets)
+    removeAttrs
+    attrNames
+    attrHead
+    ;
+
+  inherit 
+    (lib.types)
+    listOf 
+    enum
+    str
+    ;
+
+  inherit 
+    (lib.meta)
+    getExe
+    ;
+
 
   cfg = config.modules.system.boot.greetd;
   wm = config.modules.system.display.wm.default;
@@ -17,7 +48,7 @@ in {
   options.modules.system.boot.greetd = {
     enable = mkEnableOption "greetd.";
 
-    package = mkPackageOption pkgs.greetd "greetd" {
+    greeter = mkPackageOption pkgs.greetd "greetd" {
       default = "tuigreet";
     };
 
@@ -27,9 +58,7 @@ in {
         if wm == null
         then "${getExe config.users.defaultUserShell}"
         else "${getExe wm}";
-      description = ''
-        Command executed by the greeter upon login / autologin.
-      '';
+      description = "Command executed by the greeter upon login / autologin.";
     };
 
     greeterArgs = mkOption {
@@ -40,20 +69,15 @@ in {
         "--asterisks-char"
         "\"-\""
       ];
-      description = ''
-        Command line arguments applied to the greeter.
-      '';
+      description = "Command line arguments applied to the greeter.";
     };
 
     autologin = {
       enable = mkEnableOption "Autologin.";
-
       user = mkOption {
         type = enum (attrNames config.users.users);
-        default = attrHead (filterAttrs (n: _: n != "root") config.users.users);
-        description = ''
-          Determines which user is automatically logged in.
-        '';
+        default = attrHead (removeAttrs config.users.users ["root"]);
+        description = "Determines which user is automatically logged in.";
       };
     };
   };
@@ -68,7 +92,7 @@ in {
         default_session = {
           user = "greeter";
           command = concatStringsSep " " ([
-              (getExe cfg.package)
+              (getExe cfg.greeter)
               "--cmd ${cfg.command}"
             ]
             ++ cfg.greeterArgs);

@@ -4,17 +4,38 @@
   pkgs,
   ...
 }: let
-  inherit (lib.options) mkOption mkEnableOption;
-  inherit (lib.modules) mkIf mkDefault;
-  inherit (lib.attrsets) attrAny;
-  inherit (lib.lists) optional;
-  inherit (lib.types) str;
+
+  inherit 
+    (lib.options)
+    mkEnableOption
+    mkOption
+    ;
+
+  inherit
+    (lib.modules)
+    mkIf
+    ;
+
+  inherit
+    (lib.attrsets)
+    attrAny
+    ;
+
+  inherit
+    (lib.lists)
+    optional
+    ;
+
+  inherit
+    (lib.types)
+    str
+    ;
+
+  isDefaultShell =
+    config.users.defaultUserShell == pkgs.zsh 
+    || attrAny (x: x.shell == pkgs.zsh) config.users.users;
 
   cfg = config.modules.programs.zsh;
-  isDefaultShell =
-    config.users.defaultUserShell
-    == pkgs.zsh
-    || attrAny (x: x.shell == pkgs.zsh) config.users.users;
 in {
   options.modules.programs.zsh = {
     enable = mkEnableOption "ZSH shell.";
@@ -35,8 +56,8 @@ in {
       enableCompletion = true;
 
       promptInit =
-        if cfg.starship.enable
-        then ''eval "$(${pkgs.starship}/bin/starship init zsh)"''
+        if cfg.starship.enable then
+	  ''eval "$(${pkgs.starship}/bin/starship init zsh)"''
         else ''autoload -U promptinit && promptinit && prompt suse && setopt prompt_sp'';
     };
 

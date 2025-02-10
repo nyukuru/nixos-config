@@ -3,24 +3,38 @@
   lib,
   ...
 }: let
-  inherit (lib.options) mkOption mkEnableOption;
-  inherit (lib.modules) mkDefault mkForce;
-  inherit (lib.types) enum;
 
-  loader = {
+  inherit 
+    (lib.options)
+    mkEnableOption
+    mkOption
+    ;
+
+  inherit
+    (lib.modules)
+    mkDefault
+    ;
+
+  inherit
+    (lib.types)
+    enum
+    ;
+
+
+  loaders = {
     grub = {
       enable = true;
       useOSProber = mkDefault true;
       efiSupport = mkDefault true;
       device = mkDefault "nodev";
-      memtest86.enable = cfg.memtest86.enable;
+      inherit (cfg) memtest86;
     };
 
     systemd-boot = {
       enable = true;
-      consoleMode = "max";
-      editor = false;
-      memtest86.enable = cfg.memtest86.enable;
+      consoleMode = mkDefault "max";
+      editor = mkDefault false;
+      inherit (cfg) memtest86;
     };
   };
 
@@ -36,10 +50,10 @@ in {
       '';
     };
 
-    memtest86 = {
+    memtest86.enable = {
       enable = mkEnableOption "Memtest86." // {default = true;};
     };
   };
 
-  config.boot.loader.${cfg.type} = loader.${cfg.type};
+  config.boot.loader.${cfg.type} = loaders.${cfg.type};
 }

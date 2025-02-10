@@ -17,9 +17,7 @@
 
   inherit 
     (lib.types)
-    package
     listOf
-    either
     path
     str;
     
@@ -43,12 +41,6 @@ in {
       description = "URL of the newtab page.";
     };
 
-    profileDir = mkOption {
-      type = path;
-      default = "/var/lib/firefox/default/profile";
-      description = "Static profile directory to avoid polluting home.";
-    };
-
     extraPoliciesFiles = mkOption {
       type = listOf path;
       default = [];
@@ -69,15 +61,15 @@ in {
     };
 
     userChrome = mkOption {
-      type = either str package;
+      type = path;
       default = "";
-      description = "CSS to be appended into userChrome.css in the firefox profile.";
+      description = "userChrome.css file for the firefox profile.";
     };
 
     userContent = mkOption {
-      type = either str package;
+      type = path;
       default = "";
-      description = "CSS to be appended into userContent.css in the firefox profile.";
+      description = "userContent.css file for the firefox profile.";
     };
   };
 
@@ -88,30 +80,16 @@ in {
       extraPolicies = import ./policies.nix {inherit cfg lib pkgs;};
       extraPrefs = import ./preferences.nix {inherit cfg lib pkgs;};
 
-    in [
-      (pkgs.symlinkJoin {
-        name = "firefox";
-        paths = [
-          (pkgs.wrapFirefox cfg.package ({
-            inherit (cfg) 
-	      extraPrefsFiles 
-	      extraPoliciesFiles;
+    in [(
+      pkgs.wrapFirefox cfg.package {
+	inherit (cfg) 
+	  extraPrefsFiles 
+	  extraPoliciesFiles;
 
-	    inherit
-	      extraPolicies
-	      extraPrefs;
-          }))
-        ];
-        nativeBuildInputs = [pkgs.makeWrapper];
-        postBuild = ''
-          wrapProgram $out/bin/firefox \
-          --add-flags '--profile' \
-          --add-flags '${cfg.profileDir}'
-        '';
-      })
-    ];
-
-    # Create ephemeral firefox profile
-    systemd.tmpfiles.rules = ["d  ${cfg.profileDir} 0777 root root -   -"];
+	inherit
+	  extraPolicies
+	  extraPrefs;
+      }
+    )];
   };
 }

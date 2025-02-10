@@ -7,25 +7,17 @@
   inherit
     (lib.strings)
     concatMapAttrsStringSep
-    isString
+    substring
     toJSON;
 
   inherit
     (builtins)
     hashFile;
 
-  userChrome = if 
-    isString cfg.userChrome then
-      pkgs.writeText "userChrome.css" cfg.userChrome
-      else cfg.userChrome;
-
-  userContent = if
-    isString cfg.userContent then
-      pkgs.writeText "userContent.css" cfg.userContent
-    else cfg.userContent;
-
-  combinedHash = (hashFile "md5" userChrome) + (hashFile "md5" userContent);
-
+  combineHash = file1: file2: len: let
+    hash1 = substring 0 (len / 2) (hashFile "md5" file1);
+    hash2 = substring 0 (len / 2) (hashFile "md5" file2);
+  in hash1 + hash2;
 in ''
   // Apply chrome folder
   const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
@@ -38,12 +30,12 @@ in ''
 
   // XP_UNIX forces symlinks to be resolved when copying
   // so we are just going to normal copy from nix store
-  var userChrome = new FileUtils.File("${userChrome}");
-  var userContent = new FileUtils.File("${userContent}");
+  var userChrome = new FileUtils.File("${cfg.userChrome}");
+  var userContent = new FileUtils.File("${cfg.userContent}");
 
   // Combine hashes of both files
   var hashFile = chromeDir.clone();
-  hashFile.append("${combinedHash}");
+  hashFile.append("${combineHash cfg.userChrome cfg.userContent 16}");
 
   if (!chromeDir.exists()) {
       chromeDir.create(Ci.nsIFile.DIRECTORY_TYPE, FileUtils.PERMS_DIRECTORY);
@@ -59,7 +51,7 @@ in ''
       userChrome.copyTo(chromeDir, "userChrome.css");
       userContent.copyTo(chromeDir, "userContent.css");
 
-      // Write into storage the iteration of the config via nix hash
+      // Write into storage the iteration of the config via hash
       hashFile.create(Ci.nsIFile.NORMAL_FILE_TYPE, 0b100100100);
 
       var appStartup = Cc["@mozilla.org/toolkit/app-startup;1"].getService(Ci.nsIAppStartup);
@@ -856,9 +848,15 @@ in ''
       # XXX: Enterprise policy might be able to resolve this.
       "browser.tabs.firefox-view" = false;
 
-      # Disable bookmarks bar
+      # Custom style stuff
       "browser.toolbars.bookmarks.visibility" = "never";
       "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+      "svg.context-proprties.content.enabled" = true;
+
+      # Shyfox icons when available
+      "shyfox.enable.ext.mono.toolbar.icons" = true;
+      "shyfox.enable.ext.mono.context.icons" = true;
+      "shyfox.enable.context.menu.icons" = true;
 
       "browser.eme.ui.enabled" = true;
       "media.eme.ui.enabled" = true;

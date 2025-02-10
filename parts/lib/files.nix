@@ -1,7 +1,24 @@
-{lib, ...}: let
-  inherit (lib.strings) readFile concatMapStringsSep;
-  inherit (lib.lists) map;
-  inherit (lib.attrsets) mapAttrs attrNames filterAttrs;
+{
+  lib,
+  ...
+}: let
+
+  inherit 
+    (lib.strings)
+    concatMapStringsSep
+    readFile
+    ;
+
+  inherit 
+    (lib.lists) 
+    map
+    ;
+
+  inherit 
+    (lib.attrsets) 
+    filterAttrs
+    attrNames 
+    ;
 
   # Provide functions reference outside of builtins
   readDir = builtins.readDir;
@@ -22,13 +39,6 @@
   concatMapFiles = list:
     concatMapStringsSep "\n" (x: readFile x) list;
 
-  recursiveFileTree = dir:
-    mapAttrs
-    (n: v:
-      if v == "directory"
-      then recursiveFileTree (dir + "/${n}")
-      else dir + "/${n}")
-    (readDir dir);
 in {
   inherit
     dirsIn
@@ -36,6 +46,5 @@ in {
     readDir
     baseNameOf
     concatMapFiles
-    recursiveFileTree
     ;
 }

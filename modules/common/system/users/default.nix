@@ -7,7 +7,6 @@
 in {
   imports = [
     ./nyoo.nix
-    ./root.nix
   ];
 
   users = {

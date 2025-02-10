@@ -31,12 +31,12 @@ index e3f0660..b03969b 100644
    }
  }
 +
-+body:has(#sidebar-box) #nav-bar {
++body:has(#sidebar-box:not([hidden="true"])) #nav-bar {
 +  margin-left: calc(60px + 24px);
 +}
 +
 +body:has(#sidebar-box:hover) #nav-bar {
-+  margin-left: calc(248px + 24px);
++  margin-left: calc(248px + 24px) !important;
 +}
 +
  #PersonalToolbar {

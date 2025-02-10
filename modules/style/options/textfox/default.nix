@@ -68,8 +68,17 @@ in {
       }
     '';
 
-    userChrome = pkgs.stdenvNoCC.mkDerivation {
-      name = "textfox-userChrome.css";
+    chrome = pkgs.stdenvNoCC.mkDerivation {
+      inherit 
+        (cfg) 
+        extraUserChrome
+	extraUserContent;
+
+      inherit 
+        configCss;
+
+      name = "textfox-chrome";
+
       src = pkgs.fetchFromGitHub {
 	owner = "adriankarlen"; 
 	repo = "textfox";
@@ -79,61 +88,51 @@ in {
 
       patches = [
 	./patches/full-sidebar.patch
-      ];
-
-      inherit (cfg) extraUserChrome;
-      inherit configCss;
-      passAsFile = ["extraUserChrome" "configCss"];
-      dontBuild = true;
-      installPhase = ''
-	cat "chrome/overwrites.css" >> "$out"
-	cat "chrome/userChrome.css" >> "$out"
-	cat "chrome/sidebar.css" >> "$out"
-	cat "chrome/browser.css" >> "$out"
-	cat "chrome/findbar.css" >> "$out"
-	cat "chrome/navbar.css" >> "$out"
-	cat "chrome/urlbar.css" >> "$out"
-	cat "chrome/menus.css" >> "$out"
-	cat "chrome/tabs.css" >> "$out"
-	cat "chrome/defaults.css" >> "$out"
-
-	cat "$configCssPath" >> "$out"
-	cat "$extraUserChromePath" >> "$out"
-      '';
-    };
-
-    userContent = pkgs.stdenvNoCC.mkDerivation {
-      name = "textfox-userContent.css";
-      src = pkgs.fetchFromGitHub {
-	owner = "adriankarlen"; 
-	repo = "textfox";
-	rev = "68ae7744357157e5c30e807291fe04c6b2e36291";
-	hash = "sha256-2QrxNbXmjYP3COZIrCaRwPWqVYVq9ryj2+VXsHilQaQ=";
-      };
-
-      patches = [
+	./patches/obscolete-userChrome.patch
 	./patches/collapsed-tabs.patch
       ];
 
-      inherit (cfg) extraUserContent;
-      inherit configCss;
-      dontBuild = true;
-      passAsFile = ["extraUserContent" "configCss"];
-      installPhase = ''
-	cat "chrome/content/sidebery.css" >> "$out"
-	cat "chrome/content/newtab.css" >> "$out"
-	cat "chrome/content/about.css" >> "$out"
-	cat "chrome/defaults.css" >> "$out"
+      passAsFile = [
+        "extraUserChrome"
+	"extraUserContent"
+	"configCss"
+      ];
 
-	cat "$configCssPath" >> "$out"
-	cat "$extraUserContentPath" >> "$out"
+      dontBuild = true;
+      dontConfigure = true;
+
+      installPhase = ''
+        mkdir -p "$out"
+	cp -r "chrome/icons" "$out/icons"
+
+	cat "chrome/overwrites.css" >> "$out/userChrome.css"
+	cat "chrome/sidebar.css" >> "$out/userChrome.css"
+	cat "chrome/browser.css" >> "$out/userChrome.css"
+	cat "chrome/findbar.css" >> "$out/userChrome.css"
+	cat "chrome/navbar.css" >> "$out/userChrome.css"
+	cat "chrome/urlbar.css" >> "$out/userChrome.css"
+	sed "s|./icons|$out/icons|g" "chrome/icons.css" >> "$out/userChrome.css"
+	cat "chrome/menus.css" >> "$out/userChrome.css"
+	cat "chrome/tabs.css" >> "$out/userChrome.css"
+	cat "chrome/defaults.css" >> "$out/userChrome.css"
+
+	cat "$configCssPath" >> "$out/userChrome.css"
+	cat "$extraUserChromePath" >> "$out/userChrome.css"
+
+	cat "chrome/content/sidebery.css" >> "$out/userContent.css"
+	cat "chrome/content/newtab.css" >> "$out/userContent.css"
+	cat "chrome/content/about.css" >> "$out/userContent.css"
+	cat "chrome/defaults.css" >> "$out/userContent.css"
+
+	cat "$configCssPath" >> "$out/userContent.css"
+	cat "$extraUserContentPath" >> "$out/userContent.css"
       '';
     };
 
   in mkIf cfg.enable {
     modules.programs.firefox = {
-      userChrome = mkForce userChrome;
-      userContent = mkForce userContent;
+      userChrome = mkForce "${chrome}/userChrome.css";
+      userContent = mkForce "${chrome}/userContent.css";
     };
   };
 }

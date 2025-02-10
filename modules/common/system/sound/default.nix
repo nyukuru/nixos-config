@@ -1,6 +1,5 @@
 {
   imports = [
     ./pipewire
-    ./pulseaudio
   ];
 }
