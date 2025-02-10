@@ -3,23 +3,32 @@
   lib,
   ...
 }: let
-  inherit (lib.modules) mkDefault;
-  inherit (lib.attrsets) mapAttrsToList;
+
+  inherit 
+    (lib.modules)
+    mkDefault
+    mkForce
+    ;
+
+  GB = x: toString (x * 1024 * 1024 * 1024);
+
 in {
-  imports = [
-    # Nixpkgs option defaults
-    ./nixpkgs.nix
-    # Nix documentation defaults
-    ./documentation.nix
-    # Nix helper cli tool
-    ./nh.nix
-  ];
+  nixpkgs.config = {
+    allowUnfree = mkForce true;
+    allowBroken = mkDefault false;
+    #enableParallelBuildingByDefault = true;
+  };
 
-  nix = let
-    GB = x: toString (x * 1024 * 1024 * 1024);
-  in {
+  documentation = {
+    enable = mkDefault true;
+    doc.enable = mkDefault false;
+    info.enable = mkDefault false;
+    nixos.enable = mkDefault false;
+    man.enable = mkDefault true;
+  };
+
+  nix = {
     package = mkDefault pkgs.lix;
-
     daemonCPUSchedPolicy = mkDefault "idle";
     daemonIOSchedClass = mkDefault "idle";
     daemonIOSchedPriority = mkDefault 7;
@@ -27,21 +36,14 @@ in {
     # Store Optimizer
     optimise = {
       automatic = mkDefault true;
-      # Tuesday, Thursday, Saturday
       dates = mkDefault ["Tue,Thu,Sat"];
     };
 
     settings = {
       # https://nix.dev/manual/nix/2.18/command-ref/conf-file.html
-
       auto-optimise-store = mkDefault true;
-
-      # Restarts download after 30 seconds of no contact.
       stalled-download-timeout = mkDefault 30;
-
-      # The curl connection timeout, let us know if we have no internet.
       connect-timeout = mkDefault 10;
-
       allowed-users = ["root" "@wheel"];
       trusted-users = ["root" "@wheel"];
 
@@ -52,9 +54,6 @@ in {
       # Isolate builds, stop if something prevents that.
       sandbox = mkDefault true;
       sandbox-fallback = mkDefault false;
-
-      max-jobs = mkDefault 7;
-      cores = mkDefault 4;
 
       # Gives some extra lines to the tail of log
       log-lines = mkDefault 20;
@@ -67,12 +66,8 @@ in {
         "no-url-literals"
       ];
 
-      # Complete declaritive purity.
-      #pure-eval = true;
-
+      pure-eval = mkDefault true;
       warn-dirty = mkDefault false;
-
-      # Alert if a third party is changing the config.
       accept-flake-config = mkDefault false;
 
       substituters = [

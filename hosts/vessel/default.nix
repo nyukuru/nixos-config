@@ -3,6 +3,7 @@
     ./hardware-configuration.nix
     ./disk-config.nix
 
+    ./users
     ./modules
   ];
 
@@ -26,7 +27,17 @@
     dbus.packages = with pkgs; [dconf gcr];
   };
 
-  programs.nix-ld.enable = true;
+  programs = {
+    nix-ld.enable = true;
+    nh = {
+      enable = true;
+      clean = {
+        enable = true;
+	extraArgs = "--keep-since 3d --keep 5";
+	dates = "Sun";
+      };
+    };
+  };
 
   system.stateVersion = "24.05";
 }

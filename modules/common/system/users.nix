@@ -3,12 +3,13 @@
   lib,
   ...
 }: let
-  inherit (lib.modules) mkDefault;
-in {
-  imports = [
-    ./nyoo.nix
-  ];
 
+  inherit
+    (lib.modules)
+    mkDefault
+    ;
+
+in {
   users = {
     defaultUserShell = pkgs.zsh;
 
