@@ -3,12 +3,10 @@
   lib,
   ...
 }: let
-
   inherit
     (lib.modules)
     mkDefault
     ;
-
 in {
   users = {
     defaultUserShell = pkgs.zsh;

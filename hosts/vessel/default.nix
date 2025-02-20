@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs',
+  ...
+}: {
   imports = [
     ./hardware-configuration.nix
     ./disk-config.nix
@@ -14,6 +18,8 @@
       ]))
     unzip
     openvpn
+    dunst
+    prismlauncher
   ];
 
   boot = {
@@ -33,9 +39,13 @@
       enable = true;
       clean = {
         enable = true;
-	extraArgs = "--keep-since 3d --keep 5";
-	dates = "Sun";
+        extraArgs = "--keep-since 3d --keep 5";
+        dates = "Sun";
       };
+    };
+
+    steam = {
+      enable = true;
     };
   };
 

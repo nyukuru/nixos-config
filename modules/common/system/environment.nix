@@ -3,9 +3,8 @@
   lib,
   ...
 }: let
-  inherit 
+  inherit
     (lib.modules)
-    mkDefaultAttr
     mkDefault
     mkForce
     ;
@@ -14,7 +13,6 @@
     (lib.meta)
     getExe
     ;
-
 in {
   environment = {
     defaultPackages = mkForce [];
@@ -31,16 +29,15 @@ in {
       vim
     ];
 
-    variables = mkDefaultAttr {
+    variables = {
       EDITOR = "nvim";
       VISUAL = "nvim";
       SUDO_EDITOR = "nvim";
       BROWSER = "firefox";
-      FLAKE = "~/nixos-config";
     };
 
     shellAliases = {
-      nr = "nix-store --verify; ${getExe pkgs.nh} os switch";
+      nr = "nix-store --verify; pushd ~/nixos-config; ${getExe pkgs.nh} os switch . -au; popd";
     };
   };
 

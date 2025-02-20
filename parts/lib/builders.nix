@@ -4,30 +4,28 @@
   lib,
   ...
 }: let
-
-  inherit 
+  inherit
     (lib)
     nixosSystem
     ;
 
-  inherit 
-    (lib.attrsets) 
+  inherit
+    (lib.attrsets)
     recursiveUpdate
     ;
 
-  inherit 
-    (lib.lists) 
-    optionals 
-    optional 
+  inherit
+    (lib.lists)
+    optionals
+    optional
     map
     ;
-
 
   mkModules = {
     form ? "",
     style ? "",
     defaultModules ? true,
-    extraModules ? []
+    extraModules ? [],
   }: let
     modules = inputs.self.nixosModules;
   in
@@ -36,11 +34,11 @@
       extraModules
       ++ optional (form != "") (modules.forms.${form} or (throw "No such form ${form}!"))
       ++ optional (style != "") (modules.style.${style} or (throw "No such style/theme ${style}!"))
-      ++ optionals (defaultModules) [
+      ++ optionals defaultModules [
         modules.common
-        modules.system 
-	modules.programs
-	modules.style.options
+        modules.system
+        modules.programs
+        modules.style.options
       ]
     );
 
@@ -75,8 +73,8 @@
         }
     );
 in {
-  inherit 
-    mkNixosSystem 
+  inherit
+    mkNixosSystem
     mkModules
     ;
 }

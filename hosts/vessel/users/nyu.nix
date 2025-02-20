@@ -17,6 +17,8 @@
       "network"
       "nix"
       "networkmanager"
+
+      "media"
     ];
   };
 }

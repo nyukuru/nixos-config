@@ -3,22 +3,20 @@
   config,
   ...
 }: let
-
-  inherit 
+  inherit
     (inputs.nixpkgs)
     lib
     ;
 
-  inherit 
+  inherit
     (lib.fixedPoints)
     composeManyExtensions
     ;
 
-  inherit 
+  inherit
     (lib.attrsets)
     recursiveUpdate
     ;
-
 
   # An overlay of my library to go onto nixpkgs'
   myLib = final: prev: let
@@ -45,7 +43,6 @@
   ];
 
   lib' = lib.extend extensions;
-
 in {
   perSystem._module.args.lib = lib';
   _module.args.lib = lib';

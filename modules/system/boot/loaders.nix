@@ -3,8 +3,7 @@
   lib,
   ...
 }: let
-
-  inherit 
+  inherit
     (lib.options)
     mkEnableOption
     mkOption
@@ -19,7 +18,6 @@
     (lib.types)
     enum
     ;
-
 
   loaders = {
     grub = {

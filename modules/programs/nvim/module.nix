@@ -4,8 +4,7 @@
   config,
   ...
 }: let
-
-  inherit 
+  inherit
     (lib.options)
     mkPackageOption
     mkEnableOption
@@ -17,7 +16,7 @@
     mkIf
     ;
 
-  inherit 
+  inherit
     (lib.strings)
     hasSuffix
     ;
@@ -45,8 +44,10 @@
     package
     nullOr
     listOf
+    lines
     path
-    str;
+    str
+    ;
 
   cfg = config.modules.programs.nvim;
 in {
@@ -65,12 +66,12 @@ in {
 
     extra = {
       vim = mkOption {
-        type = str;
+        type = lines;
         default = "";
         description = "VimL content to be appended on the generated init.vim.";
       };
       lua = mkOption {
-        type = str;
+        type = lines;
         default = "";
         description = "Lua content to be appended on the generated init.lua.";
       };
@@ -121,8 +122,8 @@ in {
 
           plugins =
             cfg.plugins.start
-            ++ (map 
-	      (x: {
+            ++ (map
+              (x: {
                 plugin = x;
                 optional = true;
               })

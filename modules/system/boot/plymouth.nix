@@ -41,9 +41,6 @@ in {
     };
 
     powerManagement = {
-      powerDownCommands = ''
-        ${getExe' pkgs.plymouth "plymouth"} --show-splash
-      '';
       resumeCommands = ''
         ${getExe' pkgs.plymouth "plymouth"} --quit
       '';

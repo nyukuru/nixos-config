@@ -3,15 +3,13 @@
   lib,
   ...
 }: let
-
-  inherit 
+  inherit
     (lib.modules)
     mkDefault
     mkForce
     ;
 
   GB = x: toString (x * 1024 * 1024 * 1024);
-
 in {
   nixpkgs.config = {
     allowUnfree = mkForce true;

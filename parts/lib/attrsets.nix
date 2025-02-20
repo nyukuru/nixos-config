@@ -1,25 +1,19 @@
-{
-  lib,
-  ...
-}: let
-
-  inherit 
-    (lib.attrsets) 
+{lib, ...}: let
+  inherit
+    (lib.attrsets)
     mapAttrsToList
-    attrNames 
+    attrNames
     getAttr
     ;
 
-  inherit 
-    (lib.lists) 
-    head 
+  inherit
+    (lib.lists)
+    head
     elem
     ;
 
-
   attrHead = x: getAttr (head (attrNames x)) x;
   attrAny = pred: elem true (mapAttrsToList (_: pred));
-
 in {
   inherit
     attrHead

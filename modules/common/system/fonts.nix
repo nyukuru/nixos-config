@@ -3,7 +3,10 @@
   lib,
   ...
 }: let
-  inherit (lib.modules) mkDefault;
+  inherit
+    (lib.modules)
+    mkDefault
+    ;
 in {
   fonts = {
     packages = with pkgs; [

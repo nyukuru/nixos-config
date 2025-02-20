@@ -4,8 +4,18 @@
   lib,
   ...
 }: let
-  inherit (lib.options) mkEnableOption mkPackageOption;
-  inherit (lib.modules) mkIf mkDefault;
+
+  inherit 
+    (lib.options)
+    mkPackageOption
+    mkEnableOption
+    ;
+
+  inherit
+    (lib.modules)
+    mkDefault
+    mkIf
+    ;
 
   cfg = config.modules.system.hardware.bluetooth;
 in {
@@ -22,12 +32,13 @@ in {
 
     hardware.bluetooth = {
       enable = true;
-      package = cfg.package;
+      #package = cfg.package;
       powerOnBoot = mkDefault true;
 
       # Security vulnerability
-      disabledPlugins = ["sap"];
+      #disabledPlugins = ["sap"];
 
+      /*
       settings = mkDefault {
         General = {
           JustWorksRepairing = "always";
@@ -35,6 +46,7 @@ in {
           Experimental = true;
         };
       };
+      */
     };
     # A simple bluetooth device manager.
     services.blueman.enable = true;

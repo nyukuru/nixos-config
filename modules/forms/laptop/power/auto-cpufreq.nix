@@ -1,12 +1,15 @@
 {lib, ...}: let
-  inherit (lib.modules) mkDefault;
+  inherit
+    (lib.modules)
+    mkDefault
+    ;
+
+  MHz = x: x * 1000;
 in {
   services = {
     auto-cpufreq = {
       enable = true;
-      settings = let
-        MHz = x: x * 1000;
-      in {
+      settings = {
         charger = {
           governor = "powersave";
           energy_performance_preference = "power";

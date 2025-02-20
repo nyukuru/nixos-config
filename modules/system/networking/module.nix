@@ -3,9 +3,8 @@
   config,
   ...
 }: let
-
-  inherit 
-    (lib.options) 
+  inherit
+    (lib.options)
     mkEnableOption
     mkOption
     ;
@@ -43,15 +42,19 @@ in {
 
       extra = mkOption {
         type = listOf str;
-	default = [];
-	description = "Location of nameservers to use.";
+        default = [];
+        description = "Location of nameservers to use.";
       };
     };
   };
 
   config = mkIf cfg.enable {
     # TODO: fix
-    #services.resolved.dnssec = mkDefault "allow-downgrade";
+    services.resolved = {
+      enable = true;
+      dnssec = "false";
+    };
+    
 
     systemd = {
       network.wait-online.enable = false;
@@ -61,27 +64,29 @@ in {
     networking = {
       useDHCP = false;
       useNetworkd = !config.networking.useDHCP;
+      #useHostResolvConf = true;
 
-      nameservers = cfg.nameservers.extra
+      nameservers =
+        cfg.nameservers.extra
         ++ optionals cfg.nameservers.cloudflare [
-	    "1.1.1.2"
-	    "2606:4700:4700:1112"
-	    "1.0.0.2"
-	    "2606:4700:4700:1002"
-	  ]
-	++ optionals cfg.nameservers.quad9 [
-	    "9.9.9.9"
-	    "2620:fe::9"
-	    "149.112.112.112"
-	    "2620:fe::fe"
-	  ];
+          "1.1.1.2"
+          "2606:4700:4700::1112"
+          "1.0.0.2"
+          "2606:4700:4700::1002"
+        ]
+        ++ optionals cfg.nameservers.quad9 [
+          "9.9.9.9"
+          "2620:fe::9"
+          "149.112.112.112"
+          "2620:fe::fe"
+        ];
 
       networkmanager = {
         enable = mkDefault true;
-	wifi = {
-	  macAddress = mkDefault "reandom";
-	  powersave = mkDefault true;
-	};
+        wifi = {
+          macAddress = mkDefault "random";
+          powersave = mkDefault true;
+        };
       };
     };
   };

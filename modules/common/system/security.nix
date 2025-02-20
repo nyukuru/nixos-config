@@ -3,12 +3,10 @@
   lib,
   ...
 }: let
-
-  inherit 
+  inherit
     (lib.modules)
     mkDefault
     ;
-
 in {
   security = {
     protectKernelImage = mkDefault true;

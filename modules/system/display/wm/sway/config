@@ -12,7 +12,7 @@ set $menu dmenu_path | wmenu | xargs swaymsg exec --
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in \/run\/current-system\/sw\/share\/backgrounds\/sway\/)
-output * bg #000000 solid_color
+#output * bg #000000 solid_color
 
 input "1267:12572:VEN_04F3:00_04F3:311C_Touchpad" {
  dwt disabled

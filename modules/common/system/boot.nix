@@ -4,8 +4,15 @@
   lib,
   ...
 }: let
-  inherit (lib.modules) mkDefault;
-  inherit (lib.meta) getExe';
+  inherit
+    (lib.modules)
+    mkDefault
+    ;
+
+  inherit
+    (lib.meta)
+    getExe'
+    ;
 in {
   config.boot = {
     consoleLogLevel = mkDefault 3;

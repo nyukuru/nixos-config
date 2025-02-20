@@ -8,11 +8,10 @@
     mkDefault
     ;
 
-  inherit 
+  inherit
     (lib.meta)
     getExe
     ;
-
 in {
   security = {
     polkit.enable = mkDefault true;
@@ -44,9 +43,9 @@ in {
     wlr = {
       enable = true;
       settings.screencast = {
-	max_fps = 30;
-	chooser_type = "simple";
-	chooser_cmd = mkDefault "${getExe pkgs.slurp} -orf %o";
+        max_fps = 30;
+        chooser_type = "simple";
+        chooser_cmd = mkDefault "${getExe pkgs.slurp} -orf %o";
       };
     };
   };

@@ -1,23 +1,19 @@
-{
-  lib,
-  ...
-}: let
-
-  inherit 
+{lib, ...}: let
+  inherit
     (lib.strings)
     concatMapStringsSep
     readFile
     ;
 
-  inherit 
-    (lib.lists) 
+  inherit
+    (lib.lists)
     map
     ;
 
-  inherit 
-    (lib.attrsets) 
+  inherit
+    (lib.attrsets)
     filterAttrs
-    attrNames 
+    attrNames
     ;
 
   # Provide functions reference outside of builtins
@@ -38,7 +34,6 @@
 
   concatMapFiles = list:
     concatMapStringsSep "\n" (x: readFile x) list;
-
 in {
   inherit
     dirsIn

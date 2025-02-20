@@ -4,7 +4,6 @@
   config,
   ...
 }: let
-
   inherit
     (lib.options)
     mkEnableOption
@@ -32,36 +31,36 @@ in {
     enable = mkEnableOption "Firewall." // {default = true;};
 
     tables = mkOption {
-      type = attrsOf (submodule 
-      ({name, ...}: {
-        options = {
-	  enable = mkEnableOption "${name}" // {default = true;};
+      type = attrsOf (submodule
+        ({name, ...}: {
+          options = {
+            enable = mkEnableOption "${name}" // {default = true;};
 
-	  name = mkOption {
-	    type = str;
-	    default = name;
-	    description = "Table name.";
-	  };
+            name = mkOption {
+              type = str;
+              default = name;
+              description = "Table name.";
+            };
 
-	  content = mkOption {
-	    type = lines;
-	    default = "";
-	    description = "The table content.";
-	  };
+            content = mkOption {
+              type = lines;
+              default = "";
+              description = "The table content.";
+            };
 
-	  family = mkOption {
-	    description = "Table family.";
-	    type = enum [
-	      "ip"
-	      "ip6"
-	      "inet"
-	      "arp"
-	      "bridge"
-	      "netdev"
-	    ];
-	  };
-	};
-      }));
+            family = mkOption {
+              description = "Table family.";
+              type = enum [
+                "ip"
+                "ip6"
+                "inet"
+                "arp"
+                "bridge"
+                "netdev"
+              ];
+            };
+          };
+        }));
       default = {};
       description = "nftables configs";
     };
@@ -70,25 +69,27 @@ in {
   config = mkIf (config.modules.system.networking.enable && cfg.enable) {
     networking = {
       firewall = {
-	enable = true;
-	package = pkgs.nftables;
-	pingLimit = "1/minute burst 5 packets";
+        enable = true;
+        package = pkgs.nftables;
+        pingLimit = "1/minute burst 5 packets";
       };
 
       nftables = {
-	enable = true;
-	flushRuleset = true;
+        enable = true;
+        flushRuleset = true;
 
-	tables = {
-	  fail2ban = {
-	    family = "ip";
-	    content = ''
-	      chain input {
-	        type filter hook input priority 100;
-	      }
-	    '';
-	  };
-	} // cfg.tables;
+        tables =
+          {
+            fail2ban = {
+              family = "ip";
+              content = ''
+                chain input {
+                  type filter hook input priority 100;
+                }
+              '';
+            };
+          }
+          // cfg.tables;
       };
     };
   };

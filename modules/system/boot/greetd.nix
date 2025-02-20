@@ -4,8 +4,7 @@
   lib,
   ...
 }: let
-
-  inherit 
+  inherit
     (lib.options)
     mkPackageOption
     mkEnableOption
@@ -29,18 +28,17 @@
     attrHead
     ;
 
-  inherit 
+  inherit
     (lib.types)
-    listOf 
+    listOf
     enum
     str
     ;
 
-  inherit 
+  inherit
     (lib.meta)
     getExe
     ;
-
 
   cfg = config.modules.system.boot.greetd;
   wm = config.modules.system.display.wm.default;
