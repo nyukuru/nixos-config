@@ -1,53 +1,36 @@
 {
-  pkgs,
   inputs',
+  inputs,
+  config,
+  pkgs,
   ...
 }: {
   imports = [
-    ./hardware-configuration.nix
     ./disk-config.nix
 
+    ./programs.nix
+    ./style.nix
+    ./system.nix
+    ./services.nix
+
     ./users
-    ./modules
   ];
 
   environment.systemPackages = with pkgs; [
-    (python3.withPackages (ps:
-      with ps; [
-        dbus-python
-      ]))
     unzip
     openvpn
     dunst
     prismlauncher
+    git-crypt
+    mangohud
+    obsidian
+    obs-studio
+
+    (inputs'.xivlauncher-rb.packages.xivlauncher-rb.override {
+      useGameMode = true;
+      nvngxPath = "${config.hardware.nvidia.package}/lib/nvidia/wine";
+    })
   ];
-
-  boot = {
-    extraModprobeConfig = ''
-      options iwlwifi power_save=1 disable_11ax=1
-    '';
-  };
-
-  services = {
-    printing.enable = true;
-    dbus.packages = with pkgs; [dconf gcr];
-  };
-
-  programs = {
-    nix-ld.enable = true;
-    nh = {
-      enable = true;
-      clean = {
-        enable = true;
-        extraArgs = "--keep-since 3d --keep 5";
-        dates = "Sun";
-      };
-    };
-
-    steam = {
-      enable = true;
-    };
-  };
 
   system.stateVersion = "24.05";
 }

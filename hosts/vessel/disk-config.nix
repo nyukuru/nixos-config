@@ -30,22 +30,31 @@
                   type = "btrfs";
                   extraArgs = ["-f" "-L fsroot"];
                   subvolumes = {
-                    "/root" = {
+                    "root" = {
                       mountpoint = "/";
                       mountOptions = ["subvol=root" "compress=zstd" "noatime"];
                     };
-                    "/home" = {
+
+                    "root/home" = {
                       mountpoint = "/home";
                       mountOptions = ["subvol=home" "compress=zstd" "noatime"];
                     };
-                    "/nix" = {
+
+                    "root/nix" = {
                       mountpoint = "/nix";
                       mountOptions = ["subvol=nix" "compress=zstd" "noatime"];
                     };
-                    "/persist" = {
+
+                    "root/persist" = {
                       mountpoint = "/persist";
                       mountOptions = ["subvol=perist" "compress=zstd" "noatime"];
                     };
+
+		    "root/libvirt" = {
+		      mountPoint = "/libvirt";
+		      mountOptions = ["subvol=libvirt" "noatime"];
+		    };
+
                     "/swap" = {
                       mountpoint = "/.swapvol";
                       swap.swapfile.size = "16G";

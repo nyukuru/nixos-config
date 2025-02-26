@@ -67,11 +67,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1739841949,
-        "narHash": "sha256-lSOXdgW/1zi/SSu7xp71v+55D5Egz8ACv0STkj7fhbs=",
+        "lastModified": 1740485968,
+        "narHash": "sha256-WK+PZHbfDjLyveXAxpnrfagiFgZWaTJglewBWniTn2Y=",
         "owner": "nix-community",
         "repo": "disko",
-        "rev": "15dbf8cebd8e2655a883b74547108e089f051bf0",
+        "rev": "19c1140419c4f1cdf88ad4c1cfb6605597628940",
         "type": "github"
       },
       "original": {
@@ -207,11 +207,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1739186342,
-        "narHash": "sha256-2j+sln9RwQn+g7J4GmdFFgvqXnLkvWBNMaUzONlkzUE=",
+        "lastModified": 1740440383,
+        "narHash": "sha256-w8ixbqOGrVWMQZFFs4uAwZpuwuGMzFoKjocMFxTR5Ts=",
         "owner": "nix-community",
         "repo": "lanzaboote",
-        "rev": "3bdeebbc484a09391c4f0ec8a37bb77809426660",
+        "rev": "6321bc060d757c137c1fbae2057c7e941483878f",
         "type": "github"
       },
       "original": {
@@ -222,11 +222,11 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1739798439,
-        "narHash": "sha256-GyipmjbbQEaosel/+wq1xihCKbv0/e1LU00x/8b/fP4=",
+        "lastModified": 1740387674,
+        "narHash": "sha256-pGk/aA0EBvI6o4DeuZsr05Ig/r4uMlSaf5EWUZEWM10=",
         "owner": "nixos",
         "repo": "nixos-hardware",
-        "rev": "3e2ea8a49d4d76276b0f4e2041df8ca5c0771371",
+        "rev": "d58f642ddb23320965b27beb0beba7236e9117b5",
         "type": "github"
       },
       "original": {
@@ -237,11 +237,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1739866667,
-        "narHash": "sha256-EO1ygNKZlsAC9avfcwHkKGMsmipUk1Uc0TbrEZpkn64=",
+        "lastModified": 1740367490,
+        "narHash": "sha256-WGaHVAjcrv+Cun7zPlI41SerRtfknGQap281+AakSAw=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "73cf49b8ad837ade2de76f87eb53fc85ed5d4680",
+        "rev": "0196c0175e9191c474c26ab5548db27ef5d34b05",
         "type": "github"
       },
       "original": {
@@ -303,7 +303,9 @@
         "lanzaboote": "lanzaboote",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
-        "treefmt-nix": "treefmt-nix"
+        "treefmt-nix": "treefmt-nix",
+        "wfvm": "wfvm",
+        "xivlauncher-rb": "xivlauncher-rb"
       }
     },
     "rust-overlay": {
@@ -359,6 +361,46 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "wfvm": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1718082876,
+        "narHash": "sha256-u4OgfsO6jnQwHNmxHhSIfCKaa2gYoIYwGKPJFZSpK/A=",
+        "ref": "refs/heads/master",
+        "rev": "e811c7c5d87059cb93b6548109fcafb3268a3af1",
+        "revCount": 70,
+        "type": "git",
+        "url": "https://git.m-labs.hk/m-labs/wfvm"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.m-labs.hk/m-labs/wfvm"
+      }
+    },
+    "xivlauncher-rb": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1740481736,
+        "narHash": "sha256-MXkHv125m03bnlh9dD+S5jWUuY552vrSDzagX9ZEq1Q=",
+        "owner": "drakon64",
+        "repo": "nixos-xivlauncher-rb",
+        "rev": "fdab5cbb7d4c32afc7e55f1639591453f4335fa9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "drakon64",
+        "repo": "nixos-xivlauncher-rb",
         "type": "github"
       }
     }

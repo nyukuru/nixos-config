@@ -20,14 +20,15 @@
   inherit
     (lib.strings)
     concatMapAttrsStringSep
+    concatStringsSep
     isString
     isAttrs
+    isList
     toJSON
     ;
 
   inherit
     (lib.types)
-    package
     attrsOf
     listOf
     nullOr
@@ -59,16 +60,20 @@
 	str
 	path
 	(attrsOf valueType)
+	(listOf valueType)
       ]) // {
         description = "Sway config value";
       };
     in valueType;
 
     generate = let
+      listToConfig = concatStringsSep "\n";
       attrToConfig = concatMapAttrsStringSep "\n" (
         n: v: 
 	  if isAttrs v then
 	    "${n} {\n${attrToConfig v}\n}"
+	  else if isList v then
+	    "${n} {\n${listToConfig v}\n}"
 	  else if isString v then
 	    "${n} ${v}"
 	  else
@@ -80,9 +85,10 @@
 
   cfg = config.modules.system.display.wm.sway;
   gpu = config.modules.system.hardware.gpu.type;
+
 in {
   imports = [
-    ../wayland.nix
+    ./wayland.nix
   ];
 
   options.modules.system.display.wm.sway = {
@@ -98,11 +104,7 @@ in {
             withGtkWrapper = true;
             enableXWayland = cfg.xwayland.enable;
             isNixOS = true;
-            extraOptions = [
-                "--config"
-                "${swayConf.generate "sway.conf" cfg.settings}"
-              ]
-              ++ optional (mutuallyInclusive ["nvidia" "hybrid-nvidia"] gpu)
+            extraOptions = optional (mutuallyInclusive ["nvidia" "hybrid-nvidia"] gpu)
               "--unsupported-gpu";
           };
       };
@@ -118,7 +120,7 @@ in {
         export ANKI_WAYLAND=1
         export MOZ_ENABLE_WAYLAND=1
         export XDG_SESSION_TYPE=wayland
-        export SDL_VIDEODRIVER=wayland, x11
+        export SDL_VIDEODRIVER=wayland
         export CLUTTER_BACKEND=wayland
 
         export WLR_BACKEND=wayland
@@ -140,27 +142,60 @@ in {
       enable = mkEnableOption "XWayland" // {default = true;};
     };
 
-    extraPackages = mkOption {
-      type = listOf package;
-      default = with pkgs; [
-        swaylock
-        swayidle
-        dmenu
-        wmenu
-        brightnessctl
-        wl-clipboard
-        grim
-        slurp
-        mako
-      ];
+    swayidle = {
+      enable = mkEnableOption "Swayidle";
+      package = mkPackageOption pkgs "swayidle" {};
+
+      settings = mkOption {
+        type = swayConf.type;
+	default = {};
+	description = "Swayidle config content.";
+      };
+    };
+
+    swaylock = {
+      enable = mkEnableOption "swaylock";
+      package = mkPackageOption pkgs "swaylock" {};
+
+      settings = mkOption {
+        type = swayConf.type;
+	default = {};
+	description = "Swaylock config content.";
+      };
     };
   };
 
   config = mkIf cfg.enable {
     programs.sway.enable = mkForce false;
 
-    programs.foot.enable = true;
+    environment = {
+      systemPackages = [cfg.package]
+	++ optional cfg.xwayland.enable pkgs.xwayland
+	++ optional cfg.swayidle.enable cfg.swayidle.package
+	++ optional cfg.swaylock.enable cfg.swaylock.package;
 
+      etc = {
+        "sway/config".source = swayConf.generate "sway.conf" cfg.settings;
+	"swaylock/config".source = swayConf.generate "swaylock.conf" cfg.swaylock.settings;
+	"swayidle/config".source = swayConf.generate "swayidle.conf" cfg.swayidle.settings;
+      };
+    };
+
+    # https://github.com/emersion/slurp?tab=readme-ov-file#example-usage
+    xdg.portal.wlr.settings.screencast.chooser_cmd = ''
+      ${getExe' cfg.package "swaymsg"} -t get_tree | \
+      ${getExe pkgs.jq} '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | \
+      ${getExe pkgs.slurp}'';
+
+    systemd.user.targets.sway-session = {
+      description = "sway compositor session";
+      documentation = [ "man:systemd.special(7)" ];
+      bindsTo = [ "graphical-session.target" ];
+      wants = [ "graphical-session-pre.target" ];
+      after = [ "graphical-session-pre.target" ];
+    };
+
+    # The default config settings
     modules.system.display.wm.sway.settings = {
       input = {
 	"type:touchpad" = {
@@ -169,11 +204,18 @@ in {
 	};
       };
 
+      exec = [
+        # Import important environment variables into D-Bus and systemd
+        "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP"
+	"systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK; systemctl --user start sway-session.target"
+	"swaymsg -t subscribe '[\"shutdown\"]' && systemctl --user stop sway-session.target"
+      ] ++ optional config.modules.programs.dunst.enable config.modules.programs.dunst.package;
+
       bindsym = {
-	"Mod4+Return" = "exec foot";
+	"Mod4+Return" = "exec ${getExe pkgs.foot}";
 	"Mod4+f" = "exec firefox";
 
-	"Mod4+d" = "exec dmenu_path | wmenu | xargs swaymsg exec --";
+	"Mod4+d" = "exec ${getExe' pkgs.dmenu "dmenu_path"} | ${getExe pkgs.wmenu} | xargs swaymsg exec --";
 	"Mod4+q" = "kill";
 
 	"Mod4+h" = "focus left";
@@ -219,22 +261,5 @@ in {
 	position = "top";
       };
     };
-
-    environment.systemPackages =
-      [cfg.package]
-      ++ cfg.extraPackages
-      ++ optional cfg.xwayland.enable pkgs.xwayland;
-
-    environment.etc = {
-      "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
-        exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
-      '';
-    };
-
-    # https://github.com/emersion/slurp?tab=readme-ov-file#example-usage
-    xdg.portal.wlr.settings.screencast.chooser_cmd = ''
-      ${getExe' cfg.package "swaymsg"} -t get_tree | \
-      ${getExe pkgs.jq} '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | \
-      ${getExe pkgs.slurp}'';
   };
 }

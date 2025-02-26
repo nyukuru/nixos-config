@@ -1,16 +1,16 @@
 {
-  config,
   lib,
   ...
 }: let
-  inherit (lib.options) mkEnableOption;
 
-  cfg = config.modules.system.sound;
+  inherit
+    (lib.options)
+    mkEnableOption
+    ;
+
 in {
   imports = [
-    # Defines current sound server.
     ./servers.nix
-    # Adds realtime audio option and functionality.
     ./realtime.nix
   ];
 

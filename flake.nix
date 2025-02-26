@@ -45,6 +45,18 @@
       url = "github:nix-community/lanzaboote";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Windows vm easy setup
+    wfvm = {
+      url = "git+https://git.m-labs.hk/m-labs/wfvm";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # XIV launcher with some patches to work better i.e DLSS
+    xivlauncher-rb = {
+      url = "github:drakon64/nixos-xivlauncher-rb";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs:

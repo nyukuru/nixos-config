@@ -1,11 +1,7 @@
 {
-  pkgs ?
-    import <nixpkgs>
-    {}
-    .stdenvNoCC
-    ? pkgs.stdenvNoCC,
-  fetchFromGitHub ? pkgs.fetchFromGitHub,
-  lib ? pkgs.lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  lib,
 }:
 stdenvNoCC.mkDerivation {
   pname = "plymouth-copland-theme";

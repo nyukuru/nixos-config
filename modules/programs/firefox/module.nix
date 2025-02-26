@@ -34,7 +34,13 @@ in {
 
   options.modules.programs.firefox = {
     enable = mkEnableOption "Firefox web browser.";
-    package = mkPackageOption pkgs "firefox-esr-128-unwrapped" {};
+    package = mkPackageOption pkgs "firefox-esr-128-unwrapped" {}
+    // {
+      apply = p: pkgs.wrapFirefox p {
+        extraPrefs = cfg.preferences;
+	extraPolicies = cfg.policies;
+      };
+    };
 
     newtab = mkOption {
       type = str;
@@ -58,13 +64,6 @@ in {
   config = mkIf cfg.enable {
     programs.firefox.enable = mkForce false;
 
-    environment.systemPackages = [
-      (
-        pkgs.wrapFirefox cfg.package {
-          extraPrefs = cfg.preferences;
-          extraPolicies = cfg.policies;
-        }
-      )
-    ];
+    environment.systemPackages = [cfg.package];
   };
 }

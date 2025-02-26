@@ -1,0 +1,8 @@
+{
+  lib,
+  ...
+}: {
+  imports = [
+    ./vfio.nix
+  ];
+}

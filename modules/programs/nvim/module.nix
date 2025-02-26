@@ -50,7 +50,12 @@
     ;
 
   cfg = config.modules.programs.nvim;
+
 in {
+  imports = [
+    ./default-config
+  ];
+
   options.modules.programs.nvim = {
     enable = mkEnableOption "Neovim text editor";
     package = mkPackageOption pkgs "neovim-unwrapped" {};

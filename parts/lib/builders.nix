@@ -36,6 +36,7 @@
       ++ optional (style != "") (modules.style.${style} or (throw "No such style/theme ${style}!"))
       ++ optionals defaultModules [
         modules.common
+	modules.services
         modules.system
         modules.programs
         modules.style.options

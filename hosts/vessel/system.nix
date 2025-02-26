@@ -1,4 +1,24 @@
-{packages, ...}: {
+{
+  packages,
+  ...
+}: {
+  boot = {
+    extraModprobeConfig = ''
+      options iwlwifi power_save=1 disable_11ax=1
+    '';
+
+    # From generated hardware-config
+    initrd.availableKernelModules = [
+      "xhci_pci"
+      "thunderbolt"
+      "vmd"
+      "nvme"
+      "usb_storage"
+      "sd_mod"
+      "rtsx_pci_sdmmc"
+    ];
+  };
+
   modules.system = {
     /*
      _  _             _
@@ -76,10 +96,12 @@
     sound = {
       enable = true;
 
+    /*
       realtime = {
         enable = true;
         soundcardPci = "0000:00:1f.3";
       };
+    */
     };
     /*
      ___                       _   _

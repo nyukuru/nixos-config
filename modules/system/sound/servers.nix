@@ -26,16 +26,16 @@ in {
 
       services.pipewire = {
         enable = mkForce true;
-        audio.enable = mkDefault true;
+        #audio.enable = mkDefault true;
         pulse.enable = mkDefault true;
         alsa.enable = mkDefault true;
         wireplumber.enable = mkDefault true;
       };
 
-      systemd.user.services = {
-        pipewire.wantedBy = ["default.target"];
-        pipewire-pulse.wantedBy = ["default.target"];
-      };
+      #systemd.user.services = {
+        #pipewire.wantedBy = ["default.target"];
+        #pipewire-pulse.wantedBy = ["default.target"];
+      #};
     })
 
     (mkIf (cfg.type == "pulseaudio") {

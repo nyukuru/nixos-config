@@ -40,6 +40,7 @@
   extensions = composeManyExtensions [
     myLib
     (_: _: inputs.flake-parts.lib)
+    (_: _: inputs.wfvm.lib)
   ];
 
   lib' = lib.extend extensions;

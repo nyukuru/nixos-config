@@ -53,6 +53,7 @@ in {
 
     # Bluetooth audio if using pipewire sound server.
     # https://nixos.wiki/wiki/PipeWire#Bluetooth_Configuration
+    /*
     services.pipewire.wireplumber.extraConfig = {
       "10-bluez" = {
         "monitor.bluez.properties" = {
@@ -63,5 +64,6 @@ in {
         };
       };
     };
+    */
   };
 }

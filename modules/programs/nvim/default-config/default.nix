@@ -31,8 +31,8 @@
 
   # Packages needed for this config
   environment.systemPackages = with pkgs; [
+    llvmPackages_19.clang-tools
     lua-language-server
-    # Waiting for unstable to merge build error fix
     basedpyright
     nil
   ];

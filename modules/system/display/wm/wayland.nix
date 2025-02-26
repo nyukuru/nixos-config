@@ -12,6 +12,7 @@
     (lib.meta)
     getExe
     ;
+
 in {
   security = {
     polkit.enable = mkDefault true;
@@ -29,14 +30,20 @@ in {
     };
   };
 
+  environment.systemPackages = [
+    pkgs.wl-clipboard
+    pkgs.grim
+    pkgs.mako
+  ];
+
   xdg.portal = {
     enable = true;
     extraPortals = with pkgs; [xdg-desktop-portal-gtk];
 
     config.common = {
       default = ["gtk"];
-      "org.freedesktop.impl.portal.Screencast" = ["wlr"];
-      "org.freedesktop.impl.portal.Screenshot" = ["wlr"];
+      "org.freedesktop.impl.portal.Screencast" = "wlr";
+      "org.freedesktop.impl.portal.Screenshot" = "wlr";
       "org.freedesktop.impl.portal.Inhibit" = "none";
     };
 

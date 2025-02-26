@@ -12,8 +12,12 @@
     mkOption
     ;
 
-  toml = pkgs.formats.toml {};
+  inherit 
+    (lib.modules)
+    mkIf
+    ;
 
+  toml = pkgs.formats.toml {};
   cfg = config.modules.programs.dunst;
 
 in {
@@ -28,18 +32,10 @@ in {
     };
   };
 
-  config = {
-    environment.systemPackages = [
-      (pkgs.symlinkJoin {
-        name = "dunst-wrapped";
-	paths = cfg.package;
-	nativeBuildInputs = [pkgs.makeWrapper];
-	postBuild = ''
-	  wrapProgram $out/bin/dunst \
-	  --add-flags '-conf' \
-	  --add-flags '${toml.generate "dunts.toml" cfg.settings}'
-	'';
-      })
-    ];
+  config = mkIf cfg.enable {
+    environment = {
+      systemPackages = [cfg.package];
+      etc."dunstrc".source = toml.generate "dunstrc" cfg.settings;
+    };
   };
 }

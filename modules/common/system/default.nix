@@ -1,8 +1,9 @@
 {
   imports = [
-    ./sound
+    #./sound
 
     ./environment.nix
+    ./hardware.nix
     ./security.nix
     ./users.nix
     ./fonts.nix
