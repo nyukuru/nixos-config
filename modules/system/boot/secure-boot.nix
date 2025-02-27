@@ -5,26 +5,37 @@
   inputs,
   ...
 }: let
-  inherit (lib.options) mkOption mkEnableOption;
-  inherit (lib.modules) mkIf mkForce;
-  inherit (lib.meta) getExe;
+
+  inherit
+    (lib.options)
+    mkEnableOption
+    ;
+
+  inherit
+    (lib.modules)
+    mkForce
+    mkIf
+    ;
+
+  inherit
+    (lib.meta)
+    getExe
+    ;
 
   cfg = config.modules.system.boot.secureBoot;
+
 in {
+
+  imports = [inputs.lanzaboote.nixosModules.lanzaboote];
+
   options.modules.system.boot.secureBoot = {
     enable = mkEnableOption "Secrure boot.";
-
-    # TODO More options for TPM encryption
   };
 
   # https://github.com/nix-community/lanzaboote/blob/master/docs/QUICK_START.md
-  imports = [
-    inputs.lanzaboote.nixosModules.lanzaboote
-  ];
-
   config = mkIf cfg.enable {
-    environment.systemPackages = [
-      pkgs.sbctl
+    environment.systemPackages = with pkgs; [
+      sbctl
     ];
 
     boot = {

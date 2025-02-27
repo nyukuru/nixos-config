@@ -34,10 +34,10 @@
 
   pciIDType = strMatching "([0-z]{4}:[0-z]{4})?";
 
-  cfg = config.modules.virtualization.vfio;
+  cfg = config.modules.system.virtualization.vfio;
 
 in {
-  options.modules.virtualization.vfio = {
+  options.modules.system.virtualization.vfio = {
     enable = mkEnableOption "VFIO";
 
     pciIds = mkOption {

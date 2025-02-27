@@ -20,6 +20,12 @@
   };
 
   modules.system = {
+
+    virtualization = {
+      windows = {
+        enable = false;
+      };
+    };
     /*
      _  _             _
     | || |__ _ _ _ __| |_ __ ____ _ _ _ ___

@@ -3,19 +3,23 @@
   lib,
   ...
 }: let
-  inherit (lib.options) mkEnableOption;
-  inherit (lib.modules) mkIf;
+  inherit
+    (lib.options)
+    mkEnableOption
+    ;
+
+  inherit
+    (lib.modules)
+    mkIf
+    ;
 
   cfg = config.modules.system.boot;
+
 in {
   imports = [
-    # Options and config for bootloaders
     ./loaders.nix
-    # Plymouth options and config
     ./plymouth.nix
-    # Options and config to enable secureboot
     ./secure-boot.nix
-    # Options and config for greetd login manager
     ./greetd.nix
   ];
 
