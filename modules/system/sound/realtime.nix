@@ -50,6 +50,7 @@ in {
       };
     };
   };
+
   config = mkIf (config.modules.system.sound.enable && cfg.enable) {
     boot = {
       kernel.sysctl = {

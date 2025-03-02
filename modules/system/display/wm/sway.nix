@@ -182,10 +182,13 @@ in {
     };
 
     # https://github.com/emersion/slurp?tab=readme-ov-file#example-usage
-    xdg.portal.wlr.settings.screencast.chooser_cmd = ''
-      ${getExe' cfg.package "swaymsg"} -t get_tree | \
-      ${getExe pkgs.jq} '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | \
-      ${getExe pkgs.slurp}'';
+    /*
+    xdg.portal.wlr.settings.screencast.chooser_cmd = let
+      jqArgs = "'.. | select(.pid? and .visible?) | \"\\(.rect.x+.window_rect.x),\\(.rect.y+.window_rect.y) \\(.window_rect.width)x\\(.window_rebt.height)\"'";
+    in
+      #"${getExe' cfg.package "swaymsg"} -t get_tree | ${getExe pkgs.jq} -r ${jqArgs} | ${getExe pkgs.slurp}";
+      "${getExe pkgs.slurp}";
+    */
 
     systemd.user.targets.sway-session = {
       description = "sway compositor session";
@@ -207,7 +210,7 @@ in {
       exec = [
         # Import important environment variables into D-Bus and systemd
         "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP"
-	"systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK; systemctl --user start sway-session.target"
+	"\"systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK; systemctl --user start sway-session.target\""
 	"swaymsg -t subscribe '[\"shutdown\"]' && systemctl --user stop sway-session.target"
       ] ++ optional config.modules.programs.dunst.enable config.modules.programs.dunst.package;
 

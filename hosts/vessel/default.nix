@@ -1,6 +1,5 @@
 {
   inputs',
-  inputs,
   config,
   pkgs,
   ...
@@ -17,15 +16,17 @@
   ];
 
   environment.systemPackages = with pkgs; [
+    # Utils
     unzip
     openvpn
-    dunst
-    prismlauncher
     git-crypt
-    mangohud
     obsidian
-    obs-studio
+    vlc
 
+    # Games
+    lutris
+    mangohud
+    prismlauncher
     (inputs'.xivlauncher-rb.packages.xivlauncher-rb.override {
       useGameMode = true;
       nvngxPath = "${config.hardware.nvidia.package}/lib/nvidia/wine";

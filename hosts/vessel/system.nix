@@ -20,12 +20,6 @@
   };
 
   modules.system = {
-
-    virtualization = {
-      windows = {
-        enable = false;
-      };
-    };
     /*
      _  _             _
     | || |__ _ _ _ __| |_ __ ____ _ _ _ ___
@@ -102,12 +96,10 @@
     sound = {
       enable = true;
 
-    /*
       realtime = {
         enable = true;
         soundcardPci = "0000:00:1f.3";
       };
-    */
     };
     /*
      ___                       _   _

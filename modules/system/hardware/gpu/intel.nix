@@ -46,7 +46,7 @@ in {
     };
 
     services.xserver.videoDrivers = ["modesetting"];
-    environment.variables.VDPAU_DRIVER = "va_gl";
+    #environment.variables.VDPAU_DRIVER = "va_gl";
   };
 }
 

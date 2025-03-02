@@ -7,6 +7,4 @@
     ./tpm.nix
     ./yubikey.nix
   ];
-
-  config.hardware.enableRedistributableFirmware = true;
 }

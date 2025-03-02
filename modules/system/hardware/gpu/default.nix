@@ -64,6 +64,10 @@ in {
       libva
       libva-utils
 
+      vaapiVdpau
+      libvdpau
+      vdpauinfo
+
       mesa
     ];
   };

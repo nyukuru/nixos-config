@@ -58,6 +58,7 @@ in {
       graphics = {
         extraPackages = with pkgs; [
           nvidia-vaapi-driver
+	  nv-codec-headers-12
         ];
 
         extraPackages32 = with pkgs; [
@@ -78,6 +79,10 @@ in {
     };
 
     services.xserver.videoDrivers = ["nvidia"];
-    environment.sessionVariables.LIBVA_DRIVER_NAME = "nvidia";
+    environment.sessionVariables = {
+      VDPAU_DRIVER = "nvidia";
+        #LIBVA_DRIVER_NAME = "nvidia";
+	#NVD_BACKEND = "direct";
+    };
   };
 }

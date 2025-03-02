@@ -22,11 +22,11 @@
     str
     ;
 
-  cfg = config.modules.system.virtualization.windows;
+  cfg = config.modules.system.virtualization.win-start;
 
 in {
-  options.modules.system.virtualization.windows = {
-    enable = mkEnableOption "Windows VM";
+  options.modules.system.virtualization.win-start = {
+    enable = mkEnableOption "Easy Windows VM start script";
   };
 
   config = mkIf cfg.enable {

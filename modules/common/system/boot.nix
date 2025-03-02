@@ -26,11 +26,14 @@ in {
       efi.canTouchEfiVariables = mkDefault true;
     };
 
+    /*
+    # Causes difficulties for large derivations
     tmp = {
       # Uses ram instead of disk space
       useTmpfs = mkDefault true;
       cleanOnBoot = !config.boot.tmp.useTmpfs;
     };
+    */
 
     initrd = {
       verbose = mkDefault false;
@@ -59,6 +62,8 @@ in {
     };
 
     kernelPackages = mkDefault pkgs.linuxPackages_latest;
+    # Temporary fix for nvidia drivers
+    #kernelPackages = mkDefault pkgs.linuxPackages;
     kernelParams = [
       "pti=auto"
       # CPU idle
