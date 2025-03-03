@@ -29,9 +29,9 @@
       description = "Color of ${item}.";
     };
 
-  cfg = config.modules.style.nyufox;
+  cfg = config.style.nyufox;
 in {
-  options.modules.style.nyufox = {
+  options.style.nyufox = {
     enable = mkEnableOption "nyu's firefox css edits";
 
     color = {
@@ -74,7 +74,7 @@ in {
 
 
   config = mkIf cfg.enable {
-    modules.programs.firefox = {
+    nyu.programs.firefox = {
       userChrome = pkgs.writeText "userChrome.css" (import ./userChrome.nix {inherit cfg;});
       userContent = pkgs.writeText "userContent.css" (import ./userContent.nix {inherit cfg;});
 

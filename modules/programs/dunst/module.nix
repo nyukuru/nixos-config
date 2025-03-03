@@ -18,10 +18,10 @@
     ;
 
   toml = pkgs.formats.toml {};
-  cfg = config.modules.programs.dunst;
+  cfg = config.nyu.programs.dunst;
 
 in {
-  options.modules.programs.dunst = {
+  options.nyu.programs.dunst = {
     enable = mkEnableOption "Dunst notification daemon.";
     package = mkPackageOption pkgs "dunst" {};
 

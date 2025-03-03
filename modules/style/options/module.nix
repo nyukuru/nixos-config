@@ -1,6 +1,4 @@
 {
-  config,
-  pkgs,
   lib,
   ...
 }: let
@@ -17,16 +15,13 @@
     str
     ;
 
-
-  cfg = config.modules.style;
 in {
   imports = [
-    ./textfox
     ./nyufox
     ./foot
   ];
 
-  options.modules.style = {
+  options.style = {
     wallpaper = mkOption {
       type = nullOr path;
       default = null;

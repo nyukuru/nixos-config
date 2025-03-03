@@ -13,7 +13,7 @@
     mkIf
     ;
 
-  cfg = config.modules.system.boot;
+  cfg = config.nyu.boot;
 
 in {
   imports = [
@@ -23,7 +23,7 @@ in {
     ./greetd.nix
   ];
 
-  options.modules.system.boot = {
+  options.nyu.boot = {
     silent = {
       enable = mkEnableOption "Silent boot." // {default = true;};
     };

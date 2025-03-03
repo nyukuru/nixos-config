@@ -7,9 +7,9 @@
   inherit (lib.modules) mkIf mkDefault;
   inherit (lib.types) int;
 
-  cfg = config.modules.system.networking.ssh;
+  cfg = config.nyu.networking.ssh;
 in {
-  options.modules.system.networking.ssh = {
+  options.nyu.networking.ssh = {
     enable = mkEnableOption "Secure Shell.";
 
     # Traps attackers trying to access an open default ssh port

@@ -52,20 +52,29 @@
     withSystem system (
       ctx:
         nixosSystem {
-          inherit lib;
-
           specialArgs =
             recursiveUpdate {
-              inherit inputs hostname;
-              inherit (ctx) inputs';
-              inherit (ctx.self') packages;
+              inherit 
+		hostname
+	        inputs
+		lib;
+
+              inherit
+	        (ctx)
+		inputs'
+		;
+
+              inherit
+	        (ctx.self')
+		packages
+		;
             }
             specialArgs;
 
           modules =
             [
               {
-                imports = ["${inputs.self.outPath}/hosts/${hostname}"];
+                imports = ["${inputs.self}/hosts/${hostname}"];
                 networking.hostName = hostname;
                 nixpkgs.hostPlatform = system;
               }

@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  modules.programs.nvim = {
+  nyu.programs.nvim = {
     enable = true;
     package = pkgs.neovim-unwrapped;
 

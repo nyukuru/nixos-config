@@ -3,49 +3,50 @@
   config,
   ...
 }: let
+
   inherit
     (inputs.nixpkgs)
     lib
     ;
 
   inherit
-    (lib.fixedPoints)
-    composeManyExtensions
-    ;
-
-  inherit
     (lib.attrsets)
+    recursiveUpdateUntil
     recursiveUpdate
     ;
 
+  inherit
+    (lib.fixedPoints)
+    makeExtensible
+    ;
+
+  # Simple recursive update only two sets deep.
+  libUpdate = recursiveUpdateUntil (path: _: _: (builtins.length path > 1));
+
+  # Composed only of my own functions
+  myLib = makeExtensible (final: let
+    callLibs = module: import module (
+      config._module.args // {
+        inherit inputs;
+	lib = libUpdate lib final;
+      });
+  in {
+    attrsets = callLibs ./attrsets.nix;
+    builders = callLibs ./builders.nix;
+    modules  = callLibs ./modules.nix;
+    files    = callLibs ./files.nix;
+    lists    = callLibs ./lists.nix;
+  });
+
   # An overlay of my library to go onto nixpkgs'
-  myLib = final: prev: let
-    callLibs = module:
-      import module (config._module.args
-        // {
-          inherit inputs;
-          lib = final;
-        });
-  in
-    recursiveUpdate prev {
-      files = callLibs ./files.nix;
-      builders = callLibs ./builders.nix;
-      lists = callLibs ./lists.nix;
-      attrsets = callLibs ./attrsets.nix;
-      modules = callLibs ./modules.nix;
-      secrets = callLibs ./secrets.nix;
-    };
+  myLibOverlay = final: prev: 
+    libUpdate prev myLib;
 
-  # Compose all imported libraries
-  extensions = composeManyExtensions [
-    myLib
-    (_: _: inputs.flake-parts.lib)
-    (_: _: inputs.wfvm.lib)
-  ];
-
-  lib' = lib.extend extensions;
+  lib' = lib.extend myLibOverlay;
 in {
   perSystem._module.args.lib = lib';
   _module.args.lib = lib';
-  flake.lib = lib';
+
+  # Export this flake's functions instead of all of nixpkgs.lib as well
+  flake.lib = myLib;
 }

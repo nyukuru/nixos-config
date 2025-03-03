@@ -37,7 +37,10 @@ in {
     };
 
     shellAliases = {
-      nr = "nix-store --verify; pushd ~/nixos-config; ${getExe pkgs.nh} os switch . -au; popd";
+      # Nix-rebuild
+      nr = "nix-store --verify; pushd ~/nixos-config; ${getExe pkgs.nh} os switch . -a; popd";
+      # Nix-rebuild-update
+      nru = "nix-store --verify; pushd ~/nixos-config; ${getExe pkgs.nh} os switch . -au; popd";
     };
   };
 

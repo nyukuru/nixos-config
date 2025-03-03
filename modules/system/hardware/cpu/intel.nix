@@ -9,7 +9,7 @@
     mkIf
     ;
 
-  isIntel = config.modules.system.hardware.cpu == "intel";
+  isIntel = config.nyu.hardware.cpu == "intel";
 
 in {
   config = mkIf isIntel {

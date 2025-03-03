@@ -4,17 +4,53 @@
   lib,
   ...
 }: let
-  inherit (lib.attrsets) mapAttrs concatMapAttrs;
-  inherit (lib.modules) mkIf;
-  inherit (lib.options) mkEnableOption mkOption;
-  inherit (lib.types) str nullOr attrsOf submodule path int listOf package;
-  inherit (lib.lists) optional;
-  inherit (lib.meta) getExe;
-  inherit (builtins) baseNameOf;
 
-  cfg = config.modules.system.encryption;
+  inherit 
+    (lib.attrsets)
+    concatMapAttrs
+    mapAttrs
+    ;
+
+  inherit
+    (lib.modules)
+    mkIf
+    ;
+
+  inherit
+    (lib.options)
+    mkEnableOption
+    mkOption
+    ;
+
+  inherit
+    (lib.types)
+    submodule
+    attrsOf
+    package
+    nullOr
+    listOf
+    path
+    int
+    ;
+
+  inherit
+    (lib.lists)
+    optional
+    ;
+
+  inherit
+    (lib.meta)
+    getExe
+    ;
+
+  inherit
+    (builtins)
+    baseNameOf
+    ;
+
+  cfg = config.nyu.encryption;
 in {
-  options.modules.system.encryption = {
+  options.nyu.encryption = {
     enable = mkEnableOption "LUKS encryption.";
 
     devices = mkOption {

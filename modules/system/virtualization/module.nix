@@ -3,7 +3,7 @@
   ...
 }: {
   imports = [
-    ./windows.nix
+    #./windows.nix
     ./vfio.nix
   ];
 }

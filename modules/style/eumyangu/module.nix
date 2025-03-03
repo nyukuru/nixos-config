@@ -5,7 +5,7 @@
     ./dunst.nix
   ];
 
-  modules.style = {
+  style = {
     colors = {
       base0 = "16130f";
       base1 = "85544b";

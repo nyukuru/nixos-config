@@ -3,10 +3,10 @@
   ...
 }: let
 
-  style = config.modules.style;
+  style = config.style;
 
 in {
-  modules.system.display.wm.sway.settings = {
+  nyu.programs.sway.settings = {
 
     gaps = {
       inner = 4;
@@ -27,7 +27,7 @@ in {
         "${"style.wallpaper"} fill"
       else "#090707 solid_color";
 
-    for_window."[class=\".*\"]".title_format = "<span></span>";
+    for_window."[class=\".*\"]".title_format = "";
 
     "client.focused"          = "#202020 #202020 #F8F8F6 #3E4A4F #212121";
     "client.focused_inactive" = "#161616 #161616 #F8F8F6 #484E50 #161616";

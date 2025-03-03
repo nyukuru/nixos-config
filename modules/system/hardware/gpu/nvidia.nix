@@ -12,11 +12,6 @@
     ;
 
   inherit
-    (lib.lists)
-    elem
-    ;
-
-  inherit
     (lib.strings)
     versionOlder
     ;
@@ -25,15 +20,13 @@
   nvStable = config.boot.kernelPackages.nvidiaPackages.stable;
   nvBeta = config.boot.kernelPackages.nvidiaPackages.beta;
 
-  nvidiaPackage = if (versionOlder nvStable.version nvBeta.version) then
-    nvBeta
-  else
-    nvStable;
+  nvidiaPackage = if (versionOlder nvStable.version nvBeta.version) 
+    then nvBeta
+  else nvStable;
 
-  isHybrid = elem "hybrid-nvidia" cfg.type;
-  isNvidia = isHybrid || elem "nvidia" cfg.type;
+  isHybrid = config.nyu.hardware.igpu == null;
+  isNvidia = config.nyu.hardware.dgpu == "nvidia";
 
-  cfg = config.modules.system.hardware.gpu;
 in {
   config = mkIf isNvidia {
     hardware = {
@@ -79,10 +72,8 @@ in {
     };
 
     services.xserver.videoDrivers = ["nvidia"];
-    environment.sessionVariables = {
-      VDPAU_DRIVER = "nvidia";
-        #LIBVA_DRIVER_NAME = "nvidia";
-	#NVD_BACKEND = "direct";
-    };
+
+    # Causes a mass rebuild
+    nixpkgs.config.cudaSupport = true;
   };
 }

@@ -27,10 +27,10 @@
     assertMsg
     ;
 
-  cfg = config.modules.services.nvidia-uv;
+  cfg = config.nyu.services.nvidia-uv;
 
 in {
-  options.modules.services.nvidia-uv = {
+  options.nyu.services.nvidia-uv = {
     enable = mkEnableOption "Nvidia Undervolting/Overclocking Service.";
 
     minCoreClock = mkOption {

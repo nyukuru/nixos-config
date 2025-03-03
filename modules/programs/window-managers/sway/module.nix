@@ -42,7 +42,6 @@
 
   inherit
     (lib.lists)
-    mutuallyInclusive
     optional
     ;
 
@@ -83,15 +82,14 @@
     in name: value: pkgs.writeText name (attrToConfig value);
   };
 
-  cfg = config.modules.system.display.wm.sway;
-  gpu = config.modules.system.hardware.gpu.type;
+  cfg = config.nyu.programs.sway;
 
 in {
   imports = [
-    ./wayland.nix
+    ../wayland-shared.nix
   ];
 
-  options.modules.system.display.wm.sway = {
+  options.nyu.programs.sway = {
     enable = mkEnableOption "Sway window manager.";
 
     package =
@@ -99,33 +97,33 @@ in {
       // {
         apply = p:
           p.override {
-            extraSessionCommands = cfg.extraSessionCommands;
-            withBaseWrapper = true;
-            withGtkWrapper = true;
-            enableXWayland = cfg.xwayland.enable;
             isNixOS = true;
-            extraOptions = optional (mutuallyInclusive ["nvidia" "hybrid-nvidia"] gpu)
-              "--unsupported-gpu";
+            withGtkWrapper = true;
+            withBaseWrapper = true;
+            enableXWayland = cfg.xwayland.enable;
+            extraOptions = ["--unsupported-gpu"];
+            extraSessionCommands = ''
+	      export XDG_SESSION_DESKTOP=sway
+	      export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+	      export _JAVA_AWT_WM_NONREPARENTING=1
+	      export NIXOS_OZONE_WL=1
+	      export GDK_BACKEND=wayland,x11
+	      export ANKI_WAYLAND=1
+	      export MOZ_ENABLE_WAYLAND=1
+	      export XDG_SESSION_TYPE=wayland
+	      export SDL_VIDEODRIVER=wayland
+	      export CLUTTER_BACKEND=wayland
+
+	      export WLR_BACKEND=wayland
+	      export WLR_RENDERER=vulkan
+	      export WLR_NO_HARDWARE_CURSORS=1
+	    '';
           };
       };
 
     extraSessionCommands = mkOption {
       type = lines;
       default = ''
-        export XDG_SESSION_DESKTOP=sway
-        export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-        export _JAVA_AWT_WM_NONREPARENTING=1
-        export NIXOS_OZONE_WL=1
-        export GDK_BACKEND=wayland,x11
-        export ANKI_WAYLAND=1
-        export MOZ_ENABLE_WAYLAND=1
-        export XDG_SESSION_TYPE=wayland
-        export SDL_VIDEODRIVER=wayland
-        export CLUTTER_BACKEND=wayland
-
-        export WLR_BACKEND=wayland
-        export WLR_RENDERER=vulkan
-        export WLR_NO_HARDWARE_CURSORS=1
       '';
       description = ''
         Shell commands executed just before Sway is started.
@@ -168,6 +166,8 @@ in {
   config = mkIf cfg.enable {
     programs.sway.enable = mkForce false;
 
+    nyu.windowManager.enabled = [cfg.package];
+
     environment = {
       systemPackages = [cfg.package]
 	++ optional cfg.xwayland.enable pkgs.xwayland
@@ -190,16 +190,8 @@ in {
       "${getExe pkgs.slurp}";
     */
 
-    systemd.user.targets.sway-session = {
-      description = "sway compositor session";
-      documentation = [ "man:systemd.special(7)" ];
-      bindsTo = [ "graphical-session.target" ];
-      wants = [ "graphical-session-pre.target" ];
-      after = [ "graphical-session-pre.target" ];
-    };
-
     # The default config settings
-    modules.system.display.wm.sway.settings = {
+    nyu.programs.sway.settings = {
       input = {
 	"type:touchpad" = {
 	  dwt = "disabled";
@@ -212,7 +204,7 @@ in {
         "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP"
 	"\"systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK; systemctl --user start sway-session.target\""
 	"swaymsg -t subscribe '[\"shutdown\"]' && systemctl --user stop sway-session.target"
-      ] ++ optional config.modules.programs.dunst.enable config.modules.programs.dunst.package;
+      ] ++ optional config.nyu.programs.dunst.enable config.nyu.programs.dunst.package;
 
       bindsym = {
 	"Mod4+Return" = "exec ${getExe pkgs.foot}";

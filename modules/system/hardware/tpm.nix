@@ -4,12 +4,21 @@
   pkgs,
   ...
 }: let
-  inherit (lib.options) mkEnableOption;
-  inherit (lib.modules) mkIf;
 
-  cfg = config.modules.system.hardware.tpm;
+  inherit
+    (lib.options)
+    mkEnableOption
+    ;
+
+  inherit
+    (lib.modules)
+    mkIf
+    ;
+
+  cfg = config.nyu.hardware.tpm;
+
 in {
-  options.modules.system.hardware.tpm = {
+  options.nyu.hardware.tpm = {
     enable = mkEnableOption "TPM.";
   };
 

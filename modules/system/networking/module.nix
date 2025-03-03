@@ -26,14 +26,14 @@
     str
     ;
 
-  cfg = config.modules.system.networking;
+  cfg = config.nyu.networking;
 in {
   imports = [
     ./firewall.nix
     ./ssh.nix
   ];
 
-  options.modules.system.networking = {
+  options.nyu.networking = {
     enable = mkEnableOption "Networking" // {default = true;};
 
     nameservers = {

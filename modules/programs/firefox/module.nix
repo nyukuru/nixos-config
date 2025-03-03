@@ -24,7 +24,7 @@
     str
     ;
 
-  cfg = config.modules.programs.firefox;
+  cfg = config.nyu.programs.firefox;
 in {
   imports = [
     ./preferences.nix
@@ -32,7 +32,7 @@ in {
     ./policies.nix
   ];
 
-  options.modules.programs.firefox = {
+  options.nyu.programs.firefox = {
     enable = mkEnableOption "Firefox web browser.";
     package = mkPackageOption pkgs "firefox-esr-128-unwrapped" {}
     // {

@@ -40,10 +40,10 @@
     getExe
     ;
 
-  cfg = config.modules.system.boot.greetd;
-  wm = config.modules.system.display.wm.default;
+  cfg = config.nyu.boot.greetd;
+  wm = config.nyu.windowManager.default;
 in {
-  options.modules.system.boot.greetd = {
+  options.nyu.boot.greetd = {
     enable = mkEnableOption "greetd.";
 
     greeter = mkPackageOption pkgs.greetd "greetd" {

@@ -16,25 +16,12 @@
       };
     };
 
-    # Launch with nvidia-offload for nvenc 
+
+
+    # cuda needed for nvenc 
     obs-studio = {
       enable = true;
-      package = pkgs.symlinkJoin {
-        name = "nv-obs";
-	nativeBuildInputs = [ pkgs.makeWrapper];
-
-	paths = [
-	  (pkgs.obs-studio.override {cudaSupport = true;})
-	];
-
-	postBuild = ''
-	  wrapProgram $out/bin/obs \
-            --set __NV_PRIME_RENDER_OFFLOAD "1" \
-            --set __NV_PRIME_RENDER_OFFLOAD_PROVIDER "NVIDIA-G0" \
-            --set __GLX_VENDOR_LIBRARY_NAME "nvidia" \
-            --set __VK_LAYER_NV_optimus "NVIDIA_only" \
-	'';
-      };
+      package = pkgs.obs-studio.override {cudaSupport = true;};
 
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs
@@ -62,7 +49,12 @@
   | |__| |_| \__ \ || (_) | | | | | | | |  | | (_) | (_| | |_| | |  __/\__ \
    \____\__,_|___/\__\___/|_| |_| |_| |_|  |_|\___/ \__,_|\__,_|_|\___||___/
   */
-  modules.programs = {
+  nyu.programs = {
+    sway = {
+      enable = true;
+    };
+
+
     zsh = {
       enable = true;
       starship.enable = true;

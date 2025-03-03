@@ -10,14 +10,8 @@
     mkIf
     ;
 
-  inherit
-    (lib.lists)
-    elem
-    ;
+  isIntel = (config.nyu.hardware.igpu == "intel") || (config.nyu.hardware.dgpu == "intel");
 
-  isIntel = elem "intel" cfg.type;
-
-  cfg = config.modules.system.hardware.gpu;
 in {
   config = mkIf isIntel {
     boot = {
@@ -42,11 +36,14 @@ in {
       extraPackages32 = with pkgs; [
         driversi686Linux.intel-media-driver
       ];
-      
     };
 
     services.xserver.videoDrivers = ["modesetting"];
-    #environment.variables.VDPAU_DRIVER = "va_gl";
+
+    # Prefer video decoding on igpu
+    environment.variables = mkIf (config.nyu.hardware.igpu == "intel") {
+      VDPAU_DRIVER = "va_gl";
+    };
   };
 }
 

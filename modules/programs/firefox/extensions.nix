@@ -98,9 +98,9 @@
     };
   });
 
-  cfg = config.modules.programs.firefox;
+  cfg = config.nyu.programs.firefox;
 in {
-  options.modules.programs.firefox = {
+  options.nyu.programs.firefox = {
     languagePacks = mkOption {
       type = listOf str;
       default = ["en-US"];
@@ -115,6 +115,6 @@ in {
   };
 
   config = {
-    modules.programs.firefox.extensions = listToAttrs (map langToExtension cfg.languagePacks);
+    nyu.programs.firefox.extensions = listToAttrs (map langToExtension cfg.languagePacks);
   };
 }

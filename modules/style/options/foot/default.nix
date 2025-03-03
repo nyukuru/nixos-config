@@ -8,7 +8,7 @@
     (lib.modules)
     mkIf;
 
-  colors = config.modules.style.colors;
+  colors = config.style.colors;
 in {
   config = mkIf config.programs.foot.enable {
     programs.foot.settings = {

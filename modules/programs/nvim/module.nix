@@ -49,14 +49,14 @@
     str
     ;
 
-  cfg = config.modules.programs.nvim;
+  cfg = config.nyu.programs.nvim;
 
 in {
   imports = [
     ./default-config
   ];
 
-  options.modules.programs.nvim = {
+  options.nyu.programs.nvim = {
     enable = mkEnableOption "Neovim text editor";
     package = mkPackageOption pkgs "neovim-unwrapped" {};
 

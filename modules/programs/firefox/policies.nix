@@ -27,9 +27,10 @@
     extensions;
 
   json = pkgs.formats.json {};
-  cfg = config.modules.programs.firefox;
+
+  cfg = config.nyu.programs.firefox;
 in {
-  options.modules.programs.firefox = {
+  options.nyu.programs.firefox = {
     policies = mkOption {
       type = json.type;
       default = {};
@@ -37,7 +38,7 @@ in {
     };
   };
 
-  config.modules.programs.firefox.policies = {
+  config.nyu.programs.firefox.policies = {
     AppAutoUpdate = false;
     DontCheckDefaultBrowser = true;
 

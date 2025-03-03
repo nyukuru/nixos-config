@@ -10,15 +10,7 @@
     mkIf
     ;
 
-  inherit
-    (lib.lists)
-    elem
-    ;
-
-  isHybrid = elem "hybrid-amd" cfg.type;
-  isAmd = isHybrid || (elem "amd" cfg.type);
-
-  cfg = config.modules.system.hardware.gpu;
+  isAmd = (config.nyu.hardware.igpu == "amd") || (config.nyu.hardware.dgpu == "amd");
 
 in {
   config = mkIf isAmd {

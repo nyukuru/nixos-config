@@ -17,9 +17,10 @@
     mkIf
     ;
 
-  cfg = config.modules.system.hardware.bluetooth;
+  cfg = config.nyu.hardware.bluetooth;
+
 in {
-  options.modules.system.hardware.bluetooth = {
+  options.nyu.hardware.bluetooth = {
     enable = mkEnableOption "Bluetooth.";
 
     package = mkPackageOption pkgs "bluez" {
@@ -32,7 +33,7 @@ in {
 
     hardware.bluetooth = {
       enable = true;
-      #package = cfg.package;
+      package = cfg.package;
       powerOnBoot = mkDefault true;
 
       # Security vulnerability
@@ -53,7 +54,6 @@ in {
 
     # Bluetooth audio if using pipewire sound server.
     # https://nixos.wiki/wiki/PipeWire#Bluetooth_Configuration
-    /*
     services.pipewire.wireplumber.extraConfig = {
       "10-bluez" = {
         "monitor.bluez.properties" = {
@@ -64,6 +64,5 @@ in {
         };
       };
     };
-    */
   };
 }

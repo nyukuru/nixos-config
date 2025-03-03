@@ -24,10 +24,10 @@
     str
     ;
 
-  cfg = config.modules.system.networking.firewall;
+  cfg = config.nyu.networking.firewall;
 in {
   # TODO
-  options.modules.system.networking.firewall = {
+  options.nyu.networking.firewall = {
     enable = mkEnableOption "Firewall." // {default = true;};
 
     tables = mkOption {
@@ -66,7 +66,7 @@ in {
     };
   };
 
-  config = mkIf (config.modules.system.networking.enable && cfg.enable) {
+  config = mkIf (config.nyu.networking.enable && cfg.enable) {
     networking = {
       firewall = {
         enable = true;

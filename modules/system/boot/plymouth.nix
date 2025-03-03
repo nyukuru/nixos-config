@@ -10,9 +10,9 @@
   inherit (lib.types) nullOr str package;
   inherit (lib.meta) getExe';
 
-  cfg = config.modules.system.boot.plymouth;
+  cfg = config.nyu.boot.plymouth;
 in {
-  options.modules.system.boot.plymouth = {
+  options.nyu.boot.plymouth = {
     enable = mkEnableOption "Plymouth.";
 
     themePackage = mkOption {

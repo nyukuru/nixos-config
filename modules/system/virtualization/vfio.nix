@@ -34,10 +34,10 @@
 
   pciIDType = strMatching "([0-z]{4}:[0-z]{4})?";
 
-  cfg = config.modules.system.virtualization.vfio;
+  cfg = config.nyu.virtualization.vfio;
 
 in {
-  options.modules.system.virtualization.vfio = {
+  options.nyu.virtualization.vfio = {
     enable = mkEnableOption "VFIO";
 
     pciIds = mkOption {
@@ -61,8 +61,8 @@ in {
 
       kernelParams = optional (cfg.pciIds != []) 
 	("vfio-pci.ids=" + concatStringsSep "," cfg.pciIds)
-      ++ (optional (config.modules.system.hardware.cpu.type == "amd") "amd_iommu=on")
-      ++ (optional (config.modules.system.hardware.cpu.type == "intel") "intel_iommu=on");
+      ++ (optional (config.nyu.hardware.cpu == "amd") "amd_iommu=on")
+      ++ (optional (config.nyu.hardware.cpu == "intel") "intel_iommu=on");
     };
   };
 }

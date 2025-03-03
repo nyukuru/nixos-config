@@ -8,7 +8,6 @@
     ./disk-config.nix
 
     ./programs.nix
-    ./style.nix
     ./system.nix
     ./services.nix
 

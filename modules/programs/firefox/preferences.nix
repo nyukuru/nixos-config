@@ -32,9 +32,9 @@
   in
     hash1 + hash2;
 
-  cfg = config.modules.programs.firefox;
+  cfg = config.nyu.programs.firefox;
 in {
-  options.modules.programs.firefox = {
+  options.nyu.programs.firefox = {
     preferences = mkOption {
       type = lines;
       default = "";
@@ -42,7 +42,7 @@ in {
     };
   };
 
-  config.modules.programs.firefox.preferences =
+  config.nyu.programs.firefox.preferences =
     ''
       const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
     ''

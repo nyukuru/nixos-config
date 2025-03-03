@@ -1,5 +1,5 @@
 {packages, ...}: {
-  modules.programs.nvim = {
+  nyu.programs.nvim = {
     plugins.start = [packages.lackluster-nvim];
 
     extra.lua = ''

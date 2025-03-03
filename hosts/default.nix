@@ -1,10 +1,10 @@
 {
   inputs,
-  self,
   ...
 }: let
+
   inherit
-    (self)
+    (inputs.self)
     lib
     ;
 

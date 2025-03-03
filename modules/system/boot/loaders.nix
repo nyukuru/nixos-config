@@ -36,9 +36,9 @@
     };
   };
 
-  cfg = config.modules.system.boot.loader;
+  cfg = config.nyu.boot.loader;
 in {
-  options.modules.system.boot.loader = {
+  options.nyu.boot.loader = {
     type = mkOption {
       type = enum ["grub" "systemd-boot"];
       default = "systemd-boot";

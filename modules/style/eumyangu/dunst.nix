@@ -1,5 +1,5 @@
 {
-  modules.programs.dunst.settings = {
+  nyu.programs.dunst.settings = {
     global = {
       monitor = 0;
       follow = "none";

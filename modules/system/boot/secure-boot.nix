@@ -22,13 +22,13 @@
     getExe
     ;
 
-  cfg = config.modules.system.boot.secureBoot;
+  cfg = config.nyu.boot.secureBoot;
 
 in {
 
   imports = [inputs.lanzaboote.nixosModules.lanzaboote];
 
-  options.modules.system.boot.secureBoot = {
+  options.nyu.boot.secureBoot = {
     enable = mkEnableOption "Secrure boot.";
   };
 

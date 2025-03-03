@@ -31,13 +31,13 @@
     ;
 
   isDefaultShell =
-    config.users.defaultUserShell
-    == pkgs.zsh
-    || attrAny (x: x.shell == pkgs.zsh) config.users.users;
+    (config.users.defaultUserShell
+    == pkgs.zsh)
+    || (attrAny (x: x.shell == pkgs.zsh) config.users.users);
 
-  cfg = config.modules.programs.zsh;
+  cfg = config.nyu.programs.zsh;
 in {
-  options.modules.programs.zsh = {
+  options.nyu.programs.zsh = {
     enable = mkEnableOption "ZSH shell.";
 
     starship = {
