@@ -3,16 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    dev-nixpkgs.url = "git+file:///home/nyoo/dev/nixpkgs";
 
     # Preconfigured configs for specific devices
     # most useful for the pci information.
     nixos-hardware = {
       url = "github:nixos/nixos-hardware";
-    };
-
-    # Self-explanatory.
-    impermanence = {
-      url = "github:nix-community/impermanence";
     };
 
     # Make flakes work with system.

@@ -1,5 +1,6 @@
 {
   inputs',
+  inputs,
   config,
   pkgs,
   ...
@@ -12,6 +13,8 @@
     ./services.nix
 
     ./users
+
+    "${inputs.dev-nixpkgs}/nixos/modules/services/desktops/dunst.nix"
   ];
 
   environment.systemPackages = with pkgs; [
@@ -31,6 +34,10 @@
       nvngxPath = "${config.hardware.nvidia.package}/lib/nvidia/wine";
     })
   ];
+
+  services.dunst = {
+    enable = true;
+  };
 
   system.stateVersion = "24.05";
 }

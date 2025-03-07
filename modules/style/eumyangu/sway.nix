@@ -27,7 +27,8 @@ in {
         "${"style.wallpaper"} fill"
       else "#090707 solid_color";
 
-    for_window."[class=\".*\"]".title_format = "";
+    # Hide titlebar text
+    for_window."[class=\".*\"]".title_format = "<span></span>";
 
     "client.focused"          = "#202020 #202020 #F8F8F6 #3E4A4F #212121";
     "client.focused_inactive" = "#161616 #161616 #F8F8F6 #484E50 #161616";

@@ -204,7 +204,7 @@ in {
         "dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP"
 	"\"systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK; systemctl --user start sway-session.target\""
 	"swaymsg -t subscribe '[\"shutdown\"]' && systemctl --user stop sway-session.target"
-      ] ++ optional config.nyu.programs.dunst.enable config.nyu.programs.dunst.package;
+      ];
 
       bindsym = {
 	"Mod4+Return" = "exec ${getExe pkgs.foot}";

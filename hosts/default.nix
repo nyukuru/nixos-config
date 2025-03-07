@@ -11,6 +11,7 @@
   inherit
     (lib.builders)
     mkNixosSystem
+    mkNixosIso
     mkModules
     ;
 
@@ -24,6 +25,22 @@ in {
         form = "laptop";
         style = "eumyangu";
         extraModules = [hw.dell-xps-15-9520-nvidia];
+      };
+    };
+
+    tantalum = mkNixosIso {
+      hostname = "tantalum";
+      system = "x86_64-linux";
+      modules = mkModules {
+        defaultModules = [];
+      };
+    };
+
+    argon = mkNixosIso {
+      hostname = "argon";
+      system = "x86_64-linux";
+      modules = mkModules {
+        defaultModules = [];
       };
     };
   };

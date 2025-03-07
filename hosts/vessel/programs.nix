@@ -21,8 +21,6 @@
     # cuda needed for nvenc 
     obs-studio = {
       enable = true;
-      package = pkgs.obs-studio.override {cudaSupport = true;};
-
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs
 	obs-pipewire-audio-capture
@@ -62,10 +60,6 @@
 
     nvim = {
       # Config is default-config in module definition
-      enable = true;
-    };
-
-    dunst = {
       enable = true;
     };
 

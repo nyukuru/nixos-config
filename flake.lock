@@ -60,6 +60,20 @@
         "type": "github"
       }
     },
+    "dev-nixpkgs": {
+      "locked": {
+        "dirtyRev": "a741f6aea14c28bd3b3793de345ff9dc56f36680-dirty",
+        "dirtyShortRev": "a741f6aea14c-dirty",
+        "lastModified": 1741240535,
+        "narHash": "sha256-JCEw6iTbmyn3xve0i3yCjTKhL82jQgq/iHUP9HJo/Vc=",
+        "type": "git",
+        "url": "file:///home/nyoo/dev/nixpkgs"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/nyoo/dev/nixpkgs"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -297,6 +311,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "dev-nixpkgs": "dev-nixpkgs",
         "disko": "disko",
         "flake-parts": "flake-parts",
         "impermanence": "impermanence",
