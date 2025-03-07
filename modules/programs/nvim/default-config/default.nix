@@ -1,39 +1,58 @@
-{pkgs, ...}: {
-  nyu.programs.nvim = {
-    enable = true;
-    package = pkgs.neovim-unwrapped;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let 
 
-    configDir = "${./.}";
+  inherit
+    (lib.modules)
+    mkDefault
+    mkMerge
+    mkIf
+    ;
 
-    plugins = {
-      start = with pkgs.vimPlugins; [
-        # Syntax Highlighting
-        nvim-treesitter
-        nvim-treesitter-parsers.nix
-        nvim-treesitter-parsers.lua
-        nvim-treesitter-parsers.python
+  cfg = config.nyu.programs.nvim;
 
-        ## LSP Support
-        nvim-lspconfig
-        nvim-cmp
-        cmp-nvim-lsp
-        cmp-buffer
-        cmp-path
-        cmp-git
-        cmp-cmdline
-        cmp-treesitter
+in {
+  config = mkMerge [
+    {
+      nyu.programs.nvim.configDir = mkDefault "${./.}";
+    }
+
+    (mkIf (cfg.enable && (cfg.configDir == "${./.}")) {
+      nyu.programs.nvim = {
+        plugins = {
+	  start = with pkgs.vimPlugins; [
+	    # Syntax Highlighting
+	    nvim-treesitter
+	    nvim-treesitter-parsers.nix
+	    nvim-treesitter-parsers.lua
+	    nvim-treesitter-parsers.python
+
+	    ## LSP Support
+	    nvim-lspconfig
+	    nvim-cmp
+	    cmp-nvim-lsp
+	    cmp-buffer
+	    cmp-path
+	    cmp-git
+	    cmp-cmdline
+	    cmp-treesitter
+	  ];
+
+	  opt = with pkgs.vimPlugins; [
+	  ];
+	};
+      };
+
+        # Packages needed for this config
+      environment.systemPackages = with pkgs; [
+	llvmPackages_19.clang-tools
+	lua-language-server
+	basedpyright
+	nil
       ];
-
-      opt = with pkgs.vimPlugins; [
-      ];
-    };
-  };
-
-  # Packages needed for this config
-  environment.systemPackages = with pkgs; [
-    llvmPackages_19.clang-tools
-    lua-language-server
-    basedpyright
-    nil
+    })
   ];
 }
