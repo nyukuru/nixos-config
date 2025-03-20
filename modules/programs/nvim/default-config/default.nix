@@ -44,6 +44,13 @@ in {
 	  opt = with pkgs.vimPlugins; [
 	  ];
 	};
+
+        # Files for systems not using nix 
+        exclude = {
+          lua = [
+            "init.lua"
+          ];
+        }
       };
 
         # Packages needed for this config
