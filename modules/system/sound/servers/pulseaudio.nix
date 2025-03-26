@@ -3,7 +3,6 @@
   lib,
   ...
 }: let
-
   inherit
     (lib.modules)
     mkForce
@@ -11,9 +10,8 @@
     ;
 
   isPulse = (config.nyu.sound.server == "pulseaudio") && config.nyu.sound.enable;
-
-  in {
-    config = mkIf isPulse {
-      hardware.pulseaudio.enable = mkForce true;
-    };
-  }
+in {
+  config = mkIf isPulse {
+    hardware.pulseaudio.enable = mkForce true;
+  };
+}

@@ -32,7 +32,7 @@
 
   isDefaultShell =
     (config.users.defaultUserShell
-    == pkgs.zsh)
+      == pkgs.zsh)
     || (attrAny (x: x.shell == pkgs.zsh) config.users.users);
 
   cfg = config.nyu.programs.zsh;

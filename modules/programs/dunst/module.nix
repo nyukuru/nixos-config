@@ -4,7 +4,6 @@
   lib,
   ...
 }: let
-  
   inherit
     (lib.options)
     mkPackageOption
@@ -12,27 +11,30 @@
     mkOption
     ;
 
-  inherit 
+  inherit
     (lib.modules)
     mkIf
     ;
 
   inherit
     (lib.types)
-    bool;
+    bool
+    ;
 
   toml = pkgs.formats.toml {};
   cfg = config.nyu.programs.dunst;
-
 in {
   options.nyu.programs.dunst = {
     enable = mkEnableOption "Dunst notification daemon.";
-    package = mkPackageOption pkgs "dunst" {} // {
-      apply = p: p.override {
-        withX11 = cfg.enableX11;
-	withWayland = cfg.enableWayland;
+    package =
+      mkPackageOption pkgs "dunst" {}
+      // {
+        apply = p:
+          p.override {
+            withX11 = cfg.enableX11;
+            withWayland = cfg.enableWayland;
+          };
       };
-    };
 
     settings = mkOption {
       type = toml.type;
@@ -59,6 +61,6 @@ in {
       etc."xdg/dunst/dunstrc".source = toml.generate "dunstrc" cfg.settings;
     };
 
-    services.dbus.packages = [ cfg.package ];
+    services.dbus.packages = [cfg.package];
   };
 }

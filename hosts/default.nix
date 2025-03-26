@@ -1,8 +1,4 @@
-{
-  inputs,
-  ...
-}: let
-
+{inputs, ...}: let
   inherit
     (inputs.self)
     lib

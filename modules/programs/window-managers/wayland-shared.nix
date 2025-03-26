@@ -12,7 +12,6 @@
     (lib.meta)
     getExe
     ;
-
 in {
   security = {
     polkit.enable = mkDefault true;
@@ -33,7 +32,6 @@ in {
   environment.systemPackages = [
     pkgs.wl-clipboard
     pkgs.grim
-    pkgs.mako
   ];
 
   xdg.portal = {

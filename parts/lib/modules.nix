@@ -27,7 +27,7 @@
   mkDefaultAttr = mapAttrsRecursive (_: v: mkDefault v);
   mkOptionDefaultAttr = mapAttrsRecursive (_: v: mkOptionDefault v);
 
-  # Create an attrset tree representing the filestructure of a modules folder, 
+  # Create an attrset tree representing the filestructure of a modules folder,
   # Leafs are module.nix files
   mkModuleTree = path: let
     allFiles = readDir path;
@@ -54,7 +54,6 @@
           else acc
       ) {}
       dirFiles;
-
 in {
   inherit
     mkForceAttr

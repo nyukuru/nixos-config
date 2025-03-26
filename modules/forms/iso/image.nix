@@ -5,8 +5,7 @@
   lib,
   ...
 }: let
-
-  inherit 
+  inherit
     (lib.modules)
     mkImageMediaOverride
     ;
@@ -17,7 +16,6 @@
     ;
 
   name = "${config.networking.hostname}-${config.system.nixos.release}-${self.shortRev}";
-
 in {
   # Immutability
   system.switch.enable = false;
@@ -31,12 +29,12 @@ in {
     contents = [
       {
         source = pkgs.memtest86plus + "/memtest.bin";
-	target = "boot/memtest.bin";
+        target = "boot/memtest.bin";
       }
       {
         # Provide flake (minus version control stuff)
         source = cleanSource self;
-	target = "/nixos-config";
+        target = "/nixos-config";
       }
     ];
   };

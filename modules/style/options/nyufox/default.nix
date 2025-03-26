@@ -4,7 +4,6 @@
   lib,
   ...
 }: let
-
   inherit
     (lib.options)
     mkEnableOption
@@ -42,13 +41,13 @@ in {
     border = {
       width = mkOption {
         type = int;
-	default = 2;
-	description = "Width of border around elements";
+        default = 2;
+        description = "Width of border around elements";
       };
 
       rounding = mkOption {
-	type = int;
-	default = 2;
+        type = int;
+        default = 2;
       };
     };
 
@@ -60,18 +59,17 @@ in {
     font = {
       family = mkOption {
         type = str;
-	default = "\"JetBrainsMono Nerd Font\"";
-	description = "Font for the default browser elements";
+        default = "\"JetBrainsMono Nerd Font\"";
+        description = "Font for the default browser elements";
       };
 
       size = mkOption {
         type = int;
-	default = 14;
-	description = "Size of browser text elements by pixels";
+        default = 14;
+        description = "Size of browser text elements by pixels";
       };
     };
   };
-
 
   config = mkIf cfg.enable {
     nyu.programs.firefox = {

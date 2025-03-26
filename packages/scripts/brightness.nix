@@ -1,7 +1,29 @@
 {
-  writeShellScriptBin
-}: 
+  writeShellScriptBin,
+  libnotify,
+}:
 writeShellScriptBin "brightness" ''
-    
-''
+  notify_cmd(){
+    dunstify -a 'no' --hints=int:value:"$(get_brightness)" "☀️  $(get_brightness)%"
+  }
 
+  get_brightness(){
+    brightnessctl i | grep -oP '\(\K[^%\)]+'
+  }
+
+  brightness_up(){
+    brightnessctl set 2%+
+  }
+
+  brightness_down(){
+    brightnessctl set 2%-
+  }
+
+  if command -v brightnessctl &>/dev/null; then
+    case "$1" in
+      --up) brightness_up && notify_cmd ;;
+      --down) brightness_down && notify_cmd ;;
+      *) echo "$(get_brightness)%" ;;
+    esac
+  fi
+''

@@ -62,10 +62,11 @@
     },
     "dev-nixpkgs": {
       "locked": {
-        "dirtyRev": "a741f6aea14c28bd3b3793de345ff9dc56f36680-dirty",
-        "dirtyShortRev": "a741f6aea14c-dirty",
-        "lastModified": 1741240535,
-        "narHash": "sha256-JCEw6iTbmyn3xve0i3yCjTKhL82jQgq/iHUP9HJo/Vc=",
+        "lastModified": 1741384391,
+        "narHash": "sha256-okqhitKuLMbU7znY942yfMSW73iLdpLpH7zm2mDa3oY=",
+        "ref": "refs/heads/init-dunst",
+        "rev": "f4cacbc385d2be0a8bbb8608f15e5f4182d89666",
+        "revCount": 764183,
         "type": "git",
         "url": "file:///home/nyoo/dev/nixpkgs"
       },

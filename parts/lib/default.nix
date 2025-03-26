@@ -3,7 +3,6 @@
   config,
   ...
 }: let
-
   inherit
     (inputs.nixpkgs)
     lib
@@ -25,21 +24,24 @@
 
   # Composed only of my own functions
   myLib = makeExtensible (final: let
-    callLibs = module: import module (
-      config._module.args // {
-        inherit inputs;
-	lib = libUpdate lib final;
-      });
+    callLibs = module:
+      import module (
+        config._module.args
+        // {
+          inherit inputs;
+          lib = libUpdate lib final;
+        }
+      );
   in {
     attrsets = callLibs ./attrsets.nix;
     builders = callLibs ./builders.nix;
-    modules  = callLibs ./modules.nix;
-    files    = callLibs ./files.nix;
-    lists    = callLibs ./lists.nix;
+    modules = callLibs ./modules.nix;
+    files = callLibs ./files.nix;
+    lists = callLibs ./lists.nix;
   });
 
   # An overlay of my library to go onto nixpkgs'
-  myLibOverlay = final: prev: 
+  myLibOverlay = final: prev:
     libUpdate prev myLib;
 
   lib' = lib.extend myLibOverlay;

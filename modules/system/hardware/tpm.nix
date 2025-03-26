@@ -4,7 +4,6 @@
   pkgs,
   ...
 }: let
-
   inherit
     (lib.options)
     mkEnableOption
@@ -16,7 +15,6 @@
     ;
 
   cfg = config.nyu.hardware.tpm;
-
 in {
   options.nyu.hardware.tpm = {
     enable = mkEnableOption "TPM.";

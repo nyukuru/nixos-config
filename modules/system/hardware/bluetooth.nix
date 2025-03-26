@@ -4,8 +4,7 @@
   lib,
   ...
 }: let
-
-  inherit 
+  inherit
     (lib.options)
     mkPackageOption
     mkEnableOption
@@ -18,7 +17,6 @@
     ;
 
   cfg = config.nyu.hardware.bluetooth;
-
 in {
   options.nyu.hardware.bluetooth = {
     enable = mkEnableOption "Bluetooth.";

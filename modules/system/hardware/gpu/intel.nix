@@ -4,14 +4,12 @@
   lib,
   ...
 }: let
-
   inherit
     (lib.modules)
     mkIf
     ;
 
   isIntel = (config.nyu.hardware.igpu == "intel") || (config.nyu.hardware.dgpu == "intel");
-
 in {
   config = mkIf isIntel {
     boot = {
@@ -28,9 +26,9 @@ in {
     hardware.graphics = {
       extraPackages = with pkgs; [
         intel-media-driver
-	intel-compute-runtime
-	vpl-gpu-rt
-	libvdpau-va-gl
+        intel-compute-runtime
+        vpl-gpu-rt
+        libvdpau-va-gl
       ];
 
       extraPackages32 = with pkgs; [
@@ -46,4 +44,3 @@ in {
     };
   };
 }
-

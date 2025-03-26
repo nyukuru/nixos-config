@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   programs = {
     nix-ld = {
       enable = true;
@@ -10,20 +7,17 @@
     nh = {
       enable = true;
       clean = {
-	enable = true;
-	extraArgs = "--keep-since 3d --keep 5";
-	dates = "Sun";
+        enable = true;
+        extraArgs = "--keep-since 3d --keep 5";
+        dates = "Sun";
       };
     };
 
-
-
-    # cuda needed for nvenc 
     obs-studio = {
       enable = true;
       plugins = with pkgs.obs-studio-plugins; [
         wlrobs
-	obs-pipewire-audio-capture
+        obs-pipewire-audio-capture
       ];
     };
 
@@ -41,8 +35,8 @@
   };
 
   /*
-    ____          _                    __  __           _       _           
-   / ___|   _ ___| |_ ___  _ __ ___   |  \/  | ___   __| |_   _| | ___  ___ 
+    ____          _                    __  __           _       _
+   / ___|   _ ___| |_ ___  _ __ ___   |  \/  | ___   __| |_   _| | ___  ___
   | |  | | | / __| __/ _ \| '_ ` _ \  | |\/| |/ _ \ / _` | | | | |/ _ \/ __|
   | |__| |_| \__ \ || (_) | | | | | | | |  | | (_) | (_| | |_| | |  __/\__ \
    \____\__,_|___/\__\___/|_| |_| |_| |_|  |_|\___/ \__,_|\__,_|_|\___||___/
@@ -51,7 +45,6 @@
     sway = {
       enable = true;
     };
-
 
     zsh = {
       enable = true;

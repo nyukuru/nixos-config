@@ -54,7 +54,6 @@ in {
       enable = true;
       dnssec = "false";
     };
-    
 
     systemd = {
       network.wait-online.enable = false;

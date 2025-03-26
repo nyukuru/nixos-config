@@ -27,14 +27,13 @@
     ;
 
   cfg = config.nyu.windowManager;
-
 in {
-
   options.nyu.windowManager = {
     default = mkOption {
       type = nullOr package;
-      default = if (cfg.enabled != [])
-          then head cfg.enabled 
+      default =
+        if (cfg.enabled != [])
+        then head cfg.enabled
         else null;
       description = ''
         The window manager package to default to.

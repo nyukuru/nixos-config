@@ -6,12 +6,12 @@
     dev-nixpkgs.url = "git+file:///home/nyoo/dev/nixpkgs";
 
     # Preconfigured configs for specific devices
-    # most useful for the pci information.
+    # i.e laptops
     nixos-hardware = {
       url = "github:nixos/nixos-hardware";
     };
 
-    # Make flakes work with system.
+    # Break up the flake definition
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -30,7 +30,6 @@
     };
 
     # Declaratively define disk partitions.
-    # Handy for reinstalls especially with encrypted drives.
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";

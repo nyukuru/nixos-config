@@ -14,7 +14,6 @@
     ;
 
   cfg = config.nyu.boot;
-
 in {
   imports = [
     ./loaders.nix

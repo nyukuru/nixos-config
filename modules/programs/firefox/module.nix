@@ -34,13 +34,15 @@ in {
 
   options.nyu.programs.firefox = {
     enable = mkEnableOption "Firefox web browser.";
-    package = mkPackageOption pkgs "firefox-esr-128-unwrapped" {}
-    // {
-      apply = p: pkgs.wrapFirefox p {
-        extraPrefs = cfg.preferences;
-	extraPolicies = cfg.policies;
+    package =
+      mkPackageOption pkgs "firefox-esr-128-unwrapped" {}
+      // {
+        apply = p:
+          pkgs.wrapFirefox p {
+            extraPrefs = cfg.preferences;
+            extraPolicies = cfg.policies;
+          };
       };
-    };
 
     newtab = mkOption {
       type = str;

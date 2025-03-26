@@ -4,7 +4,6 @@
   lib,
   ...
 }: let
-
   inherit
     (lib.modules)
     mkDefault
@@ -20,38 +19,38 @@
   nvStable = config.boot.kernelPackages.nvidiaPackages.stable;
   nvBeta = config.boot.kernelPackages.nvidiaPackages.beta;
 
-  nvidiaPackage = if (versionOlder nvStable.version nvBeta.version) 
+  nvidiaPackage =
+    if (versionOlder nvStable.version nvBeta.version)
     then nvBeta
-  else nvStable;
+    else nvStable;
 
   isHybrid = config.nyu.hardware.igpu == null;
   isNvidia = config.nyu.hardware.dgpu == "nvidia";
-
 in {
   config = mkIf isNvidia {
     hardware = {
       nvidia = {
-	package = mkDefault nvidiaPackage;
-	modesetting.enable = mkDefault true;
+        package = mkDefault nvidiaPackage;
+        modesetting.enable = mkDefault true;
 
-	prime.offload = {
-	  enable = mkDefault isHybrid;
-	  enableOffloadCmd = mkDefault isHybrid;
-	};
+        prime.offload = {
+          enable = mkDefault isHybrid;
+          enableOffloadCmd = mkDefault isHybrid;
+        };
 
-	powerManagement = {
-	  enable = mkDefault true;
-	  finegrained = mkDefault isHybrid;
-	};
+        powerManagement = {
+          enable = mkDefault true;
+          finegrained = mkDefault isHybrid;
+        };
 
-	open = mkDefault true;
-	nvidiaSettings = false;
+        open = mkDefault true;
+        nvidiaSettings = false;
       };
 
       graphics = {
         extraPackages = with pkgs; [
           nvidia-vaapi-driver
-	  nv-codec-headers-12
+          nv-codec-headers-12
         ];
 
         extraPackages32 = with pkgs; [
@@ -63,9 +62,9 @@ in {
     boot = {
       initrd.kernelModules = [
         "nvidia"
-	"nvidia_modeset"
-	"nvidia_uvm"
-	"nvidia_drm"
+        "nvidia_modeset"
+        "nvidia_uvm"
+        "nvidia_drm"
       ];
 
       blacklistedKernelModules = ["nouveau"];

@@ -1,6 +1,6 @@
 {inputs, ...}: {
   imports = [inputs.disko.nixosModules.default];
-  
+
   disko.devices = {
     disk = {
       main = {
@@ -50,10 +50,10 @@
                       mountOptions = ["subvol=perist" "compress=zstd" "noatime"];
                     };
 
-		    "/libvirt" = {
-		      mountpoint = "/libvirt";
-		      mountOptions = ["subvol=libvirt" "noatime"];
-		    };
+                    "/libvirt" = {
+                      mountpoint = "/libvirt";
+                      mountOptions = ["subvol=libvirt" "noatime"];
+                    };
 
                     "/swap" = {
                       mountpoint = "/.swapvol";
@@ -77,31 +77,31 @@
               content = {
                 type = "luks";
                 name = "crypted-2";
-		content = {
-		  type = "btrfs";
-		  extraArgs = ["-f" "-L media"];
-		  subvolumes = {
-		    "media" = {
-		      mountpoint = "/media";
-		      mountOptions = ["subvol=media" "compress=zstd" "noatime"];
-		    };
+                content = {
+                  type = "btrfs";
+                  extraArgs = ["-f" "-L media"];
+                  subvolumes = {
+                    "media" = {
+                      mountpoint = "/media";
+                      mountOptions = ["subvol=media" "compress=zstd" "noatime"];
+                    };
 
-		    "media/games" = {
-		      mountpoint = "/media/games";
-		      mountOptions = ["subvol=games" "compress=zstd" "noatime"];
-		    };
+                    "media/games" = {
+                      mountpoint = "/media/games";
+                      mountOptions = ["subvol=games" "compress=zstd" "noatime"];
+                    };
 
-		    "media/video" = {
-		      mountpoint = "/media/video";
-		      mountOptions = ["subvol=video" "compress=zstd" "noatime"];
-		    };
+                    "media/video" = {
+                      mountpoint = "/media/video";
+                      mountOptions = ["subvol=video" "compress=zstd" "noatime"];
+                    };
 
-		    "media/music" = {
-		      mountpoint = "/media/music";
-		      mountOptions = ["subvol=music" "compress=zstd" "noatime"];
-		    };
-		  };
-		};
+                    "media/music" = {
+                      mountpoint = "/media/music";
+                      mountOptions = ["subvol=music" "compress=zstd" "noatime"];
+                    };
+                  };
+                };
               };
             };
           };

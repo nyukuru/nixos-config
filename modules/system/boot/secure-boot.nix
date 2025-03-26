@@ -5,7 +5,6 @@
   inputs,
   ...
 }: let
-
   inherit
     (lib.options)
     mkEnableOption
@@ -23,9 +22,7 @@
     ;
 
   cfg = config.nyu.boot.secureBoot;
-
 in {
-
   imports = [inputs.lanzaboote.nixosModules.lanzaboote];
 
   options.nyu.boot.secureBoot = {

@@ -26,10 +26,10 @@
     };
     nyufox = {
       enable = true;
-      
+
       border = {
         width = 2;
-	rounding = 5;
+        rounding = 5;
       };
     };
   };

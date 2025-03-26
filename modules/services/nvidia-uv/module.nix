@@ -4,7 +4,6 @@
   lib,
   ...
 }: let
-  
   inherit
     (lib.options)
     mkEnableOption
@@ -28,7 +27,6 @@
     ;
 
   cfg = config.nyu.services.nvidia-uv;
-
 in {
   options.nyu.services.nvidia-uv = {
     enable = mkEnableOption "Nvidia Undervolting/Overclocking Service.";
@@ -37,9 +35,9 @@ in {
       type = nullOr int;
       default = null;
       description = ''
-        The minimum supported core clock of your GPU
+               The minimum supported core clock of your GPU
 
-	`nvidia-smi -q -d SUPPORTED_CLOCKS | less`
+        `nvidia-smi -q -d SUPPORTED_CLOCKS | less`
       '';
     };
 
@@ -47,9 +45,9 @@ in {
       type = nullOr int;
       default = null;
       description = ''
-        The maximum supported core clock of your GPU
+               The maximum supported core clock of your GPU
 
-	`nvidia-smi -q -d SUPPORTED_CLOCKS | less`
+        `nvidia-smi -q -d SUPPORTED_CLOCKS | less`
       '';
     };
 
@@ -73,15 +71,14 @@ in {
       type = int;
       default = 0;
       description = ''
-        Index of the gpu to undervolt/overclock
+               Index of the gpu to undervolt/overclock
 
-	Should be 0 unless using a multi-gpu system
+        Should be 0 unless using a multi-gpu system
       '';
     };
   };
 
   config = mkIf cfg.enable (let
-    
     minCoreClock = assertMsg (cfg.minCoreClock != null) ''
       minCoreClock is undefined, which is required to enable the nvidia undervolt/overclock.
     '';
@@ -89,10 +86,7 @@ in {
     maxCoreClock = assertMsg (cfg.minCoreClock != null) ''
       maxCoreClock is undefined, which is required to enable the nvidia undervolt/overclock.
     '';
-    
-
   in {
-
     systemd.services.nvidia-uv = {
       description = "Undervolt/Overclocking service for Nvidia GPUs";
 
@@ -100,22 +94,22 @@ in {
 
       serviceConfig = {
         Type = "oneshot";
-	Restert = "no";
-	ExecStart = pkgs.writers.writePython3 "nvidia-uv.py" {libraries = [pkgs.python312Packages.nvidia-ml-py];} ''
-	  from pynvml import *
-	  nvmlInit()
+        Restert = "no";
+        ExecStart = pkgs.writers.writePython3 "nvidia-uv.py" {libraries = [pkgs.python312Packages.nvidia-ml-py];} ''
+          from pynvml import *
+          nvmlInit()
 
-	  myGPU = nvmlDeviceGetHandleByIndex(${cfg.gpuIndex})
+          myGPU = nvmlDeviceGetHandleByIndex(${cfg.gpuIndex})
 
-	  # Set Min and Max core clocks
-	  nvmlDeviceSetGpuLockedClocks(myGPU, ${minCoreClock}, ${maxCoreClock})
+          # Set Min and Max core clocks
+          nvmlDeviceSetGpuLockedClocks(myGPU, ${minCoreClock}, ${maxCoreClock})
 
-	  # Clock offset
-	  nvmlDeviceSetGpcClkVfOffset(myGPU, ${cfg.clockOffset})
+          # Clock offset
+          nvmlDeviceSetGpcClkVfOffset(myGPU, ${cfg.clockOffset})
 
-	  # Memory Clock offset
-	  nvmlDeviceSetMemClkVfOffset(myGPU, ${cfg.memOffset}) 
-	'';
+          # Memory Clock offset
+          nvmlDeviceSetMemClkVfOffset(myGPU, ${cfg.memOffset})
+        '';
       };
     };
   });

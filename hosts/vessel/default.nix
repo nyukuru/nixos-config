@@ -3,6 +3,7 @@
   inputs,
   config,
   pkgs,
+  lib,
   ...
 }: {
   imports = [
@@ -24,6 +25,9 @@
     git-crypt
     obsidian
     vlc
+    gh
+
+    jetbrains.pycharm-community-bin
 
     # Games
     lutris
@@ -36,7 +40,25 @@
   ];
 
   services.dunst = {
+    package = pkgs.dunst.overrideAttrs {
+      makeFlags = [
+        "PREFIX=$(out)"
+        "VERSION=$(version)"
+        "SYSCONFDIR=$(out)/etc"
+        "SYSCONFDIR=/etc/xdg"
+        "SYSCONF_FORCE_NEW=0"
+        "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
+        "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
+      ];
+    };
+
     enable = true;
+
+    settings = {
+      urgency_normal = {
+        background = lib.mkForce "#000000";
+      };
+    };
   };
 
   system.stateVersion = "24.05";

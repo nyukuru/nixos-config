@@ -4,7 +4,6 @@
   lib,
   ...
 }: let
-
   inherit
     (lib.options)
     mkOption
@@ -23,7 +22,6 @@
     ;
 
   cfg = config.nyu.hardware;
-
 in {
   imports = [
     ./cpu
@@ -39,7 +37,7 @@ in {
       type = nullOr (enum ["pi" "intel" "amd"]);
       default = null;
       description = ''
-	The vendor/architecture of the CPU. Determines drivers and specializations for that cpu.
+        The vendor/architecture of the CPU. Determines drivers and specializations for that cpu.
       '';
     };
 
@@ -47,8 +45,8 @@ in {
       type = nullOr (enum ["amd" "intel"]);
       default = null;
       description = ''
-        The vendor/architecture(s) of the iGPU, installs drivers and enable modules
-	Should be null if no iGPU is present or use of the iGPU is undesired.
+               The vendor/architecture(s) of the iGPU, installs drivers and enable modules
+        Should be null if no iGPU is present or use of the iGPU is undesired.
       '';
     };
 
@@ -64,39 +62,39 @@ in {
   config = mkMerge [
     {
       assertions = [
-	{
-	  assertion = cfg.cpu != null;
-	  message = "CPU Type is undefined";
-	}
+        {
+          assertion = cfg.cpu != null;
+          message = "CPU Type is undefined";
+        }
 
-	{
-	  assertion = config.hardware.graphics.enable && ((cfg.igpu != null) || (cfg.dgpu != null));
-	  message = "GPU is undefined while graphics is enabled.";
-	}
+        {
+          assertion = config.hardware.graphics.enable && ((cfg.igpu != null) || (cfg.dgpu != null));
+          message = "GPU is undefined while graphics is enabled.";
+        }
       ];
     }
     (mkIf (cfg.igpu != null || cfg.dgpu != null) {
       hardware.graphics = {
-	enable = true;
-	enable32Bit = true;
+        enable = true;
+        enable32Bit = true;
       };
 
       environment.systemPackages = with pkgs; [
-	glxinfo
-	glmark2
+        glxinfo
+        glmark2
 
-	vulkan-tools
-	vulkan-loader
-	vulkan-validation-layers
-	vulkan-extension-layer
+        vulkan-tools
+        vulkan-loader
+        vulkan-validation-layers
+        vulkan-extension-layer
 
-	libva
-	libva-utils
+        libva
+        libva-utils
 
-	vaapiVdpau
-	vdpauinfo
+        vaapiVdpau
+        vdpauinfo
 
-	mesa
+        mesa
       ];
     })
   ];

@@ -7,7 +7,6 @@
   lib,
   ...
 }: let
-
   inherit
     (lib.options)
     mkEnableOption
@@ -43,7 +42,6 @@
     ;
 
   cfg = config.nyu.sound.realtime;
-
 in {
   options.nyu.sound.realtime = {
     enable = mkEnableOption "Realtime sound optimizations.";

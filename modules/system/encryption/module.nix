@@ -4,8 +4,7 @@
   lib,
   ...
 }: let
-
-  inherit 
+  inherit
     (lib.attrsets)
     concatMapAttrs
     mapAttrs

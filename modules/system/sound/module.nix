@@ -1,8 +1,4 @@
-{
-  lib,
-  ...
-}: let
-
+{lib, ...}: let
   inherit
     (lib.options)
     mkEnableOption
@@ -13,7 +9,6 @@
     (lib.types)
     enum
     ;
-
 in {
   imports = [
     ./servers

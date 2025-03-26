@@ -64,7 +64,7 @@ in {
         "no-url-literals"
       ];
 
-      pure-eval = mkDefault true;
+      pure-eval = mkDefault false;
       warn-dirty = mkDefault false;
       accept-flake-config = mkDefault false;
 

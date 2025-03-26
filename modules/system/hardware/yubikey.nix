@@ -4,7 +4,6 @@
   lib,
   ...
 }: let
-
   inherit
     (lib.options)
     mkEnableOption
@@ -21,7 +20,6 @@
     ;
 
   cfg = config.nyu.hardware.yubikey;
-
 in {
   options.nyu.hardware.yubikey = {
     enable = mkEnableOption "Yubikey device support and tooling.";

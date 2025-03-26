@@ -4,8 +4,7 @@
   lib,
   ...
 }: let
-  
-  inherit 
+  inherit
     (lib.options)
     mkEnableOption
     mkOption
@@ -23,7 +22,6 @@
     ;
 
   cfg = config.modules.system.virtualization.win-start;
-
 in {
   options.modules.system.virtualization.win-start = {
     enable = mkEnableOption "Easy Windows VM start script";

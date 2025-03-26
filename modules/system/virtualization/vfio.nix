@@ -3,7 +3,6 @@
   lib,
   ...
 }: let
-
   inherit
     (lib.options)
     mkEnableOption
@@ -35,7 +34,6 @@
   pciIDType = strMatching "([0-z]{4}:[0-z]{4})?";
 
   cfg = config.nyu.virtualization.vfio;
-
 in {
   options.nyu.virtualization.vfio = {
     enable = mkEnableOption "VFIO";
@@ -54,15 +52,16 @@ in {
       # Ensures vfio can claim gpus before other drivers (like nvidia)
       initrd.kernelModules = mkBefore [
         "vfio_pci"
-	"vfio"
-	"vfio_iommu_type1"
-	"vfio_virqfd"
+        "vfio"
+        "vfio_iommu_type1"
+        "vfio_virqfd"
       ];
 
-      kernelParams = optional (cfg.pciIds != []) 
-	("vfio-pci.ids=" + concatStringsSep "," cfg.pciIds)
-      ++ (optional (config.nyu.hardware.cpu == "amd") "amd_iommu=on")
-      ++ (optional (config.nyu.hardware.cpu == "intel") "intel_iommu=on");
+      kernelParams =
+        optional (cfg.pciIds != [])
+        ("vfio-pci.ids=" + concatStringsSep "," cfg.pciIds)
+        ++ (optional (config.nyu.hardware.cpu == "amd") "amd_iommu=on")
+        ++ (optional (config.nyu.hardware.cpu == "intel") "intel_iommu=on");
     };
   };
 }

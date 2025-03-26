@@ -13,6 +13,10 @@
         alejandra = {
           enable = true;
         };
+
+        stylua = {
+          enable = true;
+        };
       };
     };
   };

@@ -50,7 +50,6 @@
     ;
 
   cfg = config.nyu.programs.nvim;
-
 in {
   imports = [
     ./default-config
@@ -82,17 +81,10 @@ in {
       };
     };
 
-    exclude = {
-      vim = mkOption {
-        type = listOf str;
-        default = [];
-        description = "VimL filenames to exclude if found in the config directory.";
-      };
-      lua = mkOption {
-        type = listOf str;
-        default = [];
-        description = "Lua filenames to exclude if found in the config directory.";
-      };
+    exclude = mkOption {
+      type = listOf str;
+      default = [];
+      description = "Filenames to exclude from the config if found in the config directory.";
     };
 
     plugins = {
@@ -115,9 +107,11 @@ in {
       variables.EDITOR = "nvim";
 
       systemPackages = let
-        allFiles = optionals (cfg.configDir != null) (listFilesRecursive cfg.configDir);
-        vimFiles = filter (x: (hasSuffix ".vim" x) && !(elem (baseNameOf x) cfg.exclude.vim)) allFiles;
-        luaFiles = filter (x: (hasSuffix ".lua" x) && !(elem (baseNameOf x) cfg.exclude.lua)) allFiles;
+        allFiles =
+          optionals (cfg.configDir != null)
+          (filter (x: !(elem (baseNameOf x) cfg.exclude)) (listFilesRecursive cfg.configDir));
+        vimFiles = filter (x: hasSuffix ".vim" x) allFiles;
+        luaFiles = filter (x: hasSuffix ".lua" x) allFiles;
       in [
         (pkgs.wrapNeovimUnstable cfg.package {
           inherit (cfg) viAlias vimAlias;
