@@ -1,9 +1,11 @@
 {
+  packages,
   config,
   pkgs,
   lib,
   ...
 }: let
+
   inherit
     (lib.options)
     mkPackageOption
@@ -209,6 +211,22 @@ in {
       ];
 
       bindsym = {
+        # Brightness Bindings
+        "XF86MonBrightnessDown" = "exec ${packages.scripts-brightness} 2%-";
+        "XF86MonBrightnessUp" = "exec ${packages.scripts-brightness} 2%+";
+        "Shift+XF86MonBrightnessDown" = "exec ${packages.scripts-brightness} 20%-";
+        "Shift+XF86MonBrightnessUp" = "exec ${packages.scripts-brightness} 20%+";
+
+        # Output audio control
+        "XF86AudioRaiseVolume" = "exec ${packages.scripts-volume} set-volume @DEFAULT_SINK@ 1%+";
+        "XF86AudioLowerVolume" = "exec ${packages.scripts-volume} set-volume @DEFAULT_SINK@ 1%-";
+        "XF86AudioMute" = "exec ${packages.scripts-volume} set-mute @DEFAULT_SINK@ toggle";
+
+        # Input audio control
+        "Alt+XF86AudioRaiseVolume" = "exec ${packages.scripts-volume} set-volume @DEFAULT_SOURCE@ 1%+";
+        "Alt+XF86AudioLowerVolume" = "exec ${packages.scripts-volume} set-volume @DEFAULT_SOURCE@ 1%-";
+        "Alt+XF86AudioMute" = "exec ${packages.scripts-volume} set-mute @DEFAULT_SOURCE@ toggle";
+
         "Mod4+Return" = "exec ${getExe pkgs.foot}";
         "Mod4+f" = "exec firefox";
 

@@ -143,7 +143,7 @@ in ''
 
    :root {
      --toolbar-color: currentColor !important;
-     --link-color: ${border-width} !important;
+     --link-color: white !important;
      --urlbarView-highlight-background: var(--toolbar-field-background-color) !important;
      --toolbox-non-lwt-bgcolor: ${background} !important;
      --toolbox-non-lwt-bgcolor-inactive: ${background} !important;

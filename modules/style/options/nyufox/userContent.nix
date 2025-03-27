@@ -238,7 +238,13 @@ in ''
       & .fav {
         left: 0;
         transition: all 70ms ease;
-        filter: sepia(100%);
+        filter: 
+          grayscale(100%) 
+          contrast(300%) 
+          drop-shadow(0px 1px white)
+          drop-shadow(1px 0px white)
+          drop-shadow(0px -1px white)
+          drop-shadow(-1px 0px white)
       }
     }
 
