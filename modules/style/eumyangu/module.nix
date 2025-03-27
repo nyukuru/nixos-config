@@ -27,6 +27,11 @@
     nyufox = {
       enable = true;
 
+      color = {
+        background = "#000000";
+        border = "#29292d";
+      };
+
       border = {
         width = 2;
         rounding = 5;

@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    dev-nixpkgs.url = "git+file:///home/nyoo/dev/nixpkgs";
+    dev-nixpkgs.url = "github:nyukuru/nixpkgs/init-dunst";
 
     # Preconfigured configs for specific devices
     # i.e laptops

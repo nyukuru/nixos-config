@@ -54,28 +54,25 @@
     withSystem system (
       ctx:
         nixosSystem {
-          specialArgs =
+
+          specialArgs = {
+            inherit
+              hostname
+              inputs
+              lib
+              ;
+
+            inherit (ctx) inputs';
+            inherit (ctx.self') packages;
+          } // specialArgs;
+
+          modules = [
             {
-              inherit
-                hostname
-                inputs
-                lib
-                ;
-
-              inherit (ctx) inputs';
-              inherit (ctx.self') packages;
+              imports = ["${inputs.self}/hosts/${hostname}"];
+              networking.hostName = hostname;
+              nixpkgs.hostPlatform = system;
             }
-            // specialArgs;
-
-          modules =
-            [
-              {
-                imports = ["${inputs.self}/hosts/${hostname}"];
-                networking.hostName = hostname;
-                nixpkgs.hostPlatform = system;
-              }
-            ]
-            ++ modules;
+          ] ++ modules;
         }
     );
 

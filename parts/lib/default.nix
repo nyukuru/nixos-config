@@ -11,7 +11,6 @@
   inherit
     (lib.attrsets)
     recursiveUpdateUntil
-    recursiveUpdate
     ;
 
   inherit
@@ -40,15 +39,7 @@
     lists = callLibs ./lists.nix;
   });
 
-  # An overlay of my library to go onto nixpkgs'
-  myLibOverlay = final: prev:
-    libUpdate prev myLib;
-
-  lib' = lib.extend myLibOverlay;
 in {
-  perSystem._module.args.lib = lib';
-  _module.args.lib = lib';
-
   # Export this flake's functions instead of all of nixpkgs.lib as well
   flake.lib = myLib;
 }
