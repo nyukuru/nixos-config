@@ -27,12 +27,13 @@
     vlc
     gh
 
-    jetbrains.pycharm-community-bin
+    gimp
 
     # Games
     lutris
     mangohud
     prismlauncher
+
     (inputs'.xivlauncher-rb.packages.xivlauncher-rb.override {
       useGameMode = true;
       nvngxPath = "${config.hardware.nvidia.package}/lib/nvidia/wine";
@@ -51,9 +52,6 @@
         "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
       ];
     };
-
-    enable = true;
-
     settings = {
       urgency_normal = {
         background = lib.mkForce "#000000";

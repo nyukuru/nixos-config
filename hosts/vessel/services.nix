@@ -16,9 +16,8 @@
       enable = true;
     };
 
-    gnome.gnome-keyring = {
-      enable = true;
-    };
+    gnome.gnome-keyring.enable = true;
+    blueman.enable = true;
   };
 
   systemd.services = {

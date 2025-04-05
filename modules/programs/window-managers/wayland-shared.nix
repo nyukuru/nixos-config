@@ -8,10 +8,6 @@
     mkDefault
     ;
 
-  inherit
-    (lib.meta)
-    getExe
-    ;
 in {
   security = {
     polkit.enable = mkDefault true;
@@ -20,6 +16,7 @@ in {
 
   programs = {
     dconf.enable = mkDefault true;
+    uwsm.enable = true;
   };
 
   services = {

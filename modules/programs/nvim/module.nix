@@ -103,32 +103,28 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment = {
-      variables.EDITOR = "nvim";
+    environment.systemPackages = let
+      allFiles =
+        optionals (cfg.configDir != null)
+        (filter (x: !(elem (baseNameOf x) cfg.exclude)) (listFilesRecursive cfg.configDir));
+      vimFiles = filter (x: hasSuffix ".vim" x) allFiles;
+      luaFiles = filter (x: hasSuffix ".lua" x) allFiles;
+    in [
+      (pkgs.wrapNeovimUnstable cfg.package {
+        inherit (cfg) viAlias vimAlias;
 
-      systemPackages = let
-        allFiles =
-          optionals (cfg.configDir != null)
-          (filter (x: !(elem (baseNameOf x) cfg.exclude)) (listFilesRecursive cfg.configDir));
-        vimFiles = filter (x: hasSuffix ".vim" x) allFiles;
-        luaFiles = filter (x: hasSuffix ".lua" x) allFiles;
-      in [
-        (pkgs.wrapNeovimUnstable cfg.package {
-          inherit (cfg) viAlias vimAlias;
+        neovimRcContent = (concatMapFiles vimFiles) + cfg.extra.vim;
+        luaRcContent = (concatMapFiles luaFiles) + cfg.extra.lua;
 
-          neovimRcContent = (concatMapFiles vimFiles) + cfg.extra.vim;
-          luaRcContent = (concatMapFiles luaFiles) + cfg.extra.lua;
-
-          plugins =
-            cfg.plugins.start
-            ++ (map
-              (x: {
-                plugin = x;
-                optional = true;
-              })
-              cfg.plugins.opt);
-        })
-      ];
-    };
+        plugins =
+          cfg.plugins.start
+          ++ (map
+            (x: {
+              plugin = x;
+              optional = true;
+            })
+            cfg.plugins.opt);
+      })
+    ];
   };
 }

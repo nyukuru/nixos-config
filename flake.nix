@@ -4,6 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     dev-nixpkgs.url = "github:nyukuru/nixpkgs/init-dunst";
+    dev-nixpkgs-waybar.url = "github:/nyukuru/nixpkgs/waybar-settings";
 
     # Preconfigured configs for specific devices
     # i.e laptops

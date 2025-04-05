@@ -1,6 +1,7 @@
 {
   packages,
   config,
+  lib,
   ...
 }: {
   boot = {
@@ -92,7 +93,11 @@
         enable = true;
         autologin = {
           enable = true;
-          user = "nyoo";
+          user = "nyu";
+          command = let
+            session = lib.getExe config.nyu.programs.sway.package;
+            sessionWrapper = "${lib.getExe config.programs.uwsm.package} start -S -F";
+          in "${sessionWrapper} ${session} >/dev/null";
         };
       };
     };
@@ -136,13 +141,5 @@
         };
       };
     };
-    /*
-     ___  _         _
-    |   \(_)____ __| |__ _ _  _
-    | |) | (_-< '_ \ / _` | || |
-    |___/|_/__/ .__/_\__,_|\_, |
-              |_|          |__/
-    */
-    windowManager.default = config.nyu.programs.sway.package;
   };
 }

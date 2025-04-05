@@ -13,19 +13,20 @@
 
   inherit
     (lib.modules)
+    mkForce
     mkIf
     ;
 
   inherit
     (lib.strings)
     concatStringsSep
+    concatMapStringsSep
+    removeSuffix
     ;
 
   inherit
     (lib.attrsets)
-    removeAttrs
     attrNames
-    attrHead
     ;
 
   inherit
@@ -40,8 +41,8 @@
     getExe
     ;
 
+  sessions = config.services.displayManager.sessionPackages;
   cfg = config.nyu.boot.greetd;
-  wm = config.nyu.windowManager.default;
 in {
   options.nyu.boot.greetd = {
     enable = mkEnableOption "greetd.";
@@ -50,22 +51,13 @@ in {
       default = "tuigreet";
     };
 
-    command = mkOption {
-      type = str;
-      default =
-        if wm == null
-        then "${getExe config.users.defaultUserShell}"
-        else "${getExe wm}";
-      description = "Command executed by the greeter upon login / autologin.";
-    };
-
     greeterArgs = mkOption {
       type = listOf str;
       default = [
         "--time"
         "--remember"
-        "--asterisks-char"
-        "\"-\""
+        "--remember-user-session"
+        "--sessions ${concatMapStringsSep ":" (x: x + "/share/wayland-sessions") sessions}"
       ];
       description = "Command line arguments applied to the greeter.";
     };
@@ -74,32 +66,32 @@ in {
       enable = mkEnableOption "Autologin.";
       user = mkOption {
         type = enum (attrNames config.users.users);
-        default = attrHead (removeAttrs config.users.users ["root"]);
         description = "Determines which user is automatically logged in.";
+      };
+
+      command = mkOption {
+        type = str;
+        description = "Autologin command, usually a session start";
       };
     };
   };
 
   config = mkIf cfg.enable {
+    services.displayManager.enable = mkForce false;
     services.greetd = {
       enable = true;
       vt = 1;
 
       settings = {
-        # default greeter that requires login
         default_session = {
-          user = "greeter";
-          command = concatStringsSep " " ([
-              (getExe cfg.greeter)
-              "--cmd ${cfg.command}"
-            ]
+          command = concatStringsSep " " (
+            [(getExe cfg.greeter)]
             ++ cfg.greeterArgs);
         };
 
         # autologin start wm
         initial_session = mkIf cfg.autologin.enable {
-          inherit (cfg.autologin) user;
-          inherit (cfg) command;
+          inherit (cfg.autologin) user command;
         };
       };
     };

@@ -3,27 +3,35 @@
     ./nvim.nix
     ./sway.nix
     ./dunst.nix
+    ./waybar.nix
   ];
 
   style = {
+    wallpaper = ./komeiji.png;
+
     colors = {
-      base0 = "16130f";
-      base1 = "85544b";
-      base2 = "7e7b57";
-      base3 = "8b624b";
-      base4 = "926579";
-      base5 = "795d8a";
-      base6 = "87776a";
-      base7 = "b7a59f";
-      base8 = "4e403b";
-      base9 = "c6827d";
-      baseA = "b0aa91";
-      baseB = "b28d77";
-      baseC = "c297aa";
-      baseD = "aa97b7";
-      baseE = "c8b7aa";
-      baseF = "e2dbd9";
+      background = "000000";
+      foreground = "f8f8f6";
+
+      base0 = "232a2d";
+      base1 = "e57474";
+      base2 = "57553c";
+      base3 = "8ccf7e";
+      base4 = "67b0e8";
+      base5 = "c47fd5";
+      base6 = "6cbfbf";
+      base7 = "b3b9b8";
+
+      base8 = "2d3437";
+      base9 = "ef7e7e";
+      baseA = "96d988";
+      baseB = "f4d67a";
+      baseC = "71baf2";
+      baseD = "ce89df";
+      baseE = "67cbe7";
+      baseF = "bdc3c2";
     };
+
     nyufox = {
       enable = true;
 
@@ -36,6 +44,12 @@
         width = 2;
         rounding = 5;
       };
+    };
+  };
+
+  programs.foot.settings = {
+    main = {
+      font = "monospace:size=10";
     };
   };
 }

@@ -13,11 +13,7 @@ in {
   config = mkIf config.programs.foot.enable {
     programs.foot.settings = {
       colors = {
-        inherit
-          (colors)
-          foreground
-          background
-          ;
+        inherit (colors) foreground background;
 
         regular0 = colors.base0;
         regular1 = colors.base1;

@@ -35,7 +35,6 @@
     listOf
     nullOr
     oneOf
-    lines
     bool
     path
     int
@@ -120,14 +119,13 @@ in {
               export WLR_BACKEND=wayland
               export WLR_RENDERER=vulkan
               export WLR_NO_HARDWARE_CURSORS=1
-            '';
+            '' + cfg.extraSessionCommands;
           };
       };
 
     extraSessionCommands = mkOption {
-      type = lines;
-      default = ''
-      '';
+      type = str;
+      default = "";
       description = ''
         Shell commands executed just before Sway is started.
       '';
@@ -142,47 +140,24 @@ in {
     xwayland = {
       enable = mkEnableOption "XWayland" // {default = true;};
     };
-
-    swayidle = {
-      enable = mkEnableOption "Swayidle";
-      package = mkPackageOption pkgs "swayidle" {};
-
-      settings = mkOption {
-        type = swayConf.type;
-        default = {};
-        description = "Swayidle config content.";
-      };
-    };
-
-    swaylock = {
-      enable = mkEnableOption "swaylock";
-      package = mkPackageOption pkgs "swaylock" {};
-
-      settings = mkOption {
-        type = swayConf.type;
-        default = {};
-        description = "Swaylock config content.";
-      };
-    };
   };
 
   config = mkIf cfg.enable {
-    programs.sway.enable = mkForce false;
-
-    nyu.windowManager.enabled = [cfg.package];
+    programs = {
+      sway.enable = mkForce false;
+      uwsm.waylandCompositors.sway = {
+        prettyName = "Sway";
+        comment = "Sway compositor managed by UWSM";
+        binPath = getExe cfg.package;
+      };
+    };
 
     environment = {
       systemPackages =
         [cfg.package]
-        ++ optional cfg.xwayland.enable pkgs.xwayland
-        ++ optional cfg.swayidle.enable cfg.swayidle.package
-        ++ optional cfg.swaylock.enable cfg.swaylock.package;
+        ++ optional cfg.xwayland.enable pkgs.xwayland;
 
-      etc = {
-        "sway/config".source = swayConf.generate "sway.conf" cfg.settings;
-        "swaylock/config".source = swayConf.generate "swaylock.conf" cfg.swaylock.settings;
-        "swayidle/config".source = swayConf.generate "swayidle.conf" cfg.swayidle.settings;
-      };
+      etc."sway/config".source = swayConf.generate "sway.conf" cfg.settings;
     };
 
     # https://github.com/emersion/slurp?tab=readme-ov-file#example-usage
@@ -227,6 +202,9 @@ in {
         "Alt+XF86AudioLowerVolume" = "exec ${packages.scripts-volume} set-volume @DEFAULT_SOURCE@ 1%-";
         "Alt+XF86AudioMute" = "exec ${packages.scripts-volume} set-mute @DEFAULT_SOURCE@ toggle";
 
+        "Print" = "exec ${getExe pkgs.sway-contrib.grimshot} --notify savecopy window /media/images/screenshots/$(date '+%Y-%m-%d:%H-%M-%S')";
+        "Shift+Print" = "exec ${getExe pkgs.sway-contrib.grimshot} --notify savecopy output /media/images/screenshots/$(date '+%Y-%m-%d:%H-%M-%S')";
+
         "Mod4+Return" = "exec ${getExe pkgs.foot}";
         "Mod4+f" = "exec firefox";
 
@@ -270,10 +248,6 @@ in {
             "Escape" = "mode \"default\"";
           };
         };
-      };
-
-      bar = {
-        position = "top";
       };
     };
   };

@@ -9,7 +9,14 @@
     nullOr
     path
     str
+    int
     ;
+
+  mkColorOption = default: mkOption {
+    type = str;
+    inherit default;
+  };
+
 in {
   imports = [
     ./nyufox
@@ -24,77 +31,32 @@ in {
     };
 
     colors = {
-      background = mkOption {
-        type = str;
-        default = "16130f";
-      };
-      foreground = mkOption {
-        type = str;
-        default = "b7a59f";
-      };
-      base0 = mkOption {
-        type = str;
-        default = "16130f";
-      };
-      base1 = mkOption {
-        type = str;
-        default = "633f38";
-      };
-      base2 = mkOption {
-        type = str;
-        default = "57553c";
-      };
-      base3 = mkOption {
-        type = str;
-        default = "5f4333";
-      };
-      base4 = mkOption {
-        type = str;
-        default = "5f424f";
-      };
-      base5 = mkOption {
-        type = str;
-        default = "544160";
-      };
-      base6 = mkOption {
-        type = str;
-        default = "5d5249";
-      };
-      base7 = mkOption {
-        type = str;
-        default = "b7a59f";
-      };
-      base8 = mkOption {
-        type = str;
-        default = "4e403b";
-      };
-      base9 = mkOption {
-        type = str;
-        default = "8c4f4a";
-      };
-      baseA = mkOption {
-        type = str;
-        default = "898471";
-      };
-      baseB = mkOption {
-        type = str;
-        default = "816656";
-      };
-      baseC = mkOption {
-        type = str;
-        default = "90707e";
-      };
-      baseD = mkOption {
-        type = str;
-        default = "72657b";
-      };
-      baseE = mkOption {
-        type = str;
-        default = "80756d";
-      };
-      baseF = mkOption {
-        type = str;
-        default = "e2dbd9";
+      background = mkColorOption "000000";
+      foreground = mkColorOption "f8f8f6";
+
+      base0 = mkColorOption "232a2d";
+      base1 = mkColorOption "e57474";
+      base2 = mkColorOption "57553c";
+      base3 = mkColorOption "8ccf7e";
+      base4 = mkColorOption "67b0e8";
+      base5 = mkColorOption "c47fd5";
+      base6 = mkColorOption "6cbfbf";
+      base7 = mkColorOption "b3b9b8";
+
+      base8 = mkColorOption "2d3437";
+      base9 = mkColorOption "ef7e7e";
+      baseA = mkColorOption "96d988";
+      baseB = mkColorOption "f4d67a";
+      baseC = mkColorOption "71baf2";
+      baseD = mkColorOption "ce89df";
+      baseE = mkColorOption "67cbe7";
+      baseF = mkColorOption "bdc3c2";
+    };
+
+    font = {
+      size = mkOption {
+        type = int;
+        default = 10;
       };
     };
   };

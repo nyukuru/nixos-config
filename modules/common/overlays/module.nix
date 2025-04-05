@@ -3,6 +3,7 @@
     (final: prev: {
 
       # Relax dependencies to allow build
+      /*
       auto-cpufreq = prev.auto-cpufreq.overrideAttrs (old: {
         patches = (old.patches or []) ++ [
           (prev.fetchpatch {
@@ -12,6 +13,7 @@
           })
         ];
       });
+      */
     })
   ];
 }

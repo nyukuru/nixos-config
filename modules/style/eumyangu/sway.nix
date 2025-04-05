@@ -1,5 +1,8 @@
-{config, ...}: let
-  style = config.style;
+{
+  config,
+  ...
+}: let
+  inherit (config) style;
 in {
   nyu.programs.sway.settings = {
     gaps = {
@@ -18,7 +21,7 @@ in {
 
     output."*".bg =
       if (style.wallpaper != null)
-      then "${"style.wallpaper"} fill"
+      then "${style.wallpaper} fill"
       else "#090707 solid_color";
 
     # Hide titlebar text

@@ -30,9 +30,10 @@ in {
     ];
 
     variables = {
-      EDITOR = "nvim";
-      VISUAL = "nvim";
-      SUDO_EDITOR = "nvim";
+      # These will be overridden by default by nvim symlinking over vim
+      SUDO_EDITOR = "vim";
+      EDITOR = "vim";
+      VISUAL = "vim";
       BROWSER = "firefox";
     };
 
@@ -41,6 +42,17 @@ in {
       nr = "nix-store --verify; pushd ~/nixos-config; ${getExe pkgs.nh} os switch . -a; popd";
       # Nix-rebuild-update
       nru = "nix-store --verify; pushd ~/nixos-config; ${getExe pkgs.nh} os switch . -au; popd";
+
+      # Always ask when overwritting
+      cp = "cp -i";
+
+      # List view by default
+      ls = "ls -l";
+      la = "ls -la";
+
+      pls = "sudo";
+
+      gis = "git status";
     };
   };
 
