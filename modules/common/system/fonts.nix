@@ -10,18 +10,26 @@
 in {
   fonts = {
     packages = with pkgs; [
-      material-icons
+      # Typical fonts
       corefonts
-      twemoji-color-font
       noto-fonts
-      nerd-fonts.jetbrains-mono
+      noto-fonts-cjk-sans
+      noto-fonts-cjk-serif
+
+      # Symbol fonts
+      nerd-fonts.symbols-only
+      twemoji-color-font
+      material-icons
+
+      # Programming fonts
+      jetbrains-mono
     ];
 
     fontconfig = {
       defaultFonts = mkDefault rec {
-        emoji = ["Twitter Color Emoji" "Material Icons Sharp"];
-        monospace = ["JetBrainsMono Nerd Font Mono"] ++ emoji;
-        sansSerif = ["JetBrainsMono Nerd Font Mono"] ++ emoji;
+        emoji = ["Twitter Color Emoji" "Symbols Nerd Font" "Material Icons Sharp"];
+        monospace = ["JetBrains Mono" "Noto Sans Mono"] ++ emoji;
+        sansSerif = ["JetBrains Mono" "Noto Sans"] ++ emoji;
         serif = ["Noto Serif"] ++ emoji;
       };
     };
