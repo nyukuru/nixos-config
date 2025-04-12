@@ -1,4 +1,7 @@
 {
+  packages,
+  ...
+}: {
   services.libinput = {
     enable = true;
 
@@ -15,4 +18,8 @@
       disableWhileTyping = false;
     };
   };
+
+#TODO: move keymappings here,
+# I tried actkbd but it didnt work well
+
 }

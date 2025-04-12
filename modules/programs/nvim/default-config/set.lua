@@ -1,7 +1,10 @@
 vim.opt.guicursor = ""
+vim.g.mapleader = " "
 
 vim.opt.nu = true
 vim.opt.relativenumber = true
+
+vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
 
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
@@ -28,6 +31,12 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 
-vim.opt.colorcolumn = "80"
+vim.diagnostic.config({
+  virtual_text = true,
+  severity_sort = true,
+  float = {
+    border = 'rounded',
+    source = 'always',
+  },
+})
 
-vim.g.mapleader = " "

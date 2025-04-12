@@ -40,6 +40,15 @@
     })
   ];
 
+  windex = {
+    enable = true;
+    cpu = "intel";
+
+    vfio = {
+      deviceIds = ["10de:25a2"];
+    };
+  };
+
   services.dunst = {
     package = pkgs.dunst.overrideAttrs {
       makeFlags = [
@@ -51,11 +60,6 @@
         "SERVICEDIR_DBUS=$(out)/share/dbus-1/services"
         "SERVICEDIR_SYSTEMD=$(out)/lib/systemd/user"
       ];
-    };
-    settings = {
-      urgency_normal = {
-        background = lib.mkForce "#000000";
-      };
     };
   };
 

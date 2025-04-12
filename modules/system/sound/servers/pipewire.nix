@@ -1,5 +1,6 @@
 {
   config,
+  pkgs,
   lib,
   ...
 }: let
@@ -27,5 +28,9 @@ in {
       pipewire.wantedBy = ["default.target"];
       pipewire-pulse.wantedBy = ["default.target"];
     };
+
+    environment.systemPackages = [
+      pkgs.pulseaudio
+    ];
   };
 }

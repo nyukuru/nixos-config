@@ -12,6 +12,9 @@
     ;
 
   hw = inputs.nixos-hardware.nixosModules;
+  disko = inputs.disko.nixosModules.default;
+  windex = inputs.windex.nixosModules.default;
+
 in {
   flake.nixosConfigurations = {
     vessel = mkNixosSystem {
@@ -20,7 +23,11 @@ in {
       modules = mkModules {
         form = "laptop";
         style = "eumyangu";
-        extraModules = [hw.dell-xps-15-9520-nvidia];
+        extraModules = [
+          hw.dell-xps-15-9520-nvidia
+          disko
+          windex
+        ];
       };
     };
 

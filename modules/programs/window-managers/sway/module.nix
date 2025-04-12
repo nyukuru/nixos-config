@@ -208,6 +208,8 @@ in {
         "Mod4+Return" = "exec ${getExe pkgs.foot}";
         "Mod4+f" = "exec firefox";
 
+        "Mod4+Space" = "floating toggle";
+
         "Mod4+d" = "exec ${getExe' pkgs.dmenu "dmenu_path"} | ${getExe pkgs.wmenu} | xargs swaymsg exec --";
         "Mod4+q" = "kill";
 

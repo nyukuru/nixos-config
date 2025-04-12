@@ -21,21 +21,21 @@
     int
     ;
 
-  mkColorOption = default: item:
-    mkOption {
-      inherit default;
-      type = str;
-      description = "Color of ${item}.";
-    };
 
+  mkColorOption = default: mkOption {
+    inherit default;
+    type = str;
+  };
+
+  inherit (config.style) colors;
   cfg = config.style.nyufox;
 in {
   options.style.nyufox = {
     enable = mkEnableOption "nyu's firefox css edits";
 
     color = {
-      background = mkColorOption "#16130f" "browser container";
-      border = mkColorOption "#342d24" "background of content windows";
+      background = mkColorOption "#${colors.base0}";
+      border = mkColorOption "#${colors.base8}";
     };
 
     border = {
@@ -47,7 +47,8 @@ in {
 
       rounding = mkOption {
         type = int;
-        default = 2;
+        default = 5;
+        description = "Radius of the border elements";
       };
     };
 
@@ -59,7 +60,7 @@ in {
     font = {
       family = mkOption {
         type = str;
-        default = "\"JetBrainsMono Nerd Font\"";
+        default = "\"JetBrains Mono\"";
         description = "Font for the default browser elements";
       };
 

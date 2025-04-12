@@ -21,6 +21,7 @@ in {
   imports = [
     ./nyufox
     ./foot
+    ./tty
   ];
 
   options.style = {

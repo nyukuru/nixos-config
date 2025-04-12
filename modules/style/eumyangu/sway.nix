@@ -3,10 +3,11 @@
   ...
 }: let
   inherit (config) style;
+  inherit (style) colors;
 in {
   nyu.programs.sway.settings = {
     gaps = {
-      inner = 4;
+      inner = 8;
       outer = 0;
     };
 
@@ -22,15 +23,14 @@ in {
     output."*".bg =
       if (style.wallpaper != null)
       then "${style.wallpaper} fill"
-      else "#090707 solid_color";
+      else "#${colors.base0} solid_color";
 
     # Hide titlebar text
-    for_window."[class=\".*\"]".title_format = "<span></span>";
+    #for_window."[all]".title_format = "<span></span>";
 
-    "client.focused" = "#202020 #202020 #F8F8F6 #3E4A4F #212121";
-    "client.focused_inactive" = "#161616 #161616 #F8F8F6 #484E50 #161616";
-    "client.unfocused" = "#161616 #161616 #F8F8F6 #292D2E #161616";
-    "client.urgent" = "#141B1E #E52323 #F8F8F6 #E52323 #E52323";
-    "client.placeholder" = "#000000 #0C0C0C #F8F8F6 #000000 #0C0C0C";
+    "client.focused" = "#202020 #202020 #${colors.base7}";
+    "client.focused_inactive" = "#161616 #161616 #${colors.base7}";
+    "client.unfocused" = "#161616 #161616 #${colors.base7}";
+    "client.urgent" = "#${colors.base1} #161616 #${colors.base7}";
   };
 }

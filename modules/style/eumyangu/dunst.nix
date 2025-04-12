@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   lib,
   ...
@@ -7,6 +8,11 @@
     (lib.meta)
     getExe
     getExe'
+    ;
+
+  inherit 
+    (config.style)
+    colors
     ;
 
 in {
@@ -74,22 +80,22 @@ in {
       };
 
       urgency_low = {
-        background = "#16130f";
-        foreground = "#b7a59f";
+        background = "#${colors.base0}";
+        foreground = "#${colors.base7}";
         timeout = 5;
       };
 
       urgency_normal = {
-        background = "#16130f";
-        foreground = "#b7a59f";
-        highlight = "#b7a59f";
+        background = "#${colors.base0}";
+        foreground = "#${colors.base7}";
+        highlight = "#${colors.base7}";
         timeout = 5;
       };
 
       urgency_critical = {
-        background = "#16130f";
-        foreground = "#b7a59f";
-        frame_color = "#e57474";
+        background = "#${colors.base0}";
+        foreground = "#${colors.base7}";
+        frame_color = "#${colors.base1}";
         timeout = 120;
       };
     };

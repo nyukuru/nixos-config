@@ -42,6 +42,8 @@ in {
       nr = "nix-store --verify; pushd ~/nixos-config; ${getExe pkgs.nh} os switch . -a; popd";
       # Nix-rebuild-update
       nru = "nix-store --verify; pushd ~/nixos-config; ${getExe pkgs.nh} os switch . -au; popd";
+      # Garbage Collect
+      gc = "${getExe pkgs.nh} clean all --keep 5";
 
       # Always ask when overwritting
       cp = "cp -i";

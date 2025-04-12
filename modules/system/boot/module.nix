@@ -9,8 +9,8 @@
     ;
 
   inherit
-    (lib.modules)
-    mkIf
+    (lib.lists)
+    optionals
     ;
 
   cfg = config.nyu.boot;
@@ -29,7 +29,7 @@ in {
   };
 
   config.boot = {
-    kernelParams = mkIf cfg.silent.enable [
+    kernelParams = optionals cfg.silent.enable [
       "quiet"
 
       # Errors or worse

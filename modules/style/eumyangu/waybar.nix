@@ -1,8 +1,18 @@
 {
+  pkgs,
+  config,
   inputs,
   modulesPath,
   ...
-}: {
+}: let 
+  inherit 
+    (config.style)
+    colors
+    ;
+
+  gaps = config.nyu.programs.sway.settings.gaps.inner;
+
+in {
   disabledModules = [ "${modulesPath}/programs/wayland/waybar.nix" ];
   imports = [ "${inputs.dev-nixpkgs-waybar}/nixos/modules/programs/wayland/waybar.nix" ];
 
@@ -11,21 +21,65 @@
 
     settings = {
       layer = "top";
+      position = "top";
+
+      height = 25;
+
+      margin-top = gaps;
+      margin-right = gaps;
+      margin-left = gaps;
+      margin-bottom = 0;
 
       modules-left = [
-        "sway/workspaces"
+        "custom/launcher"
+        "clock"
         "sway/mode"
       ];
 
       modules-center = [
-        "clock"
+        "sway/workspaces"
       ];
 
       modules-right = [
+        "pulseaudio"
+        "backlight"
         "battery"
       ];
 
-      "sway/window".max-length = 50;
+      "custom/launcher" = {
+        format = "";
+        tooltip = false;
+        # TODO
+      };
+
+      "sway/workspaces" = {
+        persistent-workspaces = {
+          "1" = [];
+          "2" = [];
+          "3" = [];
+          "4" = [];
+          "5" = [];
+        };
+
+        format = "";
+        window-rewrite-default = "{name}";
+      };
+
+      pulseaudio = {
+        format = "{volume}% {icon}";
+        format-bluetooth = "{volume}% {icon}";
+        format-muted = "{volume}% ";
+        format-icons = {
+          default = ["" "" ""];
+        };
+        tooltip = false;
+      };
+
+      backlight = {
+        format = "{percent}% {icon}";
+        format-icons = ["󰃞" "󰃝" "󰃟" "󰃠"];
+        tooltip = false;
+      };
 
       battery = {
         format = "{capacity}% {icon}";
@@ -33,8 +87,51 @@
       };
 
       clock = {
-        format-alt = "{:%a, %d. %b  %H:%M}";
+        format = "{:%b. %d; %H:%M}";
+        tooltip = false;
       };
     };
   };
+
+  environment.etc."xdg/waybar/style.css".source = pkgs.writeText "waybar-style.css" ''
+    * {
+      min-height: 0;
+    }
+
+    window#waybar {
+      background-color: #${colors.base0};
+      border-radius: 5px;
+      color: #${colors.base7};
+    }
+
+    .module {
+      border: 2px solid #${colors.base7};
+      border-radius: 5px;
+      padding: 0 10px;
+      margin: 5px;
+    }
+
+    #custom-launcher {
+      border: 0;
+      font-size: 15px;
+      margin-right: 0;
+    }
+
+    #workspaces {
+      min-width: 100px;
+    }
+
+    #workspaces button {
+      all: unset;
+      background-color: #${colors.base7};
+      margin: 5px;
+      font-size: 0px;
+      padding: 0 3px;
+      transition: padding 0.2s;
+    }
+
+    #workspaces button.focused {
+      padding: 0 10px;
+    }
+  '';
 }

@@ -28,8 +28,7 @@ in {
             nvim-treesitter-parsers.lua
             nvim-treesitter-parsers.python
 
-            # Lazy Loading
-            lzn-auto-require
+            luasnip
 
             # LSP Support
             nvim-lspconfig

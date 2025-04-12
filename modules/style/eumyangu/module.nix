@@ -9,47 +9,30 @@
   style = {
     wallpaper = ./komeiji.png;
 
+    # Base16 Black Metal
     colors = {
       background = "000000";
       foreground = "f8f8f6";
 
-      base0 = "232a2d";
-      base1 = "e57474";
-      base2 = "57553c";
-      base3 = "8ccf7e";
-      base4 = "67b0e8";
-      base5 = "c47fd5";
-      base6 = "6cbfbf";
-      base7 = "b3b9b8";
+      base0 = "000000";
+      base1 = "805e87";
+      base2 = "dd9999";
+      base3 = "a06666";
+      base4 = "888888";
+      base5 = "999999";
+      base6 = "aaaaaa";
+      base7 = "c1c1c1";
 
-      base8 = "2d3437";
-      base9 = "ef7e7e";
-      baseA = "96d988";
-      baseB = "f4d67a";
-      baseC = "71baf2";
-      baseD = "ce89df";
-      baseE = "67cbe7";
-      baseF = "bdc3c2";
+      base8 = "333333";
+      base9 = "805e87";
+      baseA = "dd9999";
+      baseB = "a06666";
+      baseC = "888888";
+      baseD = "999999";
+      baseE = "aaaaaa";
+      baseF = "c1c1c1";
     };
 
-    nyufox = {
-      enable = true;
-
-      color = {
-        background = "#000000";
-        border = "#29292d";
-      };
-
-      border = {
-        width = 2;
-        rounding = 5;
-      };
-    };
-  };
-
-  programs.foot.settings = {
-    main = {
-      font = "monospace:size=10";
-    };
+    nyufox.enable = true;
   };
 }

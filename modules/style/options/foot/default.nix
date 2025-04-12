@@ -4,16 +4,44 @@
   ...
 }: let
   inherit
+    (lib.options)
+    mkOption
+    ;
+
+  inherit
     (lib.modules)
     mkIf
     ;
 
+  inherit
+    (lib.types)
+    int
+    ;
+
   colors = config.style.colors;
+  cfg = config.style.foot;
 in {
+
+  options.style.foot = {
+    font = {
+      size = mkOption {
+        type = int;
+        default = 10;
+        description = "Font size of the terminal";
+      };
+    };
+  };
+
   config = mkIf config.programs.foot.enable {
     programs.foot.settings = {
+      main = {
+        font = "monospace:size=${toString cfg.font.size}";
+        pad = "4x4";
+      };
+
       colors = {
-        inherit (colors) foreground background;
+        background = colors.base0;
+        foreground = colors.base7;
 
         regular0 = colors.base0;
         regular1 = colors.base1;

@@ -1,4 +1,10 @@
-{pkgs, ...}: {
+{
+  config,
+  pkgs,
+  ...
+}: let
+  inherit (config.style) colors;
+in {
   nyu.programs.nvim = {
     plugins.start = [pkgs.vimPlugins.lackluster-nvim];
 
@@ -8,8 +14,8 @@
 
       lackluster.setup({
         tweak_color = {
-          luster = "#f3d9ea",
-          lack = "#90707e",
+          luster = "#${colors.base3}",
+          lack = "#${colors.base2}",
 
           -- TODO: these default colors are too harsh
           orange = "default",
@@ -20,7 +26,7 @@
         },
 
         tweak_background = {
-          normal = color.black
+          normal = "#${colors.base0}",
         },
 
         -- Replace undercurl with underlines

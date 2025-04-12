@@ -43,8 +43,8 @@
     };
 
     # Windows vm easy setup
-    wfvm = {
-      url = "git+https://git.m-labs.hk/m-labs/wfvm";
+    windex = {
+      url = "path:/home/nyu/dev/windex";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
