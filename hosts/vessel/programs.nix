@@ -86,6 +86,10 @@
       enable = true;
     };
 
+    fusee-nano = {
+      enable = true;
+    };
+
     firefox = {
       enable = true;
 

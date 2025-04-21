@@ -19,6 +19,7 @@
       "networkmanager"
 
       "media"
+      "nintendo-switch"
     ];
   };
 }

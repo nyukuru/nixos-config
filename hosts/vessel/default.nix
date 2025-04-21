@@ -28,6 +28,10 @@
     gh
 
     gimp
+    protonvpn-gui
+
+    winetricks
+    wineWowPackages.staging
 
     # Games
     lutris

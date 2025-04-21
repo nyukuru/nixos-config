@@ -1,7 +1,6 @@
 {
   imports = [
     ./nyu.nix
-    ./nyoo.nix
   ];
 
   users.extraGroups = {

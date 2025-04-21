@@ -1,6 +1,7 @@
 {
   packages,
   config,
+  pkgs,
   lib,
   ...
 }: {
@@ -20,6 +21,24 @@
       "rtsx_pci_sdmmc"
     ];
   };
+
+  virtualisation = {
+    waydroid.enable = true;
+  };
+
+  systemd.tmpfiles.rules = let 
+    # https://wiki.nixos.org/wiki/Waydroid
+    waydroid_base = ''
+      sys.use_memfd=true
+    '';
+      # Extra settings needed for nvidia gpu rendering
+      # kept disabled until I need to use dgpu rather than igpu
+      #ro.hardware.gralloc=default
+      #ro.hardware.egl=swiftshader
+
+  in [
+    "w+ /var/lib/waydroid/waydroid_base.prop  - - - -  ${waydroid_base}"
+  ];
 
   /*
     ____          _                    __  __           _       _
@@ -44,8 +63,7 @@
       bluetooth.enable = true;
 
       yubikey = {
-        # Currently fails due to broken dep chain
-        #enable = true;
+        enable = true;
         cliTools.enable = true;
       };
     };
