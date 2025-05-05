@@ -33,6 +33,10 @@
       enable = true;
     };
 
+    thunar = {
+      enable = true;
+    };
+
     zsh.interactiveShellInit = ''
       function osc7-pwd() {
         emulate -L zsh # also sets localoptions for us
@@ -99,6 +103,7 @@
         "skip-redirect" = {installMode = "force_installed";};
         "frankerfacez" = {installMode = "force_installed";};
         "disable-twitch-extensions" = {installMode = "force_installed";};
+        "bitwarden-password-manager" = {installMode = "force_installed";};
       };
     };
   };

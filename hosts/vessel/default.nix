@@ -21,11 +21,14 @@
   environment.systemPackages = with pkgs; [
     # Utils
     unzip
+    zip
     openvpn
     git-crypt
+    filezilla
     obsidian
     vlc
     gh
+    nixpkgs-review
 
     gimp
     protonvpn-gui

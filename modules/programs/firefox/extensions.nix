@@ -48,6 +48,8 @@
     disable-twitch-extensions = "disable-twitch-extensions@rootonline.de";
     sidebery = "{3c078156-979c-498b-8990-85f7987dd929}";
     bento = "{cb7f7992-81db-492b-9354-99844440ff9b}";
+    bitwarden-password-manager = "{446900e4-71c2-419f-a6a7-df9c091e268b}";
+
   };
 
   langToExtension = lang:
