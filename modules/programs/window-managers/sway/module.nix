@@ -187,20 +187,20 @@ in {
 
       bindsym = {
         # Brightness Bindings
-        "XF86MonBrightnessDown" = "exec ${packages.scripts-brightness} 2%-";
-        "XF86MonBrightnessUp" = "exec ${packages.scripts-brightness} 2%+";
-        "Shift+XF86MonBrightnessDown" = "exec ${packages.scripts-brightness} 20%-";
-        "Shift+XF86MonBrightnessUp" = "exec ${packages.scripts-brightness} 20%+";
+        "XF86MonBrightnessDown" = "exec ${packages.scripts.brightness} 2%-";
+        "XF86MonBrightnessUp" = "exec ${packages.scripts.brightness} 2%+";
+        "Shift+XF86MonBrightnessDown" = "exec ${packages.scripts.brightness} 20%-";
+        "Shift+XF86MonBrightnessUp" = "exec ${packages.scripts.brightness} 20%+";
 
         # Output audio control
-        "XF86AudioRaiseVolume" = "exec ${packages.scripts-volume} set-volume @DEFAULT_SINK@ 1%+";
-        "XF86AudioLowerVolume" = "exec ${packages.scripts-volume} set-volume @DEFAULT_SINK@ 1%-";
-        "XF86AudioMute" = "exec ${packages.scripts-volume} set-mute @DEFAULT_SINK@ toggle";
+        "XF86AudioRaiseVolume" = "exec ${packages.scripts.volume} set-volume @DEFAULT_SINK@ 1%+";
+        "XF86AudioLowerVolume" = "exec ${packages.scripts.volume} set-volume @DEFAULT_SINK@ 1%-";
+        "XF86AudioMute" = "exec ${packages.scripts.volume} set-mute @DEFAULT_SINK@ toggle";
 
         # Input audio control
-        "Alt+XF86AudioRaiseVolume" = "exec ${packages.scripts-volume} set-volume @DEFAULT_SOURCE@ 1%+";
-        "Alt+XF86AudioLowerVolume" = "exec ${packages.scripts-volume} set-volume @DEFAULT_SOURCE@ 1%-";
-        "Alt+XF86AudioMute" = "exec ${packages.scripts-volume} set-mute @DEFAULT_SOURCE@ toggle";
+        "Alt+XF86AudioRaiseVolume" = "exec ${packages.scripts.volume} set-volume @DEFAULT_SOURCE@ 1%+";
+        "Alt+XF86AudioLowerVolume" = "exec ${packages.scripts.volume} set-volume @DEFAULT_SOURCE@ 1%-";
+        "Alt+XF86AudioMute" = "exec ${packages.scripts.volume} set-mute @DEFAULT_SOURCE@ toggle";
 
         "Print" = "exec ${getExe pkgs.sway-contrib.grimshot} --notify savecopy window /media/images/screenshots/$(date '+%Y-%m-%d:%H-%M-%S')";
         "Shift+Print" = "exec ${getExe pkgs.sway-contrib.grimshot} --notify savecopy output /media/images/screenshots/$(date '+%Y-%m-%d:%H-%M-%S')";

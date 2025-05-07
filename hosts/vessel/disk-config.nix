@@ -32,27 +32,27 @@
                   subvolumes = {
                     "/root" = {
                       mountpoint = "/";
-                      mountOptions = ["subvol=root" "compress=zstd" "noatime"];
+                      mountOptions = ["subvol=root" "compress=zstd" "noatime" "ssd"];
                     };
 
                     "/home" = {
                       mountpoint = "/home";
-                      mountOptions = ["subvol=home" "compress=zstd" "noatime"];
+                      mountOptions = ["subvol=home" "compress=zstd" "noatime" "ssd"];
                     };
 
                     "/nix" = {
                       mountpoint = "/nix";
-                      mountOptions = ["subvol=nix" "compress=zstd" "noatime"];
+                      mountOptions = ["subvol=nix" "compress=zstd" "noatime" "ssd"];
                     };
 
                     "/persist" = {
                       mountpoint = "/persist";
-                      mountOptions = ["subvol=perist" "compress=zstd" "noatime"];
+                      mountOptions = ["subvol=perist" "compress=zstd" "noatime" "ssd"];
                     };
 
                     "/libvirt" = {
                       mountpoint = "/libvirt";
-                      mountOptions = ["subvol=libvirt" "noatime"];
+                      mountOptions = ["subvol=libvirt" "noatime" "ssd"];
                     };
 
                     "/swap" = {
@@ -83,22 +83,22 @@
                   subvolumes = {
                     "media" = {
                       mountpoint = "/media";
-                      mountOptions = ["subvol=media" "compress=zstd" "noatime"];
+                      mountOptions = ["subvol=media" "compress=zstd" "noatime" "ssd"];
                     };
 
                     "media/games" = {
                       mountpoint = "/media/games";
-                      mountOptions = ["subvol=games" "compress=zstd" "noatime"];
+                      mountOptions = ["subvol=games" "compress=zstd" "noatime" "ssd"];
                     };
 
                     "media/video" = {
                       mountpoint = "/media/video";
-                      mountOptions = ["subvol=video" "compress=zstd" "noatime"];
+                      mountOptions = ["subvol=video" "compress=zstd" "noatime" "ssd"];
                     };
 
                     "media/music" = {
                       mountpoint = "/media/music";
-                      mountOptions = ["subvol=music" "compress=zstd" "noatime"];
+                      mountOptions = ["subvol=music" "compress=zstd" "noatime" "ssd"];
                     };
                   };
                 };

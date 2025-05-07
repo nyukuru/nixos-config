@@ -9,9 +9,9 @@
     ./upower.nix
   ];
 
-  environment.systemPackages = [
-    pkgs.acpi
-    pkgs.powertop
+  environment.systemPackages = with pkgs; [
+    powertop
+    acpi
   ];
 
   boot = {
@@ -21,5 +21,11 @@
       acpi_call
       cpupower
     ];
+  };
+
+  powerManagement = {
+    enable = true;
+    powertop.enable = true;
+    scsiLinkPolicy = "med_power_with_dipm";
   };
 }
