@@ -152,69 +152,6 @@ in ''
      * ─[ pinned tabs ]──────────────────────────────────────────────────────
     */
 
-    /* size calculation */
-    .PinnedTabsBar .tab-wrapper .Tab {
-      --n: 3;
-      --m: 1;
-
-      width: calc(
-        100vw / var(--n) - var(--tabs-margin) * (1 / var(--n) + 1)
-      ) !important;
-
-      height: calc(((100vw - var(--tabs-margin)) / 3.6) / var(--m)) !important;
-    }
-
-    /* full-width titles */
-    #root[data-pinned-tabs-list="true"] .PinnedTabsBar .tab-wrapper .Tab {
-      --n: 1 !important;
-      --m: 1.4 !important;
-    }
-
-    /* 1 pinned tab */
-    .PinnedTabsBar .tab-wrapper:nth-child(1):last-child .Tab {
-      --n: 1;
-      --m: 1.4;
-    }
-
-    /* 2 tabs in bottom row */
-    .PinnedTabsBar:has(.tab-wrapper:nth-child(3n + 2):last-child)
-      .tab-wrapper:nth-last-child(-n + 2)
-      .Tab {
-      --n: 2;
-      --m: 1.2;
-    }
-
-    /* 4 tabs in bottom row */
-    .PinnedTabsBar:has(.tab-wrapper:nth-child(3n + 4):last-child)
-      .tab-wrapper:nth-last-child(-n + 4)
-      .Tab {
-      --n: 4;
-      --m: 1.3;
-    }
-
-    /* audio icon */
-    .Tab[data-pin="true"] > .body > .audio {
-      background: transparent !important;
-      box-shadow: none !important;
-      right: var(--audio-btn-round-margin) !important;
-      top: var(--audio-btn-round-margin) !important;
-    }
-
-    /* bigger favicon */
-    .Tab[data-pin="true"] :is(.fav, .fav-icon) {
-      width: var(--pin-favicon-size) !important;
-      height: var(--pin-favicon-size) !important;
-    }
-
-    /* shadow, outline and background */
-    .Tab[data-pin="true"] .body {
-      background-color: var(--toolbar-bg) !important;
-    }
-
-    /* remove bottom margin */
-    .PinnedTabsBar {
-      margin-bottom: 0px !important;
-    }
 
     /*
      * ─[ general tab stuff ]────────────────────────────────────────────────

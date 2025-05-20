@@ -202,8 +202,8 @@ in {
         "Alt+XF86AudioLowerVolume" = "exec ${packages.scripts.volume} set-volume @DEFAULT_SOURCE@ 1%-";
         "Alt+XF86AudioMute" = "exec ${packages.scripts.volume} set-mute @DEFAULT_SOURCE@ toggle";
 
-        "Print" = "exec ${getExe pkgs.sway-contrib.grimshot} --notify savecopy window /media/images/screenshots/$(date '+%Y-%m-%d:%H-%M-%S')";
-        "Shift+Print" = "exec ${getExe pkgs.sway-contrib.grimshot} --notify savecopy output /media/images/screenshots/$(date '+%Y-%m-%d:%H-%M-%S')";
+        "Print" = "exec ${getExe pkgs.sway-contrib.grimshot} --notify savecopy output /media/images/screenshots/$(date '+%Y-%m-%d:%H-%M-%S').png";
+        "Alt+Print" = "exec ${getExe pkgs.sway-contrib.grimshot} --notify savecopy anything /media/images/screenshots/$(date '+%Y-%m-%d:%H-%M-%S').png";
 
         "Mod4+Return" = "exec ${getExe pkgs.foot}";
         "Mod4+f" = "exec firefox";

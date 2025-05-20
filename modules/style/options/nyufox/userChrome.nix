@@ -128,12 +128,12 @@ in ''
      &:not([urlbar-exceeds-toolbar-bounds]) {overflow: unset !important;}
    }
 
-   body:has(#sidebar-box:not([hidden="true"])) #nav-bar {
-     margin-left: calc(60px + (${margin} * 2));
+   body:has(#sidebar-box[checked]) #nav-bar {
+     margin-left: calc(248px + (${margin} * 2));
    }
 
-   body:has(#sidebar-box:hover) #nav-bar {
-     margin-left: calc(248px + (${margin} * 2)) !important;
+   body:has(#sidebar-box[sidebarcommand^="_3c078156-979c-498b-8990-85f7987dd929"][checked]:not(:hover)) #nav-bar {
+     margin-left: calc(60px + (${margin} * 2)) !important;
    }
 
    /* OVERWRITES */
@@ -239,10 +239,10 @@ in ''
      position: relative;
      min-width: 0 !important;
      max-width: none !important;
-     width: 60px !important;
+     width: 248px !important;
      transition: width 0.2s ease;
      margin-top: calc((var(--urlbar-toolbar-height) + ((${margin} + ${border-width}) * 2)) * -1) !important;
-     &:hover {width: 248px !important;}
+     &[sidebarcommand^="_3c078156-979c-498b-8990-85f7987dd929"]:not(:hover) {width: 60px !important;}
 
      margin: ${margin} 0 ${margin} ${margin};
      border-radius: ${border-rounding} !important;
