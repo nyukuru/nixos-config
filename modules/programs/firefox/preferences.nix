@@ -4,11 +4,6 @@
   ...
 }: let
   inherit
-    (lib.options)
-    mkOption
-    ;
-
-  inherit
     (lib.strings)
     concatMapAttrsStringSep
     optionalString
@@ -17,32 +12,19 @@
     ;
 
   inherit
-    (lib.types)
-    lines
-    ;
-
-  inherit
     (builtins)
     hashFile
     ;
 
-  combineHash = file1: file2: len: let
-    hash1 = substring 0 (len / 2) (hashFile "md5" file1);
-    hash2 = substring 0 (len / 2) (hashFile "md5" file2);
+  combineHash = file1: file2: let
+    hash1 = substring 0 8 (hashFile "md5" file1);
+    hash2 = substring 0 8 (hashFile "md5" file2);
   in
     hash1 + hash2;
 
   cfg = config.nyu.programs.firefox;
 in {
-  options.nyu.programs.firefox = {
-    preferences = mkOption {
-      type = lines;
-      default = "";
-      description = "";
-    };
-  };
-
-  config.nyu.programs.firefox.preferences =
+  nyu.programs.firefox.preferences =
     ''
       const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
     ''
@@ -63,7 +45,7 @@ in {
 
          // Combine hashes of both files
          var hashFile = chromeDir.clone();
-         hashFile.append("${combineHash cfg.userChrome cfg.userContent 16}");
+         hashFile.append("${combineHash cfg.userChrome cfg.userContent}");
 
          if (!chromeDir.exists()) {
       chromeDir.create(Ci.nsIFile.DIRECTORY_TYPE, FileUtils.PERMS_DIRECTORY);

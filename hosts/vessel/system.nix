@@ -78,7 +78,7 @@
       enable = true;
 
       ssh = {
-        enable = true;
+        enable = false;
         port = 30;
 
         tarpit = {

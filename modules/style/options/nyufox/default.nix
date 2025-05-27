@@ -77,9 +77,9 @@ in {
       userChrome = pkgs.writeText "userChrome.css" (import ./userChrome.nix {inherit cfg;});
       userContent = pkgs.writeText "userContent.css" (import ./userContent.nix {inherit cfg;});
 
-      extensions = {
-        sidebery = {installMode = "force_installed";};
-      };
+      extensions = [
+        {shortID = "sidebery"; addonID = "{3c078156-979c-498b-8990-85f7987dd929}"; installMode = "force_installed";}
+      ];
     };
   };
 }

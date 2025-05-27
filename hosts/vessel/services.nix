@@ -1,27 +1,19 @@
 {pkgs, ...}: {
   services = {
-    printing = {
-      enable = true;
-    };
-
+    printing.enable = true;
     gvfs.enable = true;
     udisks2.enable = true;
-
-    dbus = {
-      enable = true;
-      packages = [
-        pkgs.dconf
-        pkgs.gcr
-      ];
-    };
-
-    btrfs.autoScrub = {
-      enable = true;
-    };
-
+    btrfs.autoScrub.enable = true;
     gnome.gnome-keyring.enable = true;
     blueman.enable = true;
 
+    dbus = {
+      enable = true;
+      packages = with pkgs; [
+        dconf
+        gcr
+      ];
+    };
   };
 
   systemd.services = {

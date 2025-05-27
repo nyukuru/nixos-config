@@ -36,15 +36,19 @@
     winetricks
     wineWowPackages.staging
 
+    # Work
+    jetbrains.pycharm-community-bin
+
     # Games
-    lutris
     mangohud
     prismlauncher
 
+    /*
     (inputs'.xivlauncher-rb.packages.xivlauncher-rb.override {
       useGameMode = true;
       nvngxPath = "${config.hardware.nvidia.package}/lib/nvidia/wine";
     })
+    */
   ];
 
   windex = {
@@ -56,6 +60,7 @@
     };
   };
 
+  /*
   services.dunst = {
     package = pkgs.dunst.overrideAttrs {
       makeFlags = [
@@ -69,6 +74,7 @@
       ];
     };
   };
+  */
 
   system.stateVersion = "24.05";
 }

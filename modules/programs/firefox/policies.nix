@@ -1,44 +1,5 @@
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}: let
-  inherit
-    (lib.options)
-    mkOption
-    ;
-
-  inherit
-    (lib.attrsets)
-    concatMapAttrs
-    ;
-
-  mkExtensions = extensions:
-    concatMapAttrs (
-      _: extension: {
-        ${extension.addonID} = {
-          install_url = extension.installUrl;
-          installation_mode = extension.installMode;
-          default_area = "menupanel";
-        };
-      }
-    )
-    extensions;
-
-  json = pkgs.formats.json {};
-
-  cfg = config.nyu.programs.firefox;
-in {
-  options.nyu.programs.firefox = {
-    policies = mkOption {
-      type = json.type;
-      default = {};
-      description = "Mozilla policies.";
-    };
-  };
-
-  config.nyu.programs.firefox.policies = {
+{pkgs, ...}: {
+  nyu.programs.firefox.policies = {
     AppAutoUpdate = false;
     DontCheckDefaultBrowser = true;
 
@@ -58,7 +19,6 @@ in {
       Value = true;
     };
 
-    ExtensionSettings = mkExtensions cfg.extensions // {"*".installation_mode = "blocked";};
     ExtensionUpdate = false;
 
     FirefoxHome = {
