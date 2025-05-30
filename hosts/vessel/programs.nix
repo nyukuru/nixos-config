@@ -8,7 +8,7 @@
 
     nh = {
       enable = true;
-      flake = /home/nyu/nixos-config;
+      flake = "/home/nyu/nixos-config";
       clean = {
         enable = true;
         extraArgs = "--keep-since 3d --keep 5";
