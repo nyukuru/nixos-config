@@ -26,7 +26,7 @@ in {
   };
 
   nix = {
-    package = mkDefault pkgs.lix;
+    package = mkDefault pkgs.lixPackageSets.latest.lix;
     daemonCPUSchedPolicy = mkDefault "idle";
     daemonIOSchedClass = mkDefault "idle";
 
@@ -58,9 +58,6 @@ in {
       extra-experimental-features = [
         "flakes"
         "nix-command"
-        "recursive-nix"
-        "ca-derivations"
-        "no-url-literals"
       ];
 
       pure-eval = mkDefault false;

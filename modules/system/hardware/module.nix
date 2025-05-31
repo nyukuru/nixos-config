@@ -62,8 +62,8 @@ in {
   config = mkMerge [
     {
       warnings = [
-        (mkIf (cfg.cpu != null) "CPU Type is undefined")
-        (mkIf (config.hardware.graphics.enable && ((cfg.igpu != null) || (cfg.dgpu != null)))
+        (mkIf (cfg.cpu == null) "CPU Type is undefined")
+        (mkIf (config.hardware.graphics.enable && ((cfg.igpu == null) || (cfg.dgpu == null)))
           "GPU is undefined while graphics is enabled.")
       ];
     }
