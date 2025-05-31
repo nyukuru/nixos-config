@@ -2,7 +2,7 @@
   description = "Nyu's NixOS configuration";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     dev-nixpkgs.url = "github:nyukuru/nixpkgs/init-dunst";
     dev-nixpkgs-waybar.url = "github:/nyukuru/nixpkgs/waybar-settings";
 

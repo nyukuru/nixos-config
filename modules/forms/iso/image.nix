@@ -1,7 +1,6 @@
 {
   config,
-  self,
-  pkgs,
+  inputs,
   lib,
   ...
 }: let
@@ -15,29 +14,23 @@
     cleanSource
     ;
 
-  name = "${config.networking.hostname}-${config.system.nixos.release}-${self.shortRev}";
+  inherit (inputs) self;
 in {
-  # Immutability
   system.switch.enable = false;
 
   isoImage = {
     squashfsCompression = "zstd -Xcompression-level 19";
-    makeEfiBootable = true;
-
     appendToMenuLabel = "";
 
-    contents = [
-      {
-        source = pkgs.memtest86plus + "/memtest.bin";
-        target = "boot/memtest.bin";
-      }
-      {
-        # Provide flake (minus version control stuff)
-        source = cleanSource self;
-        target = "/nixos-config";
-      }
-    ];
+    makeBiosBootable = true;
+    makeEfiBootable = true;
+    makeUsbBootable = true;
+
+    contents = [{
+      source = cleanSource self;
+      target = "/nixos-config";
+    }];
   };
 
-  image.baseName = mkImageMediaOverride "${name}.iso";
+  image.baseName = mkImageMediaOverride "${config.networking.hostName}-${self.shortRev or self.dirtyShortRev}";
 }

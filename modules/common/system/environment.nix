@@ -15,9 +15,7 @@
     ;
 in {
   environment = {
-    defaultPackages = mkForce [];
-
-    systemPackages = with pkgs; [
+    defaultPackages = mkForce (with pkgs; [
       # Network transfers.
       curl
       wget
@@ -27,10 +25,9 @@ in {
 
       # Text editor.
       vim
-    ];
+    ]);
 
     variables = {
-      # These will be overridden by default by nvim symlinking over vim
       SUDO_EDITOR = "vim";
       EDITOR = "vim";
       VISUAL = "vim";
@@ -38,11 +35,11 @@ in {
     };
 
     shellAliases = {
-      # Nix-rebuild
-      nr = "nix-store --verify; pushd ~/nixos-config; ${getExe pkgs.nh} os switch . -a; popd";
-      # Nix-rebuild-update
-      nru = "nix-store --verify; pushd ~/nixos-config; ${getExe pkgs.nh} os switch . -au; popd";
-      # Garbage Collect
+      # Nix-Rebuild
+      nr = "nix-store --verify; ${getExe pkgs.nh} os switch -a";
+      # Nix-Rebuild-Update
+      nru = "nix-store --verify; ${getExe pkgs.nh} os switch -au";
+      # Garbage-Collect
       gc = "${getExe pkgs.nh} clean all --keep 5";
 
       # Always ask when overwritting

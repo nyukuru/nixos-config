@@ -29,7 +29,6 @@ in {
     package = mkDefault pkgs.lix;
     daemonCPUSchedPolicy = mkDefault "idle";
     daemonIOSchedClass = mkDefault "idle";
-    daemonIOSchedPriority = mkDefault 7;
 
     # Store Optimizer
     optimise = {

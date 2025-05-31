@@ -3,7 +3,6 @@
   inputs,
   config,
   pkgs,
-  lib,
   ...
 }: {
   imports = [
@@ -13,9 +12,7 @@
     ./system.nix
     ./services.nix
 
-    ./users
-
-    "${inputs.dev-nixpkgs}/nixos/modules/services/desktops/dunst.nix"
+    ../users
   ];
 
   environment.systemPackages = with pkgs; [

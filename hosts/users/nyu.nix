@@ -1,7 +1,7 @@
 {
   users.users.nyu = {
     isNormalUser = true;
-    uid = 1001;
+    uid = 1000;
 
     createHome = true;
     home = "/home/nyu";

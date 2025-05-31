@@ -7,6 +7,7 @@
     (lib.modules)
     mkDefault
     ;
+
 in {
   fonts = {
     packages = with pkgs; [

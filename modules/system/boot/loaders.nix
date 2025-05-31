@@ -48,9 +48,7 @@ in {
       '';
     };
 
-    memtest86.enable = {
-      enable = mkEnableOption "Memtest86." // {default = true;};
-    };
+    memtest86.enable = mkEnableOption "Memtest86." // {default = true;};
   };
 
   config.boot.loader.${cfg.type} = loaders.${cfg.type};

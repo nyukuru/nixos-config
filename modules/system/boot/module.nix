@@ -23,9 +23,7 @@ in {
   ];
 
   options.nyu.boot = {
-    silent = {
-      enable = mkEnableOption "Silent boot." // {default = true;};
-    };
+    silent.enable = mkEnableOption "Silent boot";
   };
 
   config.boot = {

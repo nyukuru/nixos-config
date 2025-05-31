@@ -25,8 +25,7 @@ in {
     enable = mkEnableOption "Yubikey device support and tooling.";
 
     cliTools = {
-      enable =
-        mkEnableOption "CLI based yubikey tooling." // {default = true;};
+      enable = mkEnableOption "CLI based yubikey tooling." // {default = true;};
     };
 
     guiTools = {
@@ -45,8 +44,7 @@ in {
     };
 
     environment.systemPackages = with pkgs;
-      []
-      ++ optionals cfg.cliTools.enable [
+      optionals cfg.cliTools.enable [
         yubikey-manager
         yubikey-personalization
         yubico-piv-tool
