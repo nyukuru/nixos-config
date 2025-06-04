@@ -65,6 +65,7 @@
       yubikey = {
         enable = true;
         cliTools.enable = true;
+        guiTools.enable = true;
       };
     };
     /*

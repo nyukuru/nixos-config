@@ -1,8 +1,10 @@
 {
-  pkgs ? import <nixpkgs> {},
-  stdenvNoCC ? pkgs.stdenvNoCC,
-  fetchFromGitHub ? pkgs.fetchFromGitHub,
-  lib ? pkgs.lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  imagemagick,
+  lib,
+
+  color ? "FFFFFF"
 }:
 stdenvNoCC.mkDerivation {
   pname = "plymouth-hellonavi-theme";
@@ -11,17 +13,25 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "nyukuru";
     repo = "hellonavi";
-    rev = "247f372a3c91d475a01ac20d7d79f567c21402a3";
-    hash = "sha256-YmgVko3SwALf6X8KZiUjdQAStllYVU/bVaH6gpbuBk4=";
+    rev = "c7c08625cc2e35f92cd6347892b1b34133a8e975";
+    hash = "sha256-OaUH/PdxgpPLznuGsJadB4WVZ3l/rdi+QXM4aRvX4i0=";
   };
 
   postPatch = ''
     rm readme.md
     rm changelog.md
     rm test_kubuntu16-10.sh
+
+    for img in hellonavi/img/navi*.png; do
+      magick \( -size 150x150 xc:"#${color}" \) "$img" -compose multiply -composite "$img"
+    done
   '';
 
   dontBuild = true;
+
+  nativeBuildInputs = [
+    imagemagick
+  ];
 
   installPhase = ''
     runHook preInstall
