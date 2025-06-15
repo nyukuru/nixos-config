@@ -15,10 +15,14 @@
     ../users
   ];
 
+  environment.pathsToLink = [ "/share"];
+
   environment.systemPackages = with pkgs; [
     # Utils
     unzip
+    unrar
     zip
+    rar
     openvpn
     git-crypt
     filezilla
@@ -37,6 +41,7 @@
     jetbrains.pycharm-community-bin
 
     # Games
+    ns-usbloader
     mangohud
     prismlauncher
 
@@ -48,6 +53,7 @@
     */
   ];
 
+/*
   windex = {
     enable = true;
     cpu = "intel";
@@ -56,6 +62,7 @@
       deviceIds = ["10de:25a2"];
     };
   };
+*/
 
   system.stateVersion = "24.05";
 }

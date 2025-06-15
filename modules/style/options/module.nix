@@ -1,4 +1,8 @@
-{lib, ...}: let
+{
+  lib,
+  pkgs,
+  ...
+}: let
   inherit
     (lib.options)
     mkOption
@@ -6,6 +10,7 @@
 
   inherit
     (lib.types)
+    package
     nullOr
     path
     str
@@ -22,6 +27,7 @@ in {
     ./nyufox
     ./foot
     ./tty
+    ./gtk
   ];
 
   options.style = {
@@ -55,6 +61,16 @@ in {
     };
 
     font = {
+      package = mkOption {
+        type = nullOr package;
+        default = pkgs.jetbrains-mono;
+      };
+
+      name = mkOption {
+        type = str;
+        default = "JetBrains Mono";
+      };
+
       size = mkOption {
         type = int;
         default = 10;

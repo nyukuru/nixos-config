@@ -33,6 +33,7 @@ in {
       modules-left = [
         "custom/launcher"
         "clock"
+        "tray"
         "sway/mode"
       ];
 
@@ -90,6 +91,10 @@ in {
         format = "{:%b. %d; %H:%M}";
         tooltip = false;
       };
+
+      tray = {
+        spacing = 10;
+      };
     };
   };
 
@@ -126,7 +131,7 @@ in {
       background-color: #${colors.base7};
       margin: 5px;
       font-size: 0px;
-      padding: 0 3px;
+      padding: 0 4px;
       transition: padding 0.2s;
     }
 

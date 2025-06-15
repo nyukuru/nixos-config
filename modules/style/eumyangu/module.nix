@@ -1,4 +1,7 @@
 {
+  pkgs,
+  ...
+}: {
   imports = [
     ./nvim.nix
     ./sway.nix
@@ -34,5 +37,22 @@
     };
 
     nyufox.enable = true;
+
+    gtk = {
+      theme = {
+        package = pkgs.kanagawa-gtk-theme;
+        name = "Kanagawa-B";
+      };
+      iconTheme = {
+        package = pkgs.kanagawa-icon-theme;
+        name = "Kanagawa";
+      };
+      gtk3.extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
+      };
+      gtk4.extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
+      };
+    };
   };
 }

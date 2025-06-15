@@ -117,7 +117,6 @@ in {
               export CLUTTER_BACKEND=wayland
 
               export WLR_BACKEND=wayland
-              export WLR_RENDERER=vulkan
               export WLR_NO_HARDWARE_CURSORS=1
             '' + cfg.extraSessionCommands;
           };

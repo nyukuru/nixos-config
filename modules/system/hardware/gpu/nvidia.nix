@@ -24,7 +24,7 @@
     then nvBeta
     else nvStable;
 
-  isHybrid = config.nyu.hardware.igpu == null;
+  isHybrid = config.nyu.hardware.igpu != null;
   isNvidia = config.nyu.hardware.dgpu == "nvidia";
 in {
   config = mkIf isNvidia {
@@ -60,19 +60,9 @@ in {
     };
 
     boot = {
-      initrd.kernelModules = [
-        "nvidia"
-        "nvidia_modeset"
-        "nvidia_uvm"
-        "nvidia_drm"
-      ];
-
       blacklistedKernelModules = ["nouveau"];
     };
-
     services.xserver.videoDrivers = ["nvidia"];
-
-    # Causes a mass rebuild
     nixpkgs.config.cudaSupport = true;
   };
 }

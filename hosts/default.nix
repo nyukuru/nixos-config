@@ -32,7 +32,7 @@ in {
           hw.dell-xps-15-9520-nvidia
           dunst
           disko
-          windex
+          #windex
         ];
       };
     };

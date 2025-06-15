@@ -50,7 +50,6 @@ in {
         yubico-piv-tool
       ]
       ++ optionals cfg.guiTools.enable [
-        yubikey-personalization-gui
         yubioath-flutter
       ];
   };

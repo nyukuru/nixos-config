@@ -3,8 +3,18 @@
     foot.enable = true;
     gamemode.enable = true;
     nix-ld.enable = true;
-    steam.enable = true;
     thunar.enable = true;
+
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true;
+      gamescopeSession = {
+        enable = true;
+        args = [
+          "-r 60"
+        ];
+      };
+    };
 
     nh = {
       enable = true;
