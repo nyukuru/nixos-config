@@ -23,19 +23,20 @@
     unrar
     zip
     rar
+
     openvpn
-    git-crypt
     filezilla
     obsidian
-    vlc
     gh
+    git-crypt
     nixpkgs-review
 
+    vlc
     gimp
-    protonvpn-gui
 
-    winetricks
-    wineWowPackages.staging
+    # Social
+    webcord
+    fractal
 
     # Work
     jetbrains.pycharm-community-bin
@@ -44,13 +45,6 @@
     ns-usbloader
     mangohud
     prismlauncher
-
-    /*
-    (inputs'.xivlauncher-rb.packages.xivlauncher-rb.override {
-      useGameMode = true;
-      nvngxPath = "${config.hardware.nvidia.package}/lib/nvidia/wine";
-    })
-    */
   ];
 
 /*

@@ -1,5 +1,6 @@
 {
   pkgs,
+  packages,
   config,
   inputs,
   modulesPath,
@@ -34,6 +35,7 @@ in {
         "custom/launcher"
         "clock"
         "tray"
+        "custom/obs"
         "sway/mode"
       ];
 
@@ -51,6 +53,11 @@ in {
         format = "";
         tooltip = false;
         # TODO
+      };
+
+      "custom/obs" = {
+        exec = packages.waybar-modules.obs-studio;
+        interval = 2;
       };
 
       "sway/workspaces" = {

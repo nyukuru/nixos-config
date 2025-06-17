@@ -22,7 +22,7 @@ in {
     enable = mkEnableOption "Bluetooth.";
 
     package = mkPackageOption pkgs "bluez" {
-      default = "bluez5-experimental";
+      default = "bluez-experimental";
     };
   };
 
@@ -34,32 +34,45 @@ in {
       package = cfg.package;
       powerOnBoot = mkDefault true;
 
-      # Security vulnerability
-      #disabledPlugins = ["sap"];
+      disabledPlugins = ["sap"];
 
-      /*
       settings = mkDefault {
         General = {
+          Enable = "Source,Sink,Media,Socket";
           JustWorksRepairing = "always";
-          DiscoverableTimeout = 0;
           Experimental = true;
         };
       };
-      */
     };
     # A simple bluetooth device manager.
     services.blueman.enable = true;
 
-    # Bluetooth audio if using pipewire sound server.
-    # https://nixos.wiki/wiki/PipeWire#Bluetooth_Configuration
     services.pipewire.wireplumber.extraConfig = {
-      "10-bluez" = {
-        "monitor.bluez.properties" = {
-          "bluez5.enable-sbc-xq" = true;
-          "bluez5.enable-msbc" = true;
-          "bluez5.enable-hw-volume" = true;
-          "bluez5.roles" = ["hsp_hs" "hsp_ag" "hfp_hf" "hfp_ag"];
+      "10-bluetooth" = {
+        "wireplumber.settings" = {
+          "bluetooth.autoswitch-to-headset-profile" = false;
         };
+      };
+      "wh-1000xm4-ldac-hq" = {
+        "monitor.bluez.rules" = [
+          {
+            matches = [
+              { 
+                "device.product.id" = "0x0d58";
+                "device.vendor.id" = "usb:054c";
+              }
+            ];
+            actions = {
+              update-props = {
+                "bluez5.a2dp.ldac.quality" = "hq";
+                "bluez5.auto-connect" = true;
+                "bluez5.profile" = "a2dp-sink";
+                "bluez5.roles" = ["a2dp_source" "a2dp_sink" "bap_sink" "bap_source"];
+                "bluetooth.autoswitch-profile" = false;
+              };
+            };
+          }
+        ];
       };
     };
   };

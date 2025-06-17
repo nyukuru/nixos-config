@@ -160,13 +160,11 @@ in {
     };
 
     # https://github.com/emersion/slurp?tab=readme-ov-file#example-usage
-    /*
     xdg.portal.wlr.settings.screencast.chooser_cmd = let
-      jqArgs = "'.. | select(.pid? and .visible?) | \"\\(.rect.x+.window_rect.x),\\(.rect.y+.window_rect.y) \\(.window_rect.width)x\\(.window_rebt.height)\"'";
+      jqArgs = '''.. | select(.pid? and .visible?) | "\(.rect.x+.window_rect.x),\(.rect.y+.window_rect.y) \(.window_rect.width)x\(.window_rect.height)"''\''';
     in
-      #"${getExe' cfg.package "swaymsg"} -t get_tree | ${getExe pkgs.jq} -r ${jqArgs} | ${getExe pkgs.slurp}";
-      "${getExe pkgs.slurp}";
-    */
+      "${getExe' cfg.package "swaymsg"} -t get_tree | ${getExe pkgs.jq} -r ${jqArgs} | ${getExe pkgs.slurp}";
+      #"${getExe pkgs.slurp}";
 
     # The default config settings
     nyu.programs.sway.settings = {

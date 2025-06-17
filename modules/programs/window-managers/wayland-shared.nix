@@ -8,6 +8,11 @@
     mkDefault
     ;
 
+  inherit
+    (lib.meta)
+    getExe
+    ;
+
 in {
   security = {
     polkit.enable = mkDefault true;
@@ -26,14 +31,15 @@ in {
     };
   };
 
-  environment.systemPackages = [
-    pkgs.wl-clipboard
-    pkgs.grim
+  environment.systemPackages = with pkgs; [
+    wl-clipboard
   ];
 
   xdg.portal = {
     enable = true;
-    extraPortals = with pkgs; [xdg-desktop-portal-gtk];
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+    ];
 
     config.common = {
       default = ["gtk"];
@@ -47,7 +53,7 @@ in {
       settings.screencast = {
         max_fps = 30;
         chooser_type = "simple";
-        #chooser_cmd = mkDefault "${getExe pkgs.slurp} -orf %o";
+        chooser_cmd = mkDefault "${getExe pkgs.slurp} -orf %o";
       };
     };
   };

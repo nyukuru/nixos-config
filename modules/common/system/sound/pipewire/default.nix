@@ -1,9 +1,7 @@
 {lib, ...}: let
   inherit (lib.modules) mkDefaultAttr;
-  inherit (lib.lists) singleton;
 in {
   imports = [
-    # Default settings for wireplumber service.
     ./wireplumber
   ];
 
