@@ -28,6 +28,7 @@ in {
 
   config = mkIf cfg.enable {
     boot.kernelParams = ["btusb"];
+    services.blueman.enable = true;
 
     hardware.bluetooth = {
       enable = true;
@@ -42,37 +43,6 @@ in {
           JustWorksRepairing = "always";
           Experimental = true;
         };
-      };
-    };
-    # A simple bluetooth device manager.
-    services.blueman.enable = true;
-
-    services.pipewire.wireplumber.extraConfig = {
-      "10-bluetooth" = {
-        "wireplumber.settings" = {
-          "bluetooth.autoswitch-to-headset-profile" = false;
-        };
-      };
-      "wh-1000xm4-ldac-hq" = {
-        "monitor.bluez.rules" = [
-          {
-            matches = [
-              { 
-                "device.product.id" = "0x0d58";
-                "device.vendor.id" = "usb:054c";
-              }
-            ];
-            actions = {
-              update-props = {
-                "bluez5.a2dp.ldac.quality" = "hq";
-                "bluez5.auto-connect" = true;
-                "bluez5.profile" = "a2dp-sink";
-                "bluez5.roles" = ["a2dp_source" "a2dp_sink" "bap_sink" "bap_source"];
-                "bluetooth.autoswitch-profile" = false;
-              };
-            };
-          }
-        ];
       };
     };
   };

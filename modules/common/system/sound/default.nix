@@ -1,5 +1,5 @@
 {
   imports = [
-    ./pipewire
+    ./pipewire.nix
   ];
 }

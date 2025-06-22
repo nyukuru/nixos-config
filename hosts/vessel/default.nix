@@ -11,8 +11,6 @@
     ./programs.nix
     ./system.nix
     ./services.nix
-
-    ../users
   ];
 
   environment.pathsToLink = [ "/share"];

@@ -78,7 +78,7 @@ in {
       kernelParams = ["threadirqs"];
 
       postBootCommands = optionalString (cfg.soundcardPci != null) ''
-               ${getExe' pkgs.pciutils "setpci"} -v -d *:* latency_timer=b0
+        ${getExe' pkgs.pciutils "setpci"} -v -d *:* latency_timer=b0
         ${getExe' pkgs.pciutils "setpci"} -v -s ${cfg.soundcardPci} latency_timer=ff
       '';
     };

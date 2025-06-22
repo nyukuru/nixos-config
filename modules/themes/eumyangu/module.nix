@@ -35,24 +35,24 @@
       baseE = "aaaaaa";
       baseF = "c1c1c1";
     };
+  };
 
-    nyufox.enable = true;
+  nyufox.enable = true;
 
-    gtk = {
-      theme = {
-        package = pkgs.kanagawa-gtk-theme;
-        name = "Kanagawa-B";
-      };
-      iconTheme = {
-        package = pkgs.kanagawa-icon-theme;
-        name = "Kanagawa";
-      };
-      gtk3.extraConfig = {
-        gtk-application-prefer-dark-theme = 1;
-      };
-      gtk4.extraConfig = {
-        gtk-application-prefer-dark-theme = 1;
-      };
+  gtk = {
+    theme = {
+      package = pkgs.kanagawa-gtk-theme;
+      name = "Kanagawa-B";
+    };
+    iconTheme = {
+      package = pkgs.kanagawa-icon-theme;
+      name = "Kanagawa";
+    };
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
+    };
+    gtk4.extraConfig = {
+      gtk-application-prefer-dark-theme = 1;
     };
   };
 }

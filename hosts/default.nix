@@ -1,11 +1,9 @@
-{inputs, ...}: let
+{
+  inputs,
+  ...
+}: let
   inherit
-    (inputs.self)
-    lib
-    ;
-
-  inherit
-    (lib.builders)
+    (inputs.self.lib.builders)
     mkNixosSystem
     mkNixosIso
     mkModules
@@ -23,12 +21,10 @@ in {
       hostname = "vessel";
       system = "x86_64-linux";
       modules = mkModules {
-        entry = ./vessel;
         form = "laptop";
-        style = "eumyangu";
+        theme = "eumyangu";
         extraModules = [
-          ./users
-
+          ./vessel
           hw.dell-xps-15-9520-nvidia
           dunst
           disko
@@ -44,12 +40,10 @@ in {
         hostname = "carbon";
         system = "x86_64-linux";
         modules = mkModules {
-          entry = ./carbon;
           form = "iso";
-          style = "eumyangu";
+          theme = "eumyangu";
           extraModules = [
-            ./users
-
+            ./carbon
             dunst
           ];
         };

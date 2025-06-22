@@ -12,6 +12,7 @@
     (lib.types)
     package
     nullOr
+    enum
     path
     str
     int
@@ -24,13 +25,18 @@
 
 in {
   imports = [
-    ./nyufox
-    ./foot
-    ./tty
-    ./gtk
+    ./foot.nix
+    ./tty.nix
   ];
 
   options.style = {
+    theme = mkOption {
+      type = nullOr (enum ["eumyangu"]);
+      default = "eumyangu"; 
+      description = "Theme to import settings from";
+    };
+
+
     wallpaper = mkOption {
       type = nullOr path;
       default = null;

@@ -1,12 +1,15 @@
 {
+  lib,
   inputs,
   withSystem,
-  lib,
   ...
 }: let
+  inherit (lib) nixosSystem;
+
   inherit
-    (lib)
-    nixosSystem
+    (lib.attrsets)
+    concatMapAttrs
+    getAttrs
     ;
 
   inherit
@@ -15,35 +18,32 @@
     map
     ;
 
-  modules' = inputs.self.nixosModules;
+  modules = inputs.self.nixosModules;
 
   mkModules = {
     form ? null,
-    style ? null,
-    entry ? null,
+    theme ? null,
+    users ? [ "nyu" ],
     extraModules ? [],
     defaultModules ? [
-      modules'.common
-      modules'.services
-      modules'.system
-      modules'.programs
-      modules'.style.options
+      modules.common
+      modules.services
+      modules.system
+      modules.programs
+      modules.style
+      modules.misc
     ],
-  }:
-  # Allows implicit absorbing of the whole branch
-  # i.e system.all imports all branches in system.
-    map (m: m.all or m) (
-      defaultModules
-      ++ extraModules
-      ++ optional (entry != null) entry
-      ++ optional (form != null) (modules'.forms.${form} or (throw "No such form ${form}!"))
-      ++ optional (style != null) (modules'.style.${style} or (throw "No such style/theme ${style}!"))
-    );
+  }: map (m: m.all or m) (
+    defaultModules
+    ++ extraModules
+    ++ [{users.users = getAttrs users (import ../users.nix);}]
+    ++ optional (form != null) (modules.forms.${form} or (throw "No such form ${form}!"))
+    ++ optional (theme != null) (modules.themes.${theme} or (throw "No such theme ${theme}!"))
+  );
 
-  # NixosSystem wrapper that:
-  # - uses flake-parts automatic insertion
-  # - passes correct specialArgs
-  # - automatically imports the starting point module
+  # nixosSystem wrapper that:
+  # - overlays pkgs with all inputs packages (including self) 
+  # - pass lib, inputs, and flake parts' inputs'
   mkNixosSystem = {
     system,
     hostname,
@@ -51,24 +51,23 @@
     specialArgs ? {},
   }:
     withSystem system (
-      ctx:
-        nixosSystem {
-          specialArgs = specialArgs // {
-            inherit inputs lib;
-            inherit (ctx) inputs';
-            inherit (ctx.self') packages;
-          };
+      {inputs', ...}: nixosSystem {
+        specialArgs = specialArgs // {
+          inherit inputs lib;
+          inherit inputs';
+        };
 
-          modules = modules ++ [{
-            networking.hostName = hostname;
-            nixpkgs.hostPlatform = system;
-          }];
-        }
+        modules = modules ++ [{
+          networking.hostName = hostname;
+          nixpkgs.hostPlatform = system;
+          nixpkgs.overlays = [
+            # Consume packages from inputs
+            (final: prev: concatMapAttrs (_: value: value.packages.${system} or {}) inputs)
+          ];
+        }];
+      }
     );
 
 in {
-  inherit
-    mkNixosSystem
-    mkModules
-    ;
+  inherit mkNixosSystem mkModules;
 }

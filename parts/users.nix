@@ -1,5 +1,5 @@
 {
-  users.users.nyu = {
+  nyu = {
     isNormalUser = true;
     uid = 1000;
 

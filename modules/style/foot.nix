@@ -19,14 +19,14 @@
     ;
 
   colors = config.style.colors;
-  cfg = config.style.foot;
+  cfg = config.programs.foot;
 in {
 
-  options.style.foot = {
+  options.programs.foot = {
     font = {
       size = mkOption {
         type = int;
-        default = 10;
+        default = config.style.font.size;
         description = "Font size of the terminal";
       };
     };

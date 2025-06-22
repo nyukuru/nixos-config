@@ -1,5 +1,4 @@
 {
-  packages,
   config,
   pkgs,
   lib,
@@ -22,6 +21,10 @@
     ];
   };
 
+  # Permission for media drive
+  users.extraGroups.media = {};
+
+  /*
   virtualisation = {
     waydroid.enable = true;
   };
@@ -104,7 +107,7 @@
 
       plymouth = {
         enable = true;
-        themePackage = packages.plymouth-hellonavi-theme;
+        themePackage = pkgs.plymouth-hellonavi-theme;
         theme = "hellonavi";
       };
 
@@ -130,7 +133,7 @@
       enable = true;
 
       realtime = {
-        enable = true;
+        enable = false;
         soundcardPci = "0000:00:1f.3";
       };
     };

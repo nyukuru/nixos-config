@@ -40,7 +40,7 @@ in {
       # Nix-Rebuild-Update
       nru = "nix-store --verify; ${getExe pkgs.nh} os switch -au";
       # Garbage-Collect
-      gc = "${getExe pkgs.nh} clean all --keep 5";
+      gc = "${getExe pkgs.nh} clean all -ak 5";
 
       # Always ask when overwritting
       cp = "cp -i";
@@ -50,7 +50,6 @@ in {
       la = "ls -la";
 
       pls = "sudo";
-
       gis = "git status";
     };
   };

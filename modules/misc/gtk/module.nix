@@ -3,31 +3,17 @@
   config,
   ...
 }: let
+  inherit (lib.lists) concatMap;
+  inherit (lib.strings) concatMapAttrsStringSep;
+  inherit (lib.attrsets) optionalAttrs;
+  inherit (lib.generators) toINI;
+
   inherit 
     (lib.options)
     literalExpression
     mkOption
     ;
 
-  inherit
-    (lib.lists)
-    concatMap
-    ;
-
-  inherit
-    (lib.attrsets)
-    optionalAttrs
-    ;
-
-  inherit
-    (lib.strings)
-    concatMapAttrsStringSep
-    ;
-
-  inherit
-    (lib.generators)
-    toINI
-    ;
 
   inherit
     (lib.types)
@@ -114,10 +100,9 @@
     };
   };
 
-  cfg = config.style.gtk;
-
+  cfg = config.gtk;
 in {
-  options.style.gtk = {
+  options.gtk = {
     font = mkOption {
       type = nullOr fontType;
       default = config.style.font;

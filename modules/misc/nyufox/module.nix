@@ -10,10 +10,7 @@
     mkOption
     ;
 
-  inherit
-    (lib.modules)
-    mkIf
-    ;
+  inherit (lib.modules) mkIf;
 
   inherit
     (lib.types)
@@ -21,16 +18,16 @@
     int
     ;
 
-
   mkColorOption = default: mkOption {
     inherit default;
     type = str;
   };
 
+  # TODO -- remove two way dependency
   inherit (config.style) colors;
-  cfg = config.style.nyufox;
+  cfg = config.nyufox;
 in {
-  options.style.nyufox = {
+  options.nyufox = {
     enable = mkEnableOption "nyu's firefox css edits";
 
     color = {

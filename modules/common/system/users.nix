@@ -1,12 +1,10 @@
 {
+  config,
   pkgs,
   lib,
   ...
 }: let
-  inherit
-    (lib.modules)
-    mkDefault
-    ;
+  inherit (lib.modules) mkDefault;
 in {
   users = {
     defaultUserShell = pkgs.zsh;
@@ -16,4 +14,9 @@ in {
 
     mutableUsers = false;
   };
+  assertions = [
+    { assertion = config.users.users != [];
+      message = "No users defined!";
+    }
+  ];
 }
