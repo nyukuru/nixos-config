@@ -9,6 +9,7 @@
   inherit
     (lib.attrsets)
     concatMapAttrs
+    removeAttrs
     getAttrs
     ;
 
@@ -49,6 +50,7 @@
     system,
     hostname,
     modules ? [],
+    subsumedFlakes ? ["self"],
     specialArgs ? {},
   }:
     withSystem system (
@@ -67,10 +69,7 @@
               {
                 networking.hostName = hostname;
                 nixpkgs.hostPlatform = system;
-                nixpkgs.overlays = [
-                  # Consume packages from inputs
-                  (final: prev: concatMapAttrs (_: value: value.packages.${system} or {}) inputs)
-                ];
+                nixpkgs.overlays = [(final: prev: concatMapAttrs (_: v: v.packages.${system}) (getAttrs subsumedFlakes inputs))];
               }
             ];
         }

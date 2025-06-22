@@ -1,5 +1,4 @@
 {
-  packages,
   config,
   pkgs,
   lib,
@@ -51,7 +50,7 @@
 
       plymouth = {
         enable = true;
-        themePackage = packages.plymouth-hellonavi-theme;
+        themePackage = pkgs.plymouth-hellonavi-theme;
         theme = "hellonavi";
       };
 

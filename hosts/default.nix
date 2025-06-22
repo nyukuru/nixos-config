@@ -30,12 +30,12 @@ in {
     };
   };
 
-  perSystem = {
+  perSystem = {system, ...}: {
     packages = {
       carbon-iso =
         (mkNixosSystem {
           hostname = "carbon";
-          system = "x86_64-linux";
+          system = system;
           modules = mkModules {
             form = "iso";
             theme = "eumyangu";
@@ -46,14 +46,16 @@ in {
           };
         }).config.system.build.image;
 
+      /*
       argon-iso =
-        (mkNixosIso {
+        (mkNixosSystem {
           hostname = "argon";
-          system = "x86_64-linux";
+          system = system;
           modules = mkModules {
             defaultModules = [];
           };
         }).config.system.build.image;
+      */
     };
   };
 }
