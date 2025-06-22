@@ -1,7 +1,4 @@
 {
-  inputs',
-  inputs,
-  config,
   pkgs,
   ...
 }: {
@@ -12,8 +9,6 @@
     ./system.nix
     ./services.nix
   ];
-
-  environment.pathsToLink = ["/share"];
 
   environment.systemPackages = with pkgs; [
     # Utils
