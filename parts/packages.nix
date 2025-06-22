@@ -1,6 +1,5 @@
 {
   lib,
-  self,
   inputs,
   flake-parts-lib,
   ...
@@ -15,37 +14,42 @@
     package
     either
     ;
-
 in {
   # Redefine flake-parts packages option to allow nested attrsets
   disabledModules = ["${inputs.flake-parts}/modules/packages.nix"];
 
-  imports = [(flake-parts-lib.mkTransposedPerSystemModule {
-    name = "packages";
-    file = ./.;
-    option = mkOption {
-      type = let
-        valueType = either package (lazyAttrsOf valueType);
-      in valueType;
-      default = { };
-    };
-  })];
+  imports = [
+    inputs.flake-parts.flakeModules.easyOverlay
+    (flake-parts-lib.mkTransposedPerSystemModule {
+      name = "packages";
+      file = ./.;
+      option = mkOption {
+        type = let
+          valueType = either package (lazyAttrsOf valueType);
+        in
+          valueType;
+        default = {};
+      };
+    })
+  ];
 
   config = {
-    perSystem = {inputs', system, ...}: let
+    perSystem = {
+      inputs',
+      config,
+      ...
+    }: let
       pkgs = inputs'.nixpkgs.legacyPackages;
     in {
-      _module.args.pkgs = pkgs.extend self.overlays.default;
+      overlayAttrs = config.packages;
 
       packages = packagesFromDirectoryRecursive {
         directory = ../packages;
         callPackage = pkgs.newScope (
-          concatMapAttrs (_: v:  v.packages.${system} or {})
-          inputs
+          concatMapAttrs (_: v: v.packages.${pkgs.system} or {})
+          (removeAttrs inputs ["self"])
         );
-      }; 
+      };
     };
-
-    flake.overlays.default = (final: prev: self.packages.${final.system});
   };
 }

@@ -1,9 +1,9 @@
 {
   stdenv,
   fetchFromGitHub,
-
   devkitARM,
-}: stdenv.mkDerivation (finalAttrs: {
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "Hekate";
   version = "6.2.2";
 
@@ -15,9 +15,8 @@
   };
 
   buildInputs = [
-    devkitARM 
+    devkitARM
   ];
 
   DEVKITPRO = "${devkitARM}";
-
 })

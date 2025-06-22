@@ -11,7 +11,6 @@
    \____\__,_|___/\__\___/|_| |_| |_| |_|  |_|\___/ \__,_|\__,_|_|\___||___/
   */
   nyu.programs = {
-
     sway.enable = true;
     nvim.enable = true;
 
@@ -40,11 +39,26 @@
       bitwarden-password-manager = "{446900e4-71c2-419f-a6a7-df9c091e268b}";
       */
       extensions = [
-        {shortID = "ublock-origin"; addonID = "uBlock0@raymondhill.net";}
-        {shortID = "skip-redirect"; addonID = "skipredirect@sblask";}
-        {shortID = "frankerfacez"; addonID = "frankerfacez@frankerfacez.com";}
-        {shortID = "disable-twitch-extensions"; addonID = "disable-twitch-extensions@rootonline.de";}
-        {shortID = "bitwarden-password-manager"; addonID = "{446900e4-71c2-419f-a6a7-df9c091e268b}";}
+        {
+          shortID = "ublock-origin";
+          addonID = "uBlock0@raymondhill.net";
+        }
+        {
+          shortID = "skip-redirect";
+          addonID = "skipredirect@sblask";
+        }
+        {
+          shortID = "frankerfacez";
+          addonID = "frankerfacez@frankerfacez.com";
+        }
+        {
+          shortID = "disable-twitch-extensions";
+          addonID = "disable-twitch-extensions@rootonline.de";
+        }
+        {
+          shortID = "bitwarden-password-manager";
+          addonID = "{446900e4-71c2-419f-a6a7-df9c091e268b}";
+        }
       ];
     };
   };

@@ -10,11 +10,10 @@
     getExe'
     ;
 
-  inherit 
+  inherit
     (config.style)
     colors
     ;
-
 in {
   services.dunst = {
     enable = true;

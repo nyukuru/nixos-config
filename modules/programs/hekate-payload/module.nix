@@ -4,7 +4,6 @@
   lib,
   ...
 }: let
-
   inherit
     (lib.options)
     mkEnableOption
@@ -18,7 +17,6 @@
 
   cfg = config.nyu.programs.fusee-nano;
 in {
-
   options.nyu.programs.hekate-payload = {
     enable = mkEnableOption "NX Hekate payload injector.";
     injector = mkPackageOption pkgs "fusee-nano" {};
@@ -34,6 +32,4 @@ in {
       '';
     };
   };
-
-
 }

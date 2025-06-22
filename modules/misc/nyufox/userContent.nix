@@ -175,9 +175,9 @@ in ''
       & .fav {
         left: 0;
         transition: all 70ms ease;
-        filter: 
-          grayscale(100%) 
-          contrast(200%) 
+        filter:
+          grayscale(100%)
+          contrast(200%)
           drop-shadow(1px 1px white)
       }
     }

@@ -1,12 +1,8 @@
-{
-  lib, 
-  ...
-}: let
-  inherit 
+{lib, ...}: let
+  inherit
     (lib.modules)
     mkDefaultAttr
     ;
-
 in {
   services.pipewire.wireplumber.extraConfig = {
     "10-defaults" = mkDefaultAttr {
@@ -61,7 +57,7 @@ in {
         {
           matches = [
             {
-              # Dell XPS 15 mic 
+              # Dell XPS 15 mic
               "node.name" = "alsa_input.pci-0000_00_1f.3.analog-stereo";
             }
           ];

@@ -13,7 +13,6 @@
     (lib.meta)
     getExe'
     ;
-
 in {
   config.boot = {
     consoleLogLevel = mkDefault 3;

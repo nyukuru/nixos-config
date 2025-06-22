@@ -13,7 +13,7 @@
     ./services.nix
   ];
 
-  environment.pathsToLink = [ "/share"];
+  environment.pathsToLink = ["/share"];
 
   environment.systemPackages = with pkgs; [
     # Utils
@@ -45,7 +45,7 @@
     prismlauncher
   ];
 
-/*
+  /*
   windex = {
     enable = true;
     cpu = "intel";
@@ -54,7 +54,7 @@
       deviceIds = ["10de:25a2"];
     };
   };
-*/
+  */
 
   system.stateVersion = "24.05";
 }

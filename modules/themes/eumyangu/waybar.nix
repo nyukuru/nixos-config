@@ -4,17 +4,16 @@
   inputs,
   modulesPath,
   ...
-}: let 
-  inherit 
+}: let
+  inherit
     (config.style)
     colors
     ;
 
   gaps = config.nyu.programs.sway.settings.gaps.inner;
-
 in {
-  disabledModules = [ "${modulesPath}/programs/wayland/waybar.nix" ];
-  imports = [ "${inputs.dev-nixpkgs-waybar}/nixos/modules/programs/wayland/waybar.nix" ];
+  disabledModules = ["${modulesPath}/programs/wayland/waybar.nix"];
+  imports = ["${inputs.dev-nixpkgs-waybar}/nixos/modules/programs/wayland/waybar.nix"];
 
   programs.waybar = {
     enable = true;

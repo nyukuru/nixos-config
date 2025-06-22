@@ -8,12 +8,11 @@
   inherit (lib.attrsets) optionalAttrs;
   inherit (lib.generators) toINI;
 
-  inherit 
+  inherit
     (lib.options)
     literalExpression
     mkOption
     ;
-
 
   inherit
     (lib.types)
@@ -109,7 +108,6 @@ in {
       description = ''
         The font to use in GTK+ applications.
       '';
-
     };
 
     iconTheme = mkOption {
@@ -139,7 +137,7 @@ in {
     gtk3 = {
       extraConfig = mkOption {
         type = attrsOf (oneOf [bool int str]);
-        default = { };
+        default = {};
         example = {
           gtk-cursor-blink = false;
           gtk-recent-files-limit = 20;
@@ -163,7 +161,7 @@ in {
     gtk4 = {
       extraConfig = mkOption {
         type = attrsOf (oneOf [bool int str]);
-        default = { };
+        default = {};
         example = {
           gtk-cursor-blink = false;
           gtk-recent-files-limit = 20;
@@ -185,25 +183,27 @@ in {
     };
   };
   config = let
-    gtkIni = optionalAttrs (cfg.font != null) {
-      gtk-font-name = "${cfg.font.name} ${toString cfg.font.size}";
-    }
-    // optionalAttrs (cfg.theme != null) {
-      gtk-theme-name = cfg.theme.name;
-    }
-    // optionalAttrs (cfg.iconTheme != null) {
-      gtk-icon-theme-name = cfg.iconTheme.name;
-    };
+    gtkIni =
+      optionalAttrs (cfg.font != null) {
+        gtk-font-name = "${cfg.font.name} ${toString cfg.font.size}";
+      }
+      // optionalAttrs (cfg.theme != null) {
+        gtk-theme-name = cfg.theme.name;
+      }
+      // optionalAttrs (cfg.iconTheme != null) {
+        gtk-icon-theme-name = cfg.iconTheme.name;
+      };
 
-    dconfIni = optionalAttrs (cfg.font != null) {
-      font-name ="${cfg.font.name} ${toString cfg.font.size}";
-    }
-    // optionalAttrs (cfg.theme != null) { 
-      gtk-theme = cfg.theme.name; 
-    }
-    // optionalAttrs (cfg.iconTheme != null) {
-      icon-theme = cfg.iconTheme.name;
-    };
+    dconfIni =
+      optionalAttrs (cfg.font != null) {
+        font-name = "${cfg.font.name} ${toString cfg.font.size}";
+      }
+      // optionalAttrs (cfg.theme != null) {
+        gtk-theme = cfg.theme.name;
+      }
+      // optionalAttrs (cfg.iconTheme != null) {
+        icon-theme = cfg.iconTheme.name;
+      };
 
     toGtk3Ini = toINI {
       mkKeyValue = key: value: "${lib.escape ["="] key}=${builtins.toJSON value}";
@@ -211,11 +211,17 @@ in {
 
     toGtk2Rc = concatMapAttrsStringSep "\n" (n: v: "${lib.escape ["="] n} = ${builtins.toJSON v}}");
 
-    gtk4Css = if (cfg.theme.package or null == null) then "" else ''
-      @import url("file://${cfg.theme.package}/share/themes/${cfg.theme.name}/gtk-4.0/gtk.css")
-    '';
+    gtk4Css =
+      if (cfg.theme.package or null == null)
+      then ""
+      else ''
+        @import url("file://${cfg.theme.package}/share/themes/${cfg.theme.name}/gtk-4.0/gtk.css")
+      '';
 
-    optionalPackages = concatMap (x: if x.package or null == null then [] else [x.package]);
+    optionalPackages = concatMap (x:
+      if x.package or null == null
+      then []
+      else [x.package]);
   in {
     fonts.packages = optionalPackages [cfg.font];
 
@@ -236,9 +242,11 @@ in {
       };
     };
 
-    programs.dconf.profiles.user.databases = [{
-      lockAll = true;
-      settings."org/gnome/desktop/interface" = dconfIni;
-    }];
+    programs.dconf.profiles.user.databases = [
+      {
+        lockAll = true;
+        settings."org/gnome/desktop/interface" = dconfIni;
+      }
+    ];
   };
 }

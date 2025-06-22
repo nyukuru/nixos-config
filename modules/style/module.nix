@@ -18,11 +18,11 @@
     int
     ;
 
-  mkColorOption = default: mkOption {
-    type = str;
-    inherit default;
-  };
-
+  mkColorOption = default:
+    mkOption {
+      type = str;
+      inherit default;
+    };
 in {
   imports = [
     ./foot.nix
@@ -32,10 +32,9 @@ in {
   options.style = {
     theme = mkOption {
       type = nullOr (enum ["eumyangu"]);
-      default = "eumyangu"; 
+      default = "eumyangu";
       description = "Theme to import settings from";
     };
-
 
     wallpaper = mkOption {
       type = nullOr path;

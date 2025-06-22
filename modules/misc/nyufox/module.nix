@@ -18,10 +18,11 @@
     int
     ;
 
-  mkColorOption = default: mkOption {
-    inherit default;
-    type = str;
-  };
+  mkColorOption = default:
+    mkOption {
+      inherit default;
+      type = str;
+    };
 
   # TODO -- remove two way dependency
   inherit (config.style) colors;
@@ -75,7 +76,11 @@ in {
       userContent = pkgs.writeText "userContent.css" (import ./userContent.nix {inherit cfg;});
 
       extensions = [
-        {shortID = "sidebery"; addonID = "{3c078156-979c-498b-8990-85f7987dd929}"; installMode = "force_installed";}
+        {
+          shortID = "sidebery";
+          addonID = "{3c078156-979c-498b-8990-85f7987dd929}";
+          installMode = "force_installed";
+        }
       ];
     };
   };

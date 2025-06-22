@@ -12,7 +12,6 @@
     (lib.meta)
     getExe
     ;
-
 in {
   security = {
     polkit.enable = mkDefault true;

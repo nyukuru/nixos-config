@@ -1,7 +1,4 @@
-{
-  packages,
-  ...
-}: {
+{packages, ...}: {
   services.libinput = {
     enable = true;
 
@@ -19,7 +16,6 @@
     };
   };
 
-#TODO: move keymappings here,
-# I tried actkbd but it didnt work well
-
+  #TODO: move keymappings here,
+  # I tried actkbd but it didnt work well
 }

@@ -86,7 +86,8 @@ in {
         default_session = {
           command = concatStringsSep " " (
             [(getExe cfg.greeter)]
-            ++ cfg.greeterArgs);
+            ++ cfg.greeterArgs
+          );
         };
 
         # autologin start wm

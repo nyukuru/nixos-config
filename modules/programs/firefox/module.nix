@@ -75,7 +75,9 @@
     installMode = "force_installed";
   };
 
-  mkExtensions = foldl (acc: extension: acc // {
+  mkExtensions = foldl (acc: extension:
+    acc
+    // {
       ${extension.addonID} = {
         install_url = extension.installUrl;
         installation_mode = extension.installMode;
@@ -91,10 +93,10 @@ in {
     ./policies.nix
   ];
 
-
   options.nyu.programs.firefox = {
     enable = mkEnableOption "Firefox web browser.";
-    package = mkPackageOption pkgs "firefox-esr-128-unwrapped" {}
+    package =
+      mkPackageOption pkgs "firefox-esr-128-unwrapped" {}
       // {
         apply = p:
           pkgs.wrapFirefox p {
@@ -102,7 +104,7 @@ in {
             extraPolicies = cfg.policies;
           };
       };
-  
+
     policies = mkOption {
       type = json.type;
       default = {};
@@ -153,6 +155,5 @@ in {
 
     nyu.programs.firefox.extensions = map langToExtension cfg.languagePacks;
     nyu.programs.firefox.policies.ExtensionSettings = mkExtensions cfg.extensions;
-
   };
 }

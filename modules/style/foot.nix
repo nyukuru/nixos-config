@@ -21,7 +21,6 @@
   colors = config.style.colors;
   cfg = config.programs.foot;
 in {
-
   options.programs.foot = {
     font = {
       size = mkOption {

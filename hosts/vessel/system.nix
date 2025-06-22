@@ -29,7 +29,7 @@
     waydroid.enable = true;
   };
 
-  systemd.tmpfiles.rules = let 
+  systemd.tmpfiles.rules = let
     # https://wiki.nixos.org/wiki/Waydroid
     waydroid_base = ''
       sys.use_memfd=true
@@ -164,9 +164,9 @@
       };
     };
     /*
-    __   ___     _             _ _         _   _          
-    \ \ / (_)_ _| |_ _  _ __ _| (_)_____ _| |_(_)___ _ _  
-     \ V /| | '_|  _| || / _` | | |_ / _` |  _| / _ \ ' \ 
+    __   ___     _             _ _         _   _
+    \ \ / (_)_ _| |_ _  _ __ _| (_)_____ _| |_(_)___ _ _
+     \ V /| | '_|  _| || / _` | | |_ / _` |  _| / _ \ ' \
       \_/ |_|_|  \__|\_,_\__,_|_|_/__\__,_|\__|_\___/_||_|
     */
     /*

@@ -15,7 +15,8 @@ in {
     mutableUsers = false;
   };
   assertions = [
-    { assertion = config.users.users != [];
+    {
+      assertion = config.users.users != [];
       message = "No users defined!";
     }
   ];

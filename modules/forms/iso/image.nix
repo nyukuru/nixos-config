@@ -26,10 +26,12 @@ in {
     makeEfiBootable = true;
     makeUsbBootable = true;
 
-    contents = [{
-      source = cleanSource self;
-      target = "/nixos-config";
-    }];
+    contents = [
+      {
+        source = cleanSource self;
+        target = "/nixos-config";
+      }
+    ];
   };
 
   image.baseName = mkImageMediaOverride "${config.networking.hostName}-${self.shortRev or self.dirtyShortRev}";

@@ -4,7 +4,6 @@
   lib,
   ...
 }: let
-
   inherit
     (lib.options)
     mkPackageOption
@@ -103,21 +102,23 @@ in {
             withBaseWrapper = true;
             enableXWayland = cfg.xwayland.enable;
             extraOptions = ["--unsupported-gpu"];
-            extraSessionCommands = ''
-              export XDG_SESSION_DESKTOP=sway
-              export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-              export _JAVA_AWT_WM_NONREPARENTING=1
-              export NIXOS_OZONE_WL=1
-              export GDK_BACKEND=wayland,x11
-              export ANKI_WAYLAND=1
-              export MOZ_ENABLE_WAYLAND=1
-              export XDG_SESSION_TYPE=wayland
-              export SDL_VIDEODRIVER=wayland
-              export CLUTTER_BACKEND=wayland
+            extraSessionCommands =
+              ''
+                export XDG_SESSION_DESKTOP=sway
+                export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+                export _JAVA_AWT_WM_NONREPARENTING=1
+                export NIXOS_OZONE_WL=1
+                export GDK_BACKEND=wayland,x11
+                export ANKI_WAYLAND=1
+                export MOZ_ENABLE_WAYLAND=1
+                export XDG_SESSION_TYPE=wayland
+                export SDL_VIDEODRIVER=wayland
+                export CLUTTER_BACKEND=wayland
 
-              export WLR_BACKEND=wayland
-              export WLR_NO_HARDWARE_CURSORS=1
-            '' + cfg.extraSessionCommands;
+                export WLR_BACKEND=wayland
+                export WLR_NO_HARDWARE_CURSORS=1
+              ''
+              + cfg.extraSessionCommands;
           };
       };
 
@@ -161,9 +162,8 @@ in {
     # https://github.com/emersion/slurp?tab=readme-ov-file#example-usage
     xdg.portal.wlr.settings.screencast.chooser_cmd = let
       jqArgs = '''.. | select(.pid? and .visible?) | "\(.rect.x+.window_rect.x),\(.rect.y+.window_rect.y) \(.window_rect.width)x\(.window_rect.height)"''\''';
-    in
-      "${getExe' cfg.package "swaymsg"} -t get_tree | ${getExe pkgs.jq} -r ${jqArgs} | ${getExe pkgs.slurp}";
-      #"${getExe pkgs.slurp}";
+    in "${getExe' cfg.package "swaymsg"} -t get_tree | ${getExe pkgs.jq} -r ${jqArgs} | ${getExe pkgs.slurp}";
+    #"${getExe pkgs.slurp}";
 
     # The default config settings
     nyu.programs.sway.settings = {

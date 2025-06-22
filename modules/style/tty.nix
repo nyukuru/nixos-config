@@ -1,7 +1,4 @@
-{
-  config,
-  ...
-}: let
+{config, ...}: let
   inherit (config.style) colors;
 in {
   environment.loginShellInit = ''

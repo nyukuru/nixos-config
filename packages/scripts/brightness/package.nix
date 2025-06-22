@@ -26,7 +26,7 @@ writeShellScript "brightness" ''
   }
 
   if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
-    usage  
+    usage
     exit 0
   fi
 

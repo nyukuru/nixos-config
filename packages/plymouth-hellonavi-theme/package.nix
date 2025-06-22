@@ -3,8 +3,7 @@
   fetchFromGitHub,
   imagemagick,
   lib,
-
-  color ? "FFFFFF"
+  color ? "FFFFFF",
 }:
 stdenvNoCC.mkDerivation {
   pname = "plymouth-hellonavi-theme";

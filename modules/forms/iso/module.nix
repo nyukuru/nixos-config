@@ -1,5 +1,5 @@
 {
-  modulesPath, 
+  modulesPath,
   lib,
   ...
 }: {
@@ -33,5 +33,4 @@
   programs.git.enable = true;
 
   system.stateVersion = lib.trivial.release;
-
 }
