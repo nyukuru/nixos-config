@@ -46,8 +46,7 @@ in {
       packages = packagesFromDirectoryRecursive {
         directory = ../packages;
         callPackage = pkgs.newScope (
-          concatMapAttrs (_: v: v.packages.${pkgs.system} or {})
-          (removeAttrs inputs ["self"])
+          concatMapAttrs (_: v: v.packages.${pkgs.system} or {}) inputs
         );
       };
     };

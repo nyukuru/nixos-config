@@ -1,0 +1,28 @@
+diff --git a/lix/nix/flake.cc b/lix/nix/flake.cc
+index 60ef9306e..938f24341 100644
+--- a/lix/nix/flake.cc
++++ b/lix/nix/flake.cc
+@@ -644,10 +644,19 @@ struct CmdFlakeCheck : FlakeCommand
+                                 checkSystemName(attr_name, attr.pos);
+                                 if (checkSystemType(attr_name, attr.pos)) {
+                                     state->forceAttrs(*attr.value, attr.pos, "");
+-                                    for (auto & attr2 : *attr.value->attrs)
+-                                        checkDerivation(
+-                                            fmt("%s.%s.%s", name, attr_name, evaluator->symbols[attr2.name]),
+-                                            *attr2.value, attr2.pos);
++                                    for (auto & attr2 : *attr.value->attrs) {
++                                        state->forceAttrs(*attr2.value, attr2.pos, "");
++                                        if (!state->isDerivation(*attr2.value)) {
++                                            const auto & attr2_name = evaluator->symbols[attr2.name];
++                                            for (auto & attr3 : *attr2.value->attrs)
++                                                checkDerivation(
++                                                    fmt("%s.%s.%s.%s", name, attr_name, attr2_name, evaluator->symbols[attr2.name]),
++                                                    *attr3.value, attr3.pos);
++                                        } else
++                                            checkDerivation(
++                                                fmt("%s.%s.%s", name, attr_name, evaluator->symbols[attr2.name]),
++                                                *attr2.value, attr2.pos);
++                                    }
+                                 };
+                             }
+                         }

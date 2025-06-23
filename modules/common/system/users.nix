@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   ...
@@ -14,10 +13,4 @@ in {
 
     mutableUsers = false;
   };
-  assertions = [
-    {
-      assertion = config.users.users != [];
-      message = "No users defined!";
-    }
-  ];
 }

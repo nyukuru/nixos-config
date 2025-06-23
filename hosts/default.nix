@@ -1,28 +1,26 @@
 {inputs, ...}: let
-  inherit
-    (inputs.self.lib.builders)
-    mkNixosSystem
-    mkNixosIso
-    mkModules
-    ;
+  inherit (inputs.self.lib.builders) mkModules;
 
-  dunst = "${inputs.dev-nixpkgs}/nixos/modules/services/desktops/dunst.nix";
+  mkNixosSystem = inputs.self.lib.builders.mkNixosSystem {
+    usersFile = ./users.nix;
+    hostsDir = ./.;
+  };
 
   hw = inputs.nixos-hardware.nixosModules;
   disko = inputs.disko.nixosModules.default;
-  windex = inputs.windex.nixosModules.default;
 in {
   flake.nixosConfigurations = {
     vessel = mkNixosSystem {
       hostname = "vessel";
       system = "x86_64-linux";
+      users = [
+        "nyu"
+      ];
       modules = mkModules {
         form = "laptop";
         theme = "eumyangu";
         extraModules = [
-          ./vessel
           hw.dell-xps-15-9520-nvidia
-          dunst
           disko
           #windex
         ];
@@ -36,13 +34,12 @@ in {
         (mkNixosSystem {
           hostname = "carbon";
           system = system;
+          users = [
+            "nyu"
+          ];
           modules = mkModules {
             form = "iso";
             theme = "eumyangu";
-            extraModules = [
-              ./carbon
-              dunst
-            ];
           };
         }).config.system.build.image;
 

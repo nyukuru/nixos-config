@@ -26,6 +26,10 @@
           });
         };
       };
+
+      lixPackageSets.latest.lix = prevpkgs.lixPackageSets.latest.lix.overrideAttrs (prev: {
+        patches = (prev.patches or []) ++ [./patches/lix/0001-flake-check-allow-nested-packages.patch];
+      });
     })
   ];
 }

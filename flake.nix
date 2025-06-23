@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    dev-nixpkgs.url = "github:nyukuru/nixpkgs/init-dunst";
+    dev-nixpkgs-dunst.url = "github:nyukuru/nixpkgs/init-dunst";
     dev-nixpkgs-waybar.url = "github:/nyukuru/nixpkgs/waybar-settings";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
@@ -17,6 +17,7 @@
     };
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
+    git-hooks-nix.url = "github:cachix/git-hooks.nix";
   };
 
   outputs = inputs:

@@ -58,7 +58,7 @@
         "type": "github"
       }
     },
-    "dev-nixpkgs": {
+    "dev-nixpkgs-dunst": {
       "locked": {
         "lastModified": 1748656007,
         "narHash": "sha256-iSulFgAUCIXS6P0BHaUETgdVj7k3hp0qiMgw44VWtSM=",
@@ -188,11 +188,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1749636823,
-        "narHash": "sha256-WUaIlOlPLyPgz9be7fqWJA5iG6rHcGRtLERSCfUDne4=",
+        "lastModified": 1750684550,
+        "narHash": "sha256-uLtw0iF9mQ94L831NOlQLPX9wm0qzd5yim3rcwACEoM=",
         "owner": "cachix",
         "repo": "git-hooks.nix",
-        "rev": "623c56286de5a3193aa38891a6991b28f9bab056",
+        "rev": "fae816c55a75675f30d18c9cbdecc13b970d95d4",
         "type": "github"
       },
       "original": {
@@ -337,11 +337,11 @@
     },
     "nixpkgs_3": {
       "locked": {
-        "lastModified": 1750386251,
-        "narHash": "sha256-1ovgdmuDYVo5OUC5NzdF+V4zx2uT8RtsgZahxidBTyw=",
+        "lastModified": 1730768919,
+        "narHash": "sha256-8AKquNnnSaJRXZxc5YmF/WfmxiHX6MMZZasRP6RRQkE=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "076e8c6678d8c54204abcb4b1b14c366835a58bb",
+        "rev": "a04d33c0c3f1a59a2c1cb0c6e34cd24500e5a1dc",
         "type": "github"
       },
       "original": {
@@ -428,7 +428,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "dev-nixpkgs": "dev-nixpkgs",
+        "dev-nixpkgs-dunst": "dev-nixpkgs-dunst",
         "dev-nixpkgs-waybar": "dev-nixpkgs-waybar",
         "disko": "disko",
         "flake-parts": "flake-parts",

@@ -5,11 +5,11 @@
   ...
 }: let
   inherit (lib) nixosSystem;
+  inherit (lib.trivial) pathExists;
 
   inherit
     (lib.attrsets)
     concatMapAttrs
-    removeAttrs
     getAttrs
     ;
 
@@ -24,21 +24,14 @@
   mkModules = {
     form ? null,
     theme ? null,
-    users ? ["nyu"],
     extraModules ? [],
     defaultModules ? [
-      modules.common
-      modules.services
-      modules.system
-      modules.programs
-      modules.style
-      modules.misc
+      modules.default
     ],
   }:
     map (m: m.all or m) (
       defaultModules
       ++ extraModules
-      ++ [{users.users = getAttrs users (import ../users.nix);}]
       ++ optional (form != null) (modules.forms.${form} or (throw "No such form ${form}!"))
       ++ optional (theme != null) (modules.themes.${theme} or (throw "No such theme ${theme}!"))
     );
@@ -47,8 +40,12 @@
   # - overlays pkgs with all inputs packages (including self)
   # - pass lib, inputs, and flake parts' inputs'
   mkNixosSystem = {
+    usersFile,
+    hostsDir,
+  }: {
     system,
     hostname,
+    users ? [],
     modules ? [],
     subsumedFlakes ? ["self"],
     specialArgs ? {},
@@ -65,11 +62,19 @@
 
           modules =
             modules
+            ++ (optional (pathExists "${hostsDir}/${hostname}") "${hostsDir}/${hostname}")
             ++ [
               {
                 networking.hostName = hostname;
                 nixpkgs.hostPlatform = system;
                 nixpkgs.overlays = [(final: prev: concatMapAttrs (_: v: v.packages.${system}) (getAttrs subsumedFlakes inputs))];
+                users.users = getAttrs users (import usersFile);
+                assertions = [
+                  {
+                    assertion = users != [];
+                    message = "No users defined in top level mkNixosSystem!";
+                  }
+                ];
               }
             ];
         }

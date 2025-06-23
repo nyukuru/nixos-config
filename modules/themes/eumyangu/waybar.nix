@@ -1,14 +1,15 @@
 {
+  lib,
   pkgs,
   config,
   inputs,
   modulesPath,
   ...
 }: let
-  inherit
-    (config.style)
-    colors
-    ;
+  inherit (lib.attrsets) mergeAttrsList;
+  inherit (lib.lists) imap0;
+
+  inherit (config.style) colors;
 
   gaps = config.nyu.programs.sway.settings.gaps.inner;
 in {
@@ -87,10 +88,37 @@ in {
         tooltip = false;
       };
 
-      battery = {
-        format = "{capacity}% {icon}";
-        format-icons = ["" "" "" "" ""];
-      };
+      battery = let
+        dischargingIcons = ["󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
+        chargingIcons = ["󰢟" "󰢜" "󰂆" "󰂇" "󰂈" "󰢝" "󰂉" "󰢞" "󰂊" "󰂋" "󰂅"];
+
+        iconsToFormat = status: icons:
+          mergeAttrsList (
+            imap0 (i: v: {
+              "format-${status}-${toString i}" = "{capacity}% ${v}";
+            })
+            icons
+          );
+      in
+        {
+          interval = 5;
+
+          states = {
+            "0" = 9;
+            "1" = 19;
+            "2" = 29;
+            "3" = 39;
+            "4" = 49;
+            "5" = 59;
+            "6" = 69;
+            "7" = 79;
+            "8" = 89;
+            "9" = 99;
+            "10" = 100;
+          };
+        }
+        // (iconsToFormat "discharging" dischargingIcons)
+        // (iconsToFormat "charging" chargingIcons);
 
       clock = {
         format = "{:%b. %d; %H:%M}";
@@ -103,7 +131,7 @@ in {
     };
   };
 
-  environment.etc."xdg/waybar/style.css".source = pkgs.writeText "waybar-style.css" ''
+  environment.etc."xdg/waybar/style.css".text = ''
     * {
       min-height: 0;
     }
