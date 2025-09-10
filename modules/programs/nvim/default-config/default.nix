@@ -30,6 +30,9 @@ in {
 
             luasnip
 
+            # Lint
+            vim-prettier
+
             # LSP Support
             nvim-lspconfig
             nvim-cmp
@@ -44,12 +47,6 @@ in {
           opt = with pkgs.vimPlugins; [
           ];
         };
-
-        # Files for systems not using nix
-        exclude = [
-          "init.lua"
-          "lsp-zero.lua"
-        ];
       };
 
       # Packages needed for this config
@@ -58,6 +55,7 @@ in {
         lua-language-server
         basedpyright
         nil
+        typescript-language-server
       ];
     })
   ];

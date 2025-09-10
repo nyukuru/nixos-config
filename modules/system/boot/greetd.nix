@@ -21,7 +21,6 @@
     (lib.strings)
     concatStringsSep
     concatMapStringsSep
-    removeSuffix
     ;
 
   inherit
@@ -47,7 +46,7 @@ in {
   options.nyu.boot.greetd = {
     enable = mkEnableOption "greetd.";
 
-    greeter = mkPackageOption pkgs.greetd "greetd" {
+    greeter = mkPackageOption pkgs "greetd" {
       default = "tuigreet";
     };
 
@@ -80,7 +79,6 @@ in {
     services.displayManager.enable = mkForce false;
     services.greetd = {
       enable = true;
-      vt = 1;
 
       settings = {
         default_session = {

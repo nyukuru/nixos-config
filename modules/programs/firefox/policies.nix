@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{
   nyu.programs.firefox.policies = {
     AppAutoUpdate = false;
     DontCheckDefaultBrowser = true;
@@ -22,7 +22,7 @@
     ExtensionUpdate = false;
 
     FirefoxHome = {
-      Search = true;
+      Search = false;
       Pocket = false;
       Snippets = false;
       TopSites = false;
@@ -32,10 +32,6 @@
     Cookies = {
       Behavior = "accept";
       Locked = false;
-    };
-
-    SecurityDevices = {
-      "PKCS#11 Proxy Module" = "${pkgs.p11-kit}/lib/p11-kit-proxy.so";
     };
 
     NoDefaultBookmarks = true;

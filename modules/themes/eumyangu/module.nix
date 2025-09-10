@@ -1,4 +1,15 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}: let
+  eumangyu-gtk = lib.traceVal pkgs.writers.makeGtkTheme {
+    cssFile = ./eumangyu-gtk.css;
+    name = "Eumangyu";
+    inherit (config.style) colors;
+  };
+in {
   imports = [
     ./nvim.nix
     ./sway.nix
@@ -37,13 +48,15 @@
   nyufox.enable = true;
 
   gtk = {
+    /*
     theme = {
-      package = pkgs.kanagawa-gtk-theme;
-      name = "Kanagawa-B";
+      package = eumangyu-gtk;
+      name = "Eumangyu";
     };
+    */
     iconTheme = {
-      package = pkgs.kanagawa-icon-theme;
-      name = "Kanagawa";
+      package = pkgs.graphite-gtk-theme;
+      name = "Graphite-Dark";
     };
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;

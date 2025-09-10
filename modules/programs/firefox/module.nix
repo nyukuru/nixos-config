@@ -43,7 +43,7 @@
 
       installMode = mkOption {
         type = enum ["force_installed" "normal_installed"];
-        default = "normal_installed";
+        default = "force_installed";
         description = ''
           Installation mode of the extension
 
@@ -83,7 +83,7 @@
         installation_mode = extension.installMode;
         default_area = "menupanel";
       };
-    }) {"*".blocked = "blocked";};
+    }) {"*".installation_mode = "blocked";};
 
   json = pkgs.formats.json {};
   cfg = config.nyu.programs.firefox;
@@ -96,7 +96,7 @@ in {
   options.nyu.programs.firefox = {
     enable = mkEnableOption "Firefox web browser.";
     package =
-      mkPackageOption pkgs "firefox-esr-128-unwrapped" {}
+      mkPackageOption pkgs "firefox-esr-140-unwrapped" {}
       // {
         apply = p:
           pkgs.wrapFirefox p {

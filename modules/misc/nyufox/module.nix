@@ -4,13 +4,19 @@
   lib,
   ...
 }: let
+  inherit (lib.modules) mkIf;
+
+  inherit
+    (lib.strings)
+    concatMapAttrsStringSep
+    toJSON
+    ;
+
   inherit
     (lib.options)
     mkEnableOption
     mkOption
     ;
-
-  inherit (lib.modules) mkIf;
 
   inherit
     (lib.types)
@@ -75,13 +81,14 @@ in {
       userChrome = pkgs.writeText "userChrome.css" (import ./userChrome.nix {inherit cfg;});
       userContent = pkgs.writeText "userContent.css" (import ./userContent.nix {inherit cfg;});
 
-      extensions = [
-        {
-          shortID = "sidebery";
-          addonID = "{3c078156-979c-498b-8990-85f7987dd929}";
-          installMode = "force_installed";
-        }
-      ];
+      preferences =
+        concatMapAttrsStringSep "\n"
+        (name: value: "pref(\"${name}\", ${toJSON value});") {
+          "sidebar.verticalTabs" = true;
+          "sidebar.revamp" = true;
+          "sidebar.visibility" = "expand-on-hover";
+          "sidebar.new-sidebar.has-used" = true;
+        };
     };
   };
 }

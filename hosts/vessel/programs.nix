@@ -7,13 +7,18 @@
 
     steam = {
       enable = true;
+
+      protontricks.enable = true;
       remotePlay.openFirewall = true;
+
       gamescopeSession = {
         enable = true;
         args = [
           "-r 60"
         ];
       };
+      extraCompatPackages = [pkgs.proton-ge-bin];
+      extraPackages = [pkgs.gamescope];
     };
 
     nh = {
@@ -78,6 +83,10 @@
         {
           shortID = "skip-redirect";
           addonID = "skipredirect@sblask";
+        }
+        {
+          shortID = "languagetool";
+          addonID = "languagetool-webextension@languagetool.org";
         }
         {
           shortID = "frankerfacez";

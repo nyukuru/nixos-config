@@ -25,11 +25,15 @@
     gimp
 
     # Social
-    webcord
     fractal
+    vesktop
 
     # Work
-    jetbrains.pycharm-community-bin
+    android-tools
+
+    # Classes
+    #sage
+    mysql-workbench
 
     # Games
     ns-usbloader

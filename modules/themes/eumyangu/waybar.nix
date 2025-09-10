@@ -54,10 +54,12 @@ in {
         # TODO
       };
 
+      /*
       "custom/obs" = {
         exec = pkgs.waybar-modules.obs-studio;
         interval = 2;
       };
+      */
 
       "sway/workspaces" = {
         persistent-workspaces = {
@@ -102,20 +104,20 @@ in {
       in
         {
           interval = 5;
-
           states = {
-            "0" = 9;
-            "1" = 19;
-            "2" = 29;
-            "3" = 39;
-            "4" = 49;
-            "5" = 59;
-            "6" = 69;
-            "7" = 79;
-            "8" = 89;
-            "9" = 99;
+            "0" = 5;
+            "1" = 15;
+            "2" = 25;
+            "3" = 35;
+            "4" = 45;
+            "5" = 55;
+            "6" = 65;
+            "7" = 75;
+            "8" = 85;
+            "9" = 95;
             "10" = 100;
           };
+          format-full = "{capacity}% 󰁹";
         }
         // (iconsToFormat "discharging" dischargingIcons)
         // (iconsToFormat "charging" chargingIcons);

@@ -91,6 +91,7 @@ lspconfig.nil_ls.setup({
 
 lspconfig.basedpyright.setup({})
 lspconfig.clangd.setup({})
+lspconfig.ts_ls.setup({})
 lspconfig.lua_ls.setup({
 	on_init = function(client)
 		if client.workspace_folders then

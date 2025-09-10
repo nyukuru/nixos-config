@@ -7,6 +7,14 @@
     gnome.gnome-keyring.enable = true;
     blueman.enable = true;
 
+    udev = {
+      enable = true;
+      packages = with pkgs; [
+        android-udev-rules
+        edl
+      ];
+    };
+
     dbus = {
       enable = true;
       packages = with pkgs; [

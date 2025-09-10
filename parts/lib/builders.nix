@@ -9,6 +9,7 @@
 
   inherit
     (lib.attrsets)
+    recursiveUpdate
     concatMapAttrs
     getAttrs
     ;
@@ -67,7 +68,7 @@
               {
                 networking.hostName = hostname;
                 nixpkgs.hostPlatform = system;
-                nixpkgs.overlays = [(final: prev: concatMapAttrs (_: v: v.packages.${system}) (getAttrs subsumedFlakes inputs))];
+                nixpkgs.overlays = [(final: prev: concatMapAttrs (_: v: recursiveUpdate prev v.packages.${system}) (getAttrs subsumedFlakes inputs))];
                 users.users = getAttrs users (import usersFile);
                 assertions = [
                   {

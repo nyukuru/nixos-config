@@ -1,0 +1,49 @@
+* {
+    background-color: #@background@;
+    color: #@foreground@;
+    border-color: #@base4@;
+}
+
+/* Buttons */
+button {
+    background-image: none;
+    background-color: #@base8@;
+    color: #@foreground@;
+    border: 2px solid #@base4@;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #@base3@;
+    border-color: #@base2@;
+}
+
+button:active {
+    background-color: #@baseB@;
+    border-color: #@baseA@;
+}
+
+/* Entry fields */
+entry {
+    background-color: #@base0@;
+    color: #@foreground@;
+    border: 2px solid #@base4@;
+}
+
+/* Selected items */
+selection {
+    background-color: #@base1@;
+    color: #@background@;
+}
+
+/* Header bars */
+headerbar {
+    background-color: #@base8@;
+    color: #@foreground@;
+}
+
+/* Tooltips */
+tooltip {
+    background-color: #@base5@;
+    color: #@background@;
+}

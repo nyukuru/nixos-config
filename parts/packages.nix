@@ -33,22 +33,19 @@ in {
     })
   ];
 
-  config = {
-    perSystem = {
-      inputs',
-      config,
-      ...
-    }: let
-      pkgs = inputs'.nixpkgs.legacyPackages;
-    in {
-      overlayAttrs = config.packages;
+  config.perSystem = {
+    pkgs,
+    config,
+    system,
+    ...
+  }: {
+    overlayAttrs = config.packages;
 
-      packages = packagesFromDirectoryRecursive {
-        directory = ../packages;
-        callPackage = pkgs.newScope (
-          concatMapAttrs (_: v: v.packages.${pkgs.system} or {}) inputs
-        );
-      };
+    packages = packagesFromDirectoryRecursive {
+      directory = ../packages;
+      callPackage = pkgs.newScope (
+        concatMapAttrs (_: v: v.packages.${system} or {}) inputs
+      );
     };
   };
 }
