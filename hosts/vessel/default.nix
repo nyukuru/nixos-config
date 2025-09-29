@@ -20,6 +20,8 @@
     gh
     git-crypt
     nixpkgs-review
+    gnumake
+    gdb
 
     vlc
     gimp
@@ -30,10 +32,13 @@
 
     # Work
     android-tools
+    tmux
 
     # Classes
     #sage
     mysql-workbench
+    ghidra
+    bear
 
     # Games
     ns-usbloader

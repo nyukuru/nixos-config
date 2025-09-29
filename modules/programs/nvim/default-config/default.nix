@@ -27,11 +27,20 @@ in {
             nvim-treesitter-parsers.nix
             nvim-treesitter-parsers.lua
             nvim-treesitter-parsers.python
+            nvim-treesitter-parsers.meson
+            nvim-treesitter-parsers.c
+            nvim-treesitter-parsers.cpp
+
+            # Navigation
+            telescope-nvim
+            harpoon2
 
             luasnip
+            lualine-nvim
 
             # Lint
             vim-prettier
+            vim-clang-format
 
             # LSP Support
             nvim-lspconfig
@@ -51,11 +60,13 @@ in {
 
       # Packages needed for this config
       environment.systemPackages = with pkgs; [
-        llvmPackages_19.clang-tools
+        llvmPackages_21.clang-tools
         lua-language-server
         basedpyright
+        nodePackages.prettier
         nil
         typescript-language-server
+        mesonlsp
       ];
     })
   ];

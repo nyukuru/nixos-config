@@ -1,43 +1,30 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+local telescope = require("telescope.builtin")
 
--- Displays hover information about the symbol under the cursor
-vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>")
+vim.keymap.set("n", "<leader>pv", vim.cmd.Ex, { desc = "Open file explorer" })
 
--- Jump to the definition
-vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>")
+vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Display information about the symbol under the cursor" })
+vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, { desc = "Display function signature info" })
 
--- Jump to declaration
-vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>")
+vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
+vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
+vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to  implementations" })
+vim.keymap.set("n", "go", vim.lsp.buf.type_definition, { desc = "Go to the type definition" })
+vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Go to references" })
 
--- Lists all the implementations for the symbol under the cursor
-vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>")
+vim.keymap.set("n", "<leader>ff", telescope.find_files, { desc = "Find files" })
+vim.keymap.set("n", "<leader>fg", telescope.live_grep, { desc = "Live grep" })
+vim.keymap.set("n", "<leader>fb", telescope.buffers, { desc = "Find in buffers" })
+vim.keymap.set("n", "<leader>fh", telescope.help_tags, { desc = "Find in buffers" })
 
--- Jumps to the definition of the type symbol
-vim.keymap.set("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>")
+vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Renames the symbol under the cursor" })
 
--- Lists all the references
-vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>")
+vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Show diagnostics" })
 
--- Displays a function's signature information
-vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>")
-
--- Renames all references to the symbol under the cursor
-vim.keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<cr>")
-
--- Show diagnostics in a floating window
-vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<cr>")
-
--- Move to the previous diagnostic
-vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<cr>")
-
--- Move to the next diagnostic
-vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<cr>")
-
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set("v", "K", ':m "<-2<CR>gv=gv')
+vim.keymap.set("v", "J", ':m ">+1<CR>gv=gv')
 
 vim.keymap.set("n", "J", "mzJ`z")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
@@ -45,17 +32,8 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
-vim.keymap.set("n", "<leader>vwm", function()
-	require("vim-with-me").StartVimWithMe()
-end)
-vim.keymap.set("n", "<leader>svwm", function()
-	require("vim-with-me").StopVimWithMe()
-end)
-
--- greatest remap ever
 vim.keymap.set("x", "<leader>p", '"_dP')
 
--- next greatest remap ever : asbjornHaland
 vim.keymap.set("n", "<leader>y", '"+y')
 vim.keymap.set("v", "<leader>y", '"+y')
 vim.keymap.set("n", "<leader>Y", '"+Y')
@@ -64,10 +42,7 @@ vim.keymap.set("n", "<leader>d", '"_d')
 vim.keymap.set("v", "<leader>d", '"_d')
 
 vim.keymap.set("n", "Q", "<nop>")
-vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
-vim.keymap.set("n", "<leader>f", function()
-	vim.lsp.buf.format()
-end)
+vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
