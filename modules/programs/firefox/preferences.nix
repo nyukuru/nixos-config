@@ -594,7 +594,7 @@ in {
 
         # Canvas fingerprint protection
         "privacy.fingerprintingProtection" = true;
-        "privacy.fingerprintingProtection.overrides" = "+AllTargets,-CSSPrefersColorScheme";
+        "privacy.fingerprintingProtection.overrides" = "+AllTargets,-CSSPrefersColorScheme,-CanvasExtractionBeforeUserInputIsBlocked";
         "privacy.trackingprotection.cryptomining.enabled" = true;
         "privacy.trackingprotection.fingerprinting.enabled" = true;
 

@@ -1,4 +1,11 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
+  imports = [
+    "${inputs.nix-flatpak}/modules/nixos.nix"
+  ];
   services = {
     printing.enable = true;
     gvfs.enable = true;
@@ -10,7 +17,6 @@
     udev = {
       enable = true;
       packages = with pkgs; [
-        android-udev-rules
         edl
       ];
     };
@@ -22,7 +28,19 @@
         gcr
       ];
     };
+
+    flatpak = {
+      enable = true;
+      packages = ["org.vinegarhq.Sober"];
+    };
+
+    sunshine = {
+      enable = true;
+      openFirewall = true;
+    };
   };
+
+  boot.kernel.sysctl."kernel.yama.ptrace_scope" = 1;
 
   systemd.services = {
     fstrim = {
@@ -33,6 +51,7 @@
       };
     };
   };
+
   /*
     ____          _                    __  __           _       _
    / ___|   _ ___| |_ ___  _ __ ___   |  \/  | ___   __| |_   _| | ___  ___

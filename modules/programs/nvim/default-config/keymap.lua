@@ -13,6 +13,9 @@ vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" 
 vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Go to  implementations" })
 vim.keymap.set("n", "go", vim.lsp.buf.type_definition, { desc = "Go to the type definition" })
 vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "Go to references" })
+vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Show diagnostics" })
+
+vim.keymap.set("n", "<leader>cm", vim.lsp.buf.code_action, { desc = "Execute availalble fixes" })
 
 vim.keymap.set("n", "<leader>ff", telescope.find_files, { desc = "Find files" })
 vim.keymap.set("n", "<leader>fg", telescope.live_grep, { desc = "Live grep" })
@@ -20,8 +23,6 @@ vim.keymap.set("n", "<leader>fb", telescope.buffers, { desc = "Find in buffers" 
 vim.keymap.set("n", "<leader>fh", telescope.help_tags, { desc = "Find in buffers" })
 
 vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Renames the symbol under the cursor" })
-
-vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Show diagnostics" })
 
 vim.keymap.set("v", "K", ':m "<-2<CR>gv=gv')
 vim.keymap.set("v", "J", ':m ">+1<CR>gv=gv')

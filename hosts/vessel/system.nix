@@ -118,7 +118,7 @@
           user = "nyu";
           command = let
             session = lib.getExe config.nyu.programs.sway.package;
-            sessionWrapper = "${lib.getExe config.programs.uwsm.package} start -S -F";
+            sessionWrapper = "${lib.getExe config.programs.uwsm.package} start";
           in "${sessionWrapper} ${session} >/dev/null";
         };
       };

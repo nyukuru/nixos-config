@@ -36,11 +36,16 @@
 
     # Classes
     #sage
-    mysql-workbench
     ghidra
     bear
 
     # Games
+    godot
+    blender
+    lumafly
+    archipelago
+
+    flatpak
     ns-usbloader
     mangohud
     prismlauncher

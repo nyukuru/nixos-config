@@ -80,6 +80,10 @@
           shortID = "ublock-origin";
           addonID = "uBlock0@raymondhill.net";
         }
+        #{
+        #  shortID = "hide-youtube-shorts";
+        #  addonID = "";
+        #}
         {
           shortID = "skip-redirect";
           addonID = "skipredirect@sblask";

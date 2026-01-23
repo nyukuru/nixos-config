@@ -83,7 +83,7 @@
         installation_mode = extension.installMode;
         default_area = "menupanel";
       };
-    }) {"*".installation_mode = "blocked";};
+    }) {}; #{"*".installation_mode = "blocked";};
 
   json = pkgs.formats.json {};
   cfg = config.nyu.programs.firefox;

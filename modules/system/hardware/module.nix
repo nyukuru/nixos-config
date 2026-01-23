@@ -74,9 +74,6 @@ in {
       };
 
       environment.systemPackages = with pkgs; [
-        glxinfo
-        glmark2
-
         vulkan-tools
         vulkan-loader
         vulkan-validation-layers
@@ -85,7 +82,7 @@ in {
         libva
         libva-utils
 
-        vaapiVdpau
+        libva-vdpau-driver
         vdpauinfo
 
         mesa

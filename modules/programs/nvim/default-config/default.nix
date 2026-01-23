@@ -64,6 +64,7 @@ in {
         lua-language-server
         basedpyright
         nodePackages.prettier
+        ripgrep
         nil
         typescript-language-server
         mesonlsp
