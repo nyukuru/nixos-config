@@ -47,7 +47,39 @@
    \____\__,_|___/\__\___/|_| |_| |_| |_|  |_|\___/ \__,_|\__,_|_|\___||___/
   */
   nyu.programs = {
-    sway.enable = true;
+    # Because sway v1.12 has not reached stable (but it has window capture) I am fetching upstream
+    sway = {
+      enable = true;
+      package = pkgs.sway.override {
+        sway-unwrapped =
+          (pkgs.sway-unwrapped.overrideAttrs (old: {
+            src = pkgs.fetchFromGitHub {
+              owner = "swaywm";
+              repo = "sway";
+              rev = "40aabb80c645519107dc325abc53e4176e896fb9";
+              hash = "sha256-jmo11GHz7yR56Q6R/AFkitc4TWvmHj+9IDnpXfzQ7rQ=";
+            };
+          })).override {
+            wlroots =
+              (pkgs.wlroots.overrideAttrs (old: {
+                src = pkgs.fetchFromGitLab {
+                  domain = "gitlab.freedesktop.org";
+                  owner = "wlroots";
+                  repo = "wlroots";
+                  rev = "5a40da7e15b145cd10104cb35982649e4050281c";
+                  hash = "sha256-+iMl5OpvPQ1cw7BLJLwh6WaKlN1QGKj267cyZ6Vixpk=";
+                };
+              })).override {
+                wayland-protocols = pkgs.wayland-protocols.overrideAttrs (old: {
+                  src = pkgs.fetchurl {
+                    url = "https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/1.47/downloads/wayland-protocols-1.47.tar.xz";
+                    hash = "sha256-X9Q0m8vJurmkb4z3fR9DQpanoFLIdECglPY/z2KljiA=";
+                  };
+                });
+              };
+          };
+      };
+    };
     nvim.enable = true;
     fusee-nano.enable = true;
 
