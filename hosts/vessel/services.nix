@@ -8,6 +8,7 @@
   ];
   services = {
     printing.enable = true;
+    joycond.enable = true;
     gvfs.enable = true;
     udisks2.enable = true;
     btrfs.autoScrub.enable = true;
@@ -41,6 +42,7 @@
   };
 
   boot.kernel.sysctl."kernel.yama.ptrace_scope" = 1;
+  boot.kernel.sysctl."net.core.bpf_jit_enable" = 1;
 
   systemd.services = {
     fstrim = {

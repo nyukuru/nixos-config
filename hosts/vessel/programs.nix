@@ -60,7 +60,7 @@
               hash = "sha256-jmo11GHz7yR56Q6R/AFkitc4TWvmHj+9IDnpXfzQ7rQ=";
             };
           })).override {
-            wlroots =
+            wlroots_0_19 =
               (pkgs.wlroots.overrideAttrs (old: {
                 src = pkgs.fetchFromGitLab {
                   domain = "gitlab.freedesktop.org";

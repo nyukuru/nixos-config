@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
   imports = [
     ./disk-config.nix
 
@@ -28,22 +32,26 @@
 
     # Social
     fractal
-    vesktop
 
     # Work
     android-tools
     tmux
+    jetbrains.pycharm
+    jetbrains.rider
 
     # Classes
     #sage
     ghidra
     bear
+    chromium
 
     # Games
     godot
     blender
     lumafly
     archipelago
+    protonplus
+    bottles
 
     flatpak
     ns-usbloader
