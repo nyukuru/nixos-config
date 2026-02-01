@@ -49,10 +49,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    # TODO: fix
     services.resolved = {
       enable = true;
-      dnssec = "false";
+      settings.Resolve.DNSSEC = false;
     };
 
     systemd = {

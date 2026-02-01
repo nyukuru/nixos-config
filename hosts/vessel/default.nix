@@ -1,8 +1,4 @@
-{
-  pkgs,
-  inputs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ./disk-config.nix
 
@@ -40,7 +36,6 @@
     jetbrains.rider
 
     # Classes
-    #sage
     ghidra
     bear
     chromium
@@ -52,6 +47,8 @@
     archipelago
     protonplus
     bottles
+    dolphin-emu
+    wheelwizard
 
     flatpak
     ns-usbloader
