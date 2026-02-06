@@ -7,6 +7,8 @@
     ./services.nix
   ];
 
+  virtualisation.docker.enable = true;
+
   environment.systemPackages = with pkgs; [
     # Utils
     unzip

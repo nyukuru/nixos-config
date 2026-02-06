@@ -18,7 +18,6 @@ in {
   imports = [
     ./loaders.nix
     ./plymouth.nix
-    ./secure-boot.nix
     ./greetd.nix
   ];
 

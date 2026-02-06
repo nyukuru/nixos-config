@@ -13,6 +13,7 @@
       "audio"
       "video"
       "input"
+      "docker"
       "power"
       "network"
       "nix"

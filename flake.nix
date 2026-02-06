@@ -7,7 +7,6 @@
     dev-nixpkgs-waybar.url = "github:/nyukuru/nixpkgs/waybar-settings";
 
     nixos-hardware.url = "github:nixos/nixos-hardware";
-    lanzaboote.url = "github:nix-community/lanzaboote";
     agenix.url = "github:ryantm/agenix";
     disko.url = "github:nix-community/disko";
 

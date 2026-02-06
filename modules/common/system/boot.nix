@@ -16,13 +16,6 @@
 in {
   config.boot = {
     consoleLogLevel = mkDefault 3;
-
-    loader = {
-      # To access entries hold space.
-      timeout = mkDefault 0;
-      efi.canTouchEfiVariables = mkDefault true;
-    };
-
     tmp.cleanOnBoot = !config.boot.tmp.useTmpfs;
 
     initrd = {

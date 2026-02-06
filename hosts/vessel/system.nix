@@ -9,6 +9,12 @@
       options iwlwifi power_save=1 disable_11ax=1
     '';
 
+    loader.limine.extraEntries = ''
+      /Windows 11
+        protocol: efi
+        path: guid(614740dc-b9a7-4774-ac6e-32eae9d9fdbd):/EFI/Microsoft/Boot/bootmgfw.efi
+    '';
+
     # From generated hardware-config
     initrd.availableKernelModules = [
       "xhci_pci"
@@ -103,7 +109,10 @@
     */
     boot = {
       silent.enable = true;
-      secureBoot.enable = true;
+      loader = {
+        type = "limine";
+        secureBoot.enable = true;
+      };
 
       plymouth = {
         enable = true;
