@@ -1,5 +1,4 @@
 {
-  inputs,
   config,
   pkgs,
   lib,
@@ -13,8 +12,6 @@
 
   inherit (config.style) colors;
 in {
-  imports = ["${inputs.dev-nixpkgs-dunst}/nixos/modules/services/desktops/dunst.nix"];
-
   services.dunst = {
     enable = true;
 

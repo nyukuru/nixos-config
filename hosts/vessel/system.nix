@@ -25,6 +25,7 @@
       "sd_mod"
       "rtsx_pci_sdmmc"
     ];
+    binfmt.emulatedSystems = ["aarch64-linux"];
   };
 
   # Permission for media drive

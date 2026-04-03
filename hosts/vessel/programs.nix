@@ -1,25 +1,8 @@
 {pkgs, ...}: {
   programs = {
     foot.enable = true;
-    gamemode.enable = true;
     nix-ld.enable = true;
     thunar.enable = true;
-
-    steam = {
-      enable = true;
-
-      protontricks.enable = true;
-      remotePlay.openFirewall = true;
-
-      gamescopeSession = {
-        enable = true;
-        args = [
-          "-r 60"
-        ];
-      };
-      extraCompatPackages = [pkgs.proton-ge-bin];
-      extraPackages = [pkgs.gamescope];
-    };
 
     nh = {
       enable = true;
@@ -93,19 +76,10 @@
       languagePacks = ["en-US"];
 
       /*
-      ublock-origin = "uBlock0@raymondhill.net";
-      skip-redirect = "skipredirect@sblask";
-      privacy-badger17 = "jid1-MnnxcxisBPnSXQ@jetpack";
       clearurls = "{74145f27-f039-47ce-a470-a662b129930a}";
       sponsorblock = "sponsorBlocker@ajay.app";
       simple-translate = "simple-translate@sienori";
-      languagetool = "languagetool-webextension@languagetool.org";
-      betterttv = "firefox@betterttv.net";
-      frankerfacez = "frankerfacez@frankerfacez.com";
-      disable-twitch-extensions = "disable-twitch-extensions@rootonline.de";
-      sidebery = "{3c078156-979c-498b-8990-85f7987dd929}";
       bento = "{cb7f7992-81db-492b-9354-99844440ff9b}";
-      bitwarden-password-manager = "{446900e4-71c2-419f-a6a7-df9c091e268b}";
       */
       extensions = [
         {

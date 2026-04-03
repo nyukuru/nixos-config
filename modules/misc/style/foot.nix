@@ -38,7 +38,7 @@ in {
         pad = "4x4";
       };
 
-      colors = {
+      colors-dark = {
         background = colors.base0;
         foreground = colors.base7;
 

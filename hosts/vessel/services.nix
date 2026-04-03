@@ -1,14 +1,6 @@
-{
-  pkgs,
-  inputs,
-  ...
-}: {
-  imports = [
-    "${inputs.nix-flatpak}/modules/nixos.nix"
-  ];
+{pkgs, ...}: {
   services = {
     printing.enable = true;
-    joycond.enable = true;
     gvfs.enable = true;
     udisks2.enable = true;
     btrfs.autoScrub.enable = true;
@@ -29,27 +21,23 @@
         gcr
       ];
     };
-
-    flatpak = {
-      enable = true;
-      packages = ["org.vinegarhq.Sober"];
-    };
-
-    sunshine = {
-      enable = true;
-      openFirewall = true;
-    };
   };
 
   boot.kernel.sysctl."kernel.yama.ptrace_scope" = 1;
   boot.kernel.sysctl."net.core.bpf_jit_enable" = 1;
 
-  systemd.services = {
-    fstrim = {
-      unitConfig.ConditionACPower = true;
-      serviceConfig = {
-        Nice = 19;
-        IOSchedulingClass = "idle";
+  systemd = {
+    settings.Manager = {
+      RebootWatchdogUSec = "0";
+      ShutdownWatchdogUSec = "0";
+    };
+    services = {
+      fstrim = {
+        unitConfig.ConditionACPower = true;
+        serviceConfig = {
+          Nice = 19;
+          IOSchedulingClass = "idle";
+        };
       };
     };
   };

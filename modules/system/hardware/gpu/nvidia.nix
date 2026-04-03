@@ -30,7 +30,7 @@ in {
   config = mkIf isNvidia {
     hardware = {
       nvidia = {
-        package = mkDefault nvidiaPackage;
+        package = nvidiaPackage;
         modesetting.enable = mkDefault true;
 
         prime.offload = {
@@ -43,7 +43,7 @@ in {
           finegrained = mkDefault isHybrid;
         };
 
-        open = mkDefault true;
+        open = true;
         nvidiaSettings = false;
       };
 

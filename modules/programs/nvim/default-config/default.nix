@@ -63,7 +63,7 @@ in {
         llvmPackages_21.clang-tools
         lua-language-server
         basedpyright
-        nodePackages.prettier
+        prettier
         ripgrep
         nil
         typescript-language-server

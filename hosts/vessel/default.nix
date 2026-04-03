@@ -21,12 +21,14 @@
     obsidian
     gh
     git-crypt
+    git-lfs
     nixpkgs-review
     gnumake
     gdb
 
     vlc
     gimp
+    aseprite
 
     # Social
     fractal
@@ -35,24 +37,19 @@
     android-tools
     tmux
     jetbrains.pycharm
+    jetbrains.webstorm
     jetbrains.rider
+    rpi-imager
 
     # Classes
     ghidra
     bear
-    chromium
 
     # Games
     godot
     blender
-    lumafly
-    archipelago
-    protonplus
-    bottles
-    dolphin-emu
-    wheelwizard
+    ddnet
 
-    flatpak
     ns-usbloader
     mangohud
     prismlauncher
