@@ -60,7 +60,9 @@
       extraConfig = optionalString config.nyu.boot.silent.enable ''
         quiet: yes
       '';
-      inherit (cfg) secureBoot;
+      secureBoot = {
+        autoEnrollKeys.enable = true;
+      } // cfg.secureBoot;
     };
   };
 

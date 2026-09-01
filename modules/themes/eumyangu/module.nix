@@ -54,10 +54,7 @@ in {
       name = "Eumangyu";
     };
     */
-    iconTheme = {
-      package = pkgs.graphite-gtk-theme;
-      name = "Graphite-Dark";
-    };
+
     gtk3.extraConfig = {
       gtk-application-prefer-dark-theme = 1;
     };

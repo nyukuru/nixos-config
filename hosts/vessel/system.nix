@@ -127,7 +127,7 @@
           enable = true;
           user = "nyu";
           command = let
-            session = lib.getExe config.nyu.programs.sway.package;
+            session = lib.getExe config.nyu.programs.niri.package;
             sessionWrapper = "${lib.getExe config.programs.uwsm.package} start";
           in "${sessionWrapper} ${session} >/dev/null";
         };
@@ -156,22 +156,6 @@
     */
     encryption = {
       enable = true;
-
-      devices.crypted-1 = {
-        keyFile = {
-          enable = true;
-          rdKey = true;
-          file = "/persist/secrets/luks.key";
-        };
-      };
-
-      devices.crypted-2 = {
-        keyFile = {
-          enable = true;
-          rdKey = true;
-          file = "/persist/secrets/luks.key";
-        };
-      };
     };
     /*
     __   ___     _             _ _         _   _

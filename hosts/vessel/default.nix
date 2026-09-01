@@ -28,7 +28,6 @@
 
     vlc
     gimp
-    aseprite
 
     # Social
     fractal
@@ -36,10 +35,6 @@
     # Work
     android-tools
     tmux
-    jetbrains.pycharm
-    jetbrains.webstorm
-    jetbrains.rider
-    rpi-imager
 
     # Classes
     ghidra
@@ -47,7 +42,6 @@
 
     # Games
     godot
-    blender
     ddnet
 
     ns-usbloader

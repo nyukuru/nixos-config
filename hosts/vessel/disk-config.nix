@@ -5,12 +5,12 @@
     disk = {
       main = {
         type = "disk";
-        device = "/dev/disk/by-path/pci-0000:00:0e.0-pci-10000:e2:00.0-nvme-1";
+        device = "/dev/disk/by-nvme-Samsung_SSD_980_PRO_2TB_S76ENL0X200051J";
         content = {
           type = "gpt";
           partitions = {
             ESP = {
-              size = "512M";
+              size = "16G";
               type = "EF00";
               content = {
                 type = "filesystem";
@@ -26,6 +26,9 @@
               content = {
                 type = "luks";
                 name = "crypted-1";
+                settings = {
+                  crypttabExtraOpts = ["tpm2-device=auto"];
+                };
                 content = {
                   type = "btrfs";
                   extraArgs = ["-f" "-L fsroot"];
@@ -45,11 +48,6 @@
                       mountOptions = ["subvol=nix" "compress=zstd" "noatime" "ssd"];
                     };
 
-                    "/persist" = {
-                      mountpoint = "/persist";
-                      mountOptions = ["subvol=perist" "compress=zstd" "noatime" "ssd"];
-                    };
-
                     "/libvirt" = {
                       mountpoint = "/libvirt";
                       mountOptions = ["subvol=libvirt" "noatime" "ssd"];
@@ -57,48 +55,7 @@
 
                     "/swap" = {
                       mountpoint = "/.swapvol";
-                      swap.swapfile.size = "16G";
-                    };
-                  };
-                };
-              };
-            };
-          };
-        };
-      };
-      sub = {
-        type = "disk";
-        device = "/dev/disk/by-path/pci-0000:00:0e.0-pci-10000:e1:00.0-nvme-1";
-        content = {
-          type = "gpt";
-          partitions = {
-            luks = {
-              size = "100%";
-              content = {
-                type = "luks";
-                name = "crypted-2";
-                content = {
-                  type = "btrfs";
-                  extraArgs = ["-f" "-L media"];
-                  subvolumes = {
-                    "media" = {
-                      mountpoint = "/media";
-                      mountOptions = ["subvol=media" "compress=zstd" "noatime" "ssd"];
-                    };
-
-                    "media/games" = {
-                      mountpoint = "/media/games";
-                      mountOptions = ["subvol=games" "compress=zstd" "noatime" "ssd"];
-                    };
-
-                    "media/video" = {
-                      mountpoint = "/media/video";
-                      mountOptions = ["subvol=video" "compress=zstd" "noatime" "ssd"];
-                    };
-
-                    "media/music" = {
-                      mountpoint = "/media/music";
-                      mountOptions = ["subvol=music" "compress=zstd" "noatime" "ssd"];
+                      swap.swapfile.size = "32G";
                     };
                   };
                 };
