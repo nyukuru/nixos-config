@@ -18,7 +18,7 @@ in {
       ];
       modules = mkModules {
         form = "laptop";
-        theme = "eumyangu";
+        theme = "nyubones";
         extraModules = [
           hw.dell-xps-15-9520-nvidia
           disko

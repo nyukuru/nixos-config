@@ -4,6 +4,21 @@
     nix-ld.enable = true;
     thunar.enable = true;
 
+    git = {
+      enable = true;
+      config = {
+        init = {
+          defaultBranch = "main";
+        };
+
+        user = {
+          name = "nyukuru";
+          email = "nyu@nyuku.ru";
+        };
+
+      };
+    };
+
     nh = {
       enable = true;
       flake = "/home/nyu/nixos-config";
