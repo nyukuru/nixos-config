@@ -140,7 +140,12 @@ in ''
   :root {
     --toolbar-color: currentColor !important;
     --link-color: white !important;
-    --urlbarView-highlight-background: var(--toolbar-field-background-color) !important;
+    --urlbarView-highlight-background: color-mix(
+      in hsl,
+      var(--toolbar-field-color) 8%,
+      var(--toolbar-bgcolor)
+    ) !important;
+    --urlbarView-highlight-color: var(--toolbar-field-color) !important;
     --toolbox-non-lwt-bgcolor: ${background} !important;
     --toolbox-non-lwt-bgcolor-inactive: ${background} !important;
     --focus-outline-color: transparent !important;
@@ -276,6 +281,7 @@ in ''
   #urlbar-background {
     background-color: transparent !important;
     border: unset !important;
+    border-radius: ${border-rounding} !important;
     box-shadow: unset !important;
   }
 
@@ -283,6 +289,7 @@ in ''
     text-align: start;
     margin-top: 4px;
     background-color: ${background};
+    border: ${border-width} solid ${border} !important;
     border-radius: 0 0 ${border-rounding} ${border-rounding};
   }
   .urlbarView-body-inner {
