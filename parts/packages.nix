@@ -4,16 +4,24 @@
   flake-parts-lib,
   ...
 }: let
-  inherit (lib.options) mkOption;
+  inherit (lib.options) mkOption mergeOneOption;
   inherit (lib.attrsets) concatMapAttrs;
   inherit (lib.filesystem) packagesFromDirectoryRecursive;
 
   inherit
     (lib.types)
+    mkOptionType
     lazyAttrsOf
     package
     either
     ;
+
+  functorPackage = mkOptionType {
+    name = "functorPackage";
+    description = "callable package";
+    check = x: builtins.isAttrs x && x ? __functor;
+    merge = loc: defs: mergeOneOption loc defs;
+  };
 in {
   # Redefine flake-parts packages option to allow nested attrsets
   disabledModules = ["${inputs.flake-parts}/modules/packages.nix"];
@@ -25,7 +33,11 @@ in {
       file = ./.;
       option = mkOption {
         type = let
-          valueType = either package (lazyAttrsOf valueType);
+          valueType =
+            (either package (either functorPackage (lazyAttrsOf valueType)))
+            // {
+              description = "package, callable package, or nested attribute set of packages";
+            };
         in
           valueType;
         default = {};

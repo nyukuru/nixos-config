@@ -69,17 +69,9 @@
           shortID = "ublock-origin";
           addonID = "uBlock0@raymondhill.net";
         }
-        #{
-        #  shortID = "hide-youtube-shorts";
-        #  addonID = "";
-        #}
         {
           shortID = "skip-redirect";
           addonID = "skipredirect@sblask";
-        }
-        {
-          shortID = "languagetool";
-          addonID = "languagetool-webextension@languagetool.org";
         }
         {
           shortID = "frankerfacez";

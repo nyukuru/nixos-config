@@ -2,7 +2,6 @@
   lib,
   writeShellScript,
   brightnessctl,
-  libnotify,
 }:
 writeShellScript "brightness" ''
   function usage {
@@ -17,14 +16,6 @@ writeShellScript "brightness" ''
   EOF
   }
 
-  notify_cmd(){
-    ${lib.getExe libnotify} -e -t 500 -r 4570 --hint=int:value:"$(get_brightness)" "☀️  $(get_brightness)%"
-  }
-
-  get_brightness(){
-    ${lib.getExe brightnessctl} i | grep -oP '\(\K[^%\)]+'
-  }
-
   if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
     usage
     exit 0
@@ -36,5 +27,5 @@ writeShellScript "brightness" ''
     exit 1
   fi
 
-  ${lib.getExe brightnessctl} s "$1"; notify_cmd
+  ${lib.getExe brightnessctl} s "$1"
 ''

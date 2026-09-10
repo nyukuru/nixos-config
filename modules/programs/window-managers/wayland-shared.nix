@@ -15,7 +15,6 @@
 in {
   security = {
     polkit.enable = mkDefault true;
-    pam.services.swaylock = {};
   };
 
   programs = {

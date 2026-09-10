@@ -60,6 +60,11 @@ in {
         "nix-command"
       ];
 
+      # Silence nixpkgs lib's use of `or` as an identifier, deprecated in Lix.
+      extra-deprecated-features = [
+        "or-as-identifier"
+      ];
+
       pure-eval = mkDefault false;
       warn-dirty = mkDefault false;
       accept-flake-config = mkDefault false;

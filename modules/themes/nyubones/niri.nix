@@ -15,7 +15,7 @@ in {
 
     border {
       width 4
-      active-color "#${colors.base7}"
+      active-color "#${colors.baseB}"
       inactive-color "#${colors.base8}"
       urgent-color "#${colors.base1}"
     }
@@ -30,6 +30,12 @@ in {
 
     settings = ''
       prefer-no-csd
+
+      workspace "1"
+      workspace "2"
+      workspace "3"
+      workspace "4"
+      workspace "5"
     '';
   };
 }

@@ -1,10 +1,9 @@
 {
-  lib,
   pkgs,
   config,
   ...
 }: let
-  eumangyu-gtk = lib.traceVal pkgs.writers.makeGtkTheme {
+  eumangyu-gtk = pkgs.writers.makeGtkTheme {
     cssFile = ./eumangyu-gtk.css;
     name = "Eumangyu";
     inherit (config.style) colors;

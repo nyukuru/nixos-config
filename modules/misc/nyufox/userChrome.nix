@@ -12,6 +12,7 @@
   border-rounding = toPixels cfg.border.rounding;
 
   margin = toPixels cfg.margin;
+  launcher-reserved = toPixels (2 * (cfg.margin + cfg.border.width));
 
   toPixels = x: "${toString x}px";
 in ''
@@ -47,20 +48,20 @@ in ''
   }
 
   #tabbrowser-tabbox {
-    margin: 8px !important;
+    margin: ${margin} !important;
     border: ${border-width} solid ${border};
     border-radius: ${border-rounding};
     &:not([sidebar-positionend]) {
       &[sidebar-launcher-expanded][sidebar-launcher-hovered]:not([sidebar-panel-open]),
       &[sidebar-ongoing-animations]:not([sidebar-launcher-expanded], [sidebar-panel-open]) {
-        margin-inline-start: calc(var(--sidebar-launcher-collapsed-width) + 2 * 14px) !important;
+        margin-inline-start: calc(var(--sidebar-launcher-collapsed-width) + ${launcher-reserved}) !important;
       }
     }
 
     &[sidebar-positionend] {
       &[sidebar-launcher-expanded][sidebar-launcher-hovered]:not([sidebar-panel-open]),
       &[sidebar-ongoing-animations]:not([sidebar-panel-open], [sidebar-launcher-expanded]) {
-        margin-inline-end: calc(var(--sidebar-launcher-collapsed-width) + 2 * 14px) !important;
+        margin-inline-end: calc(var(--sidebar-launcher-collapsed-width) + ${launcher-reserved}) !important;
       }
     }
   }
@@ -195,11 +196,46 @@ in ''
   /* TABS */
 
   #sidebar-main {
-    margin: 8px 8px 0 8px !important;
-    border-radius: ${border-rounding};
-    border: ${border-width} solid ${border};
+    margin-block: ${margin} !important;
+    margin-inline: ${margin} 0 !important;
+    border-radius: ${border-rounding} !important;
+    border: ${border-width} solid ${border} !important;
     background-color: ${background} !important;
     background-image: unset !important;
+
+    &[sidebar-positionend] {margin-inline: 0 ${margin} !important;}
+  }
+
+  #browser:has(#sidebar-main[sidebar-ongoing-animations]) {
+    clip-path: inset(0 0 0 ${margin});
+
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: calc(var(--browser-area-z-index-sidebar-expand-on-hover) + 1);
+      pointer-events: none;
+      inset-block: ${margin};
+      inset-inline-start: ${margin};
+      width: calc(${border-rounding} + ${border-width});
+      border: ${border-width} solid ${border};
+      border-inline-end: none;
+      border-start-start-radius: ${border-rounding};
+      border-end-start-radius: ${border-rounding};
+    }
+
+    &:has(#sidebar-main[sidebar-positionend]) {
+      clip-path: inset(0 ${margin} 0 0);
+
+      &::after {
+        inset-inline: auto ${margin};
+        border-inline-start: none;
+        border-inline-end: ${border-width} solid ${border};
+        border-start-start-radius: 0;
+        border-end-start-radius: 0;
+        border-start-end-radius: ${border-rounding};
+        border-end-end-radius: ${border-rounding};
+      }
+    }
   }
 
   #tabbrowser-tabs[orient="vertical"] &:not([expanded]) {

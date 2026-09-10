@@ -1,8 +1,6 @@
 {
-  lib,
   writeShellScript,
   wireplumber,
-  libnotify,
 }: let
   wpctl = "${wireplumber}/bin/wpctl";
 in
@@ -19,15 +17,6 @@ in
     EOF
     }
 
-    function notify_cmd {
-      read volume mute <<< "$(get_volume)"
-      ${lib.getExe libnotify} -e -t 500 -r 4560 --hint=int:value:"$volume" "🔊  $volume% $mute"
-    }
-
-    function get_volume {
-      ${wpctl} get-volume "$ID" | awk -F'[: ]+' '{gsub(/\./,"",$2); print int($2)" "$3}'
-    }
-
     if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]]; then
       usage
       exit 0
@@ -41,5 +30,5 @@ in
 
     ID="$2"
 
-    ${wpctl} $@; notify_cmd
+    ${wpctl} $@
   ''
