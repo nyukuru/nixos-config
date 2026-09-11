@@ -6,7 +6,7 @@
 }: let
   inherit (lib.lists) optional;
   inherit (lib.modules) mkDefault;
-  inherit (lib.strings) optionalString concatStringsSep;
+  inherit (lib.strings) concatStringsSep;
 
   inherit (config.style) colors bootWallpaper;
 
@@ -18,6 +18,8 @@ in {
         enable = true;
         secureBoot.autoEnrollKeys.enable = true;
 
+        maxGenerations = mkDefault 15;
+
         additionalFiles = {
           "efi/memtest86/memtest86.efi" = "${pkgs.memtest86-efi}/BOOTX64.efi";
         };
@@ -26,10 +28,6 @@ in {
           /memtest86
             protocol: efi
             path: boot():/limine/efi/memtest86/memtest86.efi
-        '';
-
-        extraConfig = optionalString config.nyu.boot.silent.enable ''
-          quiet: yes
         '';
 
         style = {
@@ -59,7 +57,7 @@ in {
       };
 
       efi.canTouchEfiVariables = mkDefault true;
-      timeout = mkDefault 3;
+      timeout = mkDefault null;
     };
   };
 }

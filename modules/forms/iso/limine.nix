@@ -15,6 +15,11 @@
   limineCfg = config.boot.loader.limine;
   style = limineCfg.style;
 
+  timeout =
+    if config.boot.loader.timeout == null
+    then "no"
+    else toString config.boot.loader.timeout;
+
   kernelImage = "/boot/" + (config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile);
   initrdImage = "/boot/" + (config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile);
 
@@ -58,7 +63,7 @@
   ];
 
   limineConf = pkgs.writeText "limine.conf" ''
-    timeout: no 
+    timeout: ${timeout}
     ${limineCfg.extraConfig}
     ${styleLines}
     /${config.system.nixos.distroName} ${config.system.nixos.label}
