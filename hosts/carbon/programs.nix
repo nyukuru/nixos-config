@@ -7,7 +7,7 @@
    \____\__,_|___/\__\___/|_| |_| |_| |_|  |_|\___/ \__,_|\__,_|_|\___||___/
   */
   nyu.programs = {
-    sway.enable = true;
+    niri.enable = true;
 
     firefox = {
       languagePacks = ["en-US"];
