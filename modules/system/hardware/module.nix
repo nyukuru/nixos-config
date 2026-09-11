@@ -75,7 +75,7 @@ in {
         }
       ];
     }
-    (mkIf (cfg.igpu != null || cfg.dgpu != null) {
+    (mkIf (config.hardware.enableAllHardware || cfg.igpu != null || cfg.dgpu != null) {
       hardware.graphics = {
         enable = true;
         enable32Bit = true;

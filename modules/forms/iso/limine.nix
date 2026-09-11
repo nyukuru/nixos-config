@@ -58,7 +58,7 @@
   ];
 
   limineConf = pkgs.writeText "limine.conf" ''
-    timeout: ${toString config.boot.loader.timeout}
+    timeout: no 
     ${limineCfg.extraConfig}
     ${styleLines}
     /${config.system.nixos.distroName} ${config.system.nixos.label}
