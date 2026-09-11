@@ -5,6 +5,7 @@
   ...
 }: let
   inherit (lib.modules) mkImageMediaOverride mkDefault;
+  inherit (lib.attrsets) attrNames filterAttrs;
 in {
   imports = [
     "${modulesPath}/installer/cd-dvd/iso-image.nix"
@@ -12,7 +13,6 @@ in {
     "${modulesPath}/profiles/base.nix"
 
     ./image.nix
-    ./installer.nix
     ./limine.nix
   ];
 
@@ -39,7 +39,7 @@ in {
         "nix-command"
       ];
 
-      trusted-users = ["nyu"];
+      trusted-users = attrNames (filterAttrs (_: u: u.isNormalUser) config.users.users);
       accept-flake-config = false;
     };
   };

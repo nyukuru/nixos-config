@@ -50,8 +50,8 @@ in {
             brightForeground = colors.baseF;
             brightBackground = colors.base8;
 
-            margin = 0;
-            marginGradient = 4;
+            margin = 256;
+            marginGradient = 0;
           };
         };
       };

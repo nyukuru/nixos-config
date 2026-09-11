@@ -16,13 +16,18 @@
       tpm.enable = true;
     };
 
-    boot.greetd.autologin = {
-      enable = true;
-      user = "nyu";
-      command = let
-        session = lib.getExe config.nyu.programs.niri.package;
-        sessionWrapper = "${lib.getExe config.programs.uwsm.package} start";
-      in "${sessionWrapper} ${session} >/dev/null";
+    boot.greetd = {
+      greeter = null;
+      autologin = {
+        enable = true;
+        user = "nixos";
+        command = let
+          session = lib.getExe config.programs.niri.package;
+          sessionWrapper = "${lib.getExe config.programs.uwsm.package} start";
+        in "${sessionWrapper} ${session} >/dev/null";
+      };
     };
+
+    programs.niri.skipHotkeyOverlayAtStartup = false;
   };
 }

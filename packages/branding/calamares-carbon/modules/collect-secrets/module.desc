@@ -1,0 +1,5 @@
+---
+type:       "job"
+name:       "collect-secrets"
+interface:  "python"
+script:     "main.py"

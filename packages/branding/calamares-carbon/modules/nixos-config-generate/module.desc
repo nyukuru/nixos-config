@@ -1,0 +1,5 @@
+---
+type:       "job"
+name:       "nixos-config-generate"
+interface:  "python"
+script:     "main.py"

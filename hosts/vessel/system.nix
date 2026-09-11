@@ -56,7 +56,7 @@
         enable = true;
         user = "nyu";
         command = let
-          session = lib.getExe config.nyu.programs.niri.package;
+          session = lib.getExe config.programs.niri.package;
           sessionWrapper = "${lib.getExe config.programs.uwsm.package} start";
         in "${sessionWrapper} ${session} >/dev/null";
       };

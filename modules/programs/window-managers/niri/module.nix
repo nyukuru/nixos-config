@@ -2,50 +2,14 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }: let
-  inherit
-    (lib.options)
-    mkPackageOption
-    mkEnableOption
-    mkOption
-    ;
-
-  inherit
-    (lib.modules)
-    mkForce
-    mkIf
-    ;
-
-  inherit
-    (lib.strings)
-    concatMapStringsSep
-    concatStringsSep
-    optionalString
-    removeSuffix
-    splitString
-    ;
-
-  inherit
-    (lib.types)
-    nullOr
-    lines
-    path
-    str
-    ;
-
-  inherit
-    (lib.lists)
-    optionals
-    optional
-    filter
-    ;
-
-  inherit
-    (lib.meta)
-    getExe'
-    getExe
-    ;
+  inherit (lib.options) mkEnableOption mkOption;
+  inherit (lib.modules) mkIf mkForce;
+  inherit (lib.types) nullOr path str bool;
+  inherit (lib.lists) optional optionals;
+  inherit (lib.meta) getExe getExe';
 
   cfg = config.nyu.programs.niri;
   colors = config.style.colors;
@@ -55,67 +19,20 @@
   volume = "${pkgs.scripts.volume}";
   playerctl = getExe pkgs.playerctl;
   fuzzel = getExe' config.nyu.programs.fuzzel.package "fuzzel";
+  foot = getExe pkgs.foot;
+  swaylock = getExe' config.nyu.programs.swaylock.package "swaylock";
 
-  # Keep the nodes of a section lined up with the block they are nested in.
-  indent = body:
-    concatMapStringsSep "\n"
-    (line: optionalString (line != "") "    ${line}")
-    (splitString "\n" (removeSuffix "\n" body));
-
-  section = name: body:
-    optionalString (body != "") ''
-      ${name} {
-      ${indent body}
-      }
-    '';
-
-  # KDL takes every argument of a node separately quoted.
-  spawn = command: args: concatStringsSep " " (map (arg: "\"${arg}\"") ([command] ++ args));
-
-  # swaybg is only spawned once a theme actually asks for a background.
   swaybgArgs =
     optionals (cfg.backgroundColor != null) ["-c" cfg.backgroundColor]
     ++ optionals (cfg.wallpaper != null) ["-m" "fill" "-i" "${cfg.wallpaper}"];
-
-  configFile =
-    pkgs.writeText "niri.kdl"
-    (concatStringsSep "\n" (filter (s: s != "") [
-      cfg.settings
-      (section "layout" cfg.layout)
-      (section "binds" cfg.binds)
-    ]));
 in {
   imports = [
     ../wayland-shared.nix
+    inputs.niri-flake.lib.internal.settings-module
   ];
 
   options.nyu.programs.niri = {
     enable = mkEnableOption "Niri window manager.";
-    package = mkPackageOption pkgs "niri" {};
-
-    settings = mkOption {
-      type = lines;
-      default = "";
-      description = "Top level nodes of the niri config, see niri(1).";
-    };
-
-    layout = mkOption {
-      type = lines;
-      default = "";
-      description = ''
-        Nodes of the niri `layout` block. Kept apart from
-        {option}`settings` so themes can contribute to it.
-      '';
-    };
-
-    binds = mkOption {
-      type = lines;
-      default = "";
-      description = ''
-        Nodes of the niri `binds` block. Kept apart from
-        {option}`settings` so other modules can contribute to it.
-      '';
-    };
 
     wallpaper = mkOption {
       type = nullOr path;
@@ -135,8 +52,12 @@ in {
       '';
     };
 
-    xwayland = {
-      enable = mkEnableOption "XWayland" // {default = true;};
+    xwayland.enable = mkEnableOption "XWayland" // {default = true;};
+
+    skipHotkeyOverlayAtStartup = mkOption {
+      type = bool;
+      default = true;
+      description = "Whether niri's keybind cheat-sheet overlay is skipped on startup.";
     };
   };
 
@@ -146,237 +67,306 @@ in {
       uwsm.waylandCompositors.niri = {
         prettyName = "Niri";
         comment = "Niri compositor managed by UWSM";
-        binPath = getExe cfg.package;
+        binPath = getExe config.programs.niri.package;
       };
     };
 
-    systemd.packages = [cfg.package];
+    systemd.packages = [config.programs.niri.package];
     systemd.user.services.niri = {
       restartIfChanged = false;
       enableDefaultPath = false;
     };
 
-    environment = {
-      systemPackages =
-        [cfg.package]
-        ++ optional cfg.xwayland.enable pkgs.xwayland-satellite
-        ++ optional (swaybgArgs != []) pkgs.swaybg;
+    environment.systemPackages =
+      [config.programs.niri.package]
+      ++ optional cfg.xwayland.enable pkgs.xwayland-satellite
+      ++ optional (swaybgArgs != []) pkgs.swaybg;
 
-      etc."niri/config.kdl".source = configFile;
-    };
-
-    # The default config settings
-    nyu.programs.niri = {
-      settings = ''
-        prefer-no-csd
-
-        spawn-at-startup "uwsm" "finalize"
-        ${optionalString (swaybgArgs != [])
-          ''spawn-at-startup ${spawn (getExe' pkgs.swaybg "swaybg") swaybgArgs}''}
-
-        workspace "1"
-        workspace "2"
-        workspace "3"
-        workspace "4"
-        workspace "5"
-
-        input {
-            touchpad {
-                tap
-                scroll-method "two-finger"
-                disabled-on-external-mouse
-            }
-
-            mouse {
-                accel-profile "flat"
-            }
-
-            warp-mouse-to-focus
-            focus-follows-mouse max-scroll-amount="30%"
-        }
-
-        output "eDP-1" {
-            mode "1920x1080"
-            scale 1
-
-            transform "normal"
-
-            position x=1280 y=0
-        }
-
-        hotkey-overlay {
-            skip-at-startup
-        }
-
-        screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
-
-        animations {
-            slowdown 0.8
-        }
-
-        gestures {
-            hot-corners {
-                off
-            }
-        }
-
-        window-rule {
-            match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-            open-floating true
-        }
-
-        window-rule {
-            match app-id=r#"^org\.keepassxc\.KeePassXC$"#
-            match app-id=r#"^org\.gnome\.World\.Secrets$"#
-
-            block-out-from "screen-capture"
-        }
+    environment.etc."niri/config.kdl".source =
+      pkgs.runCommand "config.kdl" {
+        config = config.programs.niri.finalConfig;
+        passAsFile = ["config"];
+        buildInputs = [config.programs.niri.package];
+      } ''
+        niri validate -c $configPath
+        cp $configPath $out
       '';
 
-      layout = ''
-        gaps 8
+    programs.niri.settings = {
+      prefer-no-csd = true;
 
-        focus-ring {
-            off
+      spawn-at-startup =
+        [{argv = ["uwsm" "finalize"];}]
+        ++ optional (swaybgArgs != []) {argv = [(getExe' pkgs.swaybg "swaybg")] ++ swaybgArgs;};
+
+      workspaces = {
+        "1" = {};
+        "2" = {};
+        "3" = {};
+        "4" = {};
+        "5" = {};
+      };
+
+      input = {
+        touchpad = {
+          tap = true;
+          scroll-method = "two-finger";
+          disabled-on-external-mouse = true;
+        };
+
+        mouse.accel-profile = "flat";
+
+        warp-mouse-to-focus.enable = true;
+        focus-follows-mouse = {
+          enable = true;
+          max-scroll-amount = "30%";
+        };
+      };
+
+      outputs."eDP-1" = {
+        mode = {
+          width = 1920;
+          height = 1080;
+        };
+        scale = 1;
+        position = {
+          x = 1280;
+          y = 0;
+        };
+      };
+
+      hotkey-overlay.skip-at-startup = cfg.skipHotkeyOverlayAtStartup;
+
+      screenshot-path = "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png";
+
+      animations.slowdown = 0.8;
+
+      gestures.hot-corners.enable = false;
+
+      window-rules = [
+        {
+          matches = [
+            {
+              app-id = "firefox$";
+              title = "^Picture-in-Picture$";
+            }
+          ];
+          open-floating = true;
         }
-
-        border {
-            width 4
-            active-color "#${colors.baseB}"
-            inactive-color "#${colors.base8}"
-            urgent-color "#${colors.base1}"
+        {
+          matches = [
+            {app-id = "^org\\.keepassxc\\.KeePassXC$";}
+            {app-id = "^org\\.gnome\\.World\\.Secrets$";}
+          ];
+          block-out-from = "screen-capture";
         }
+      ];
 
-        shadow {
-            softness 30
-            spread 5
-            offset x=0 y=5
-            color "#${colors.base0}77"
-        }
+      layout = {
+        gaps = 8;
 
-        center-focused-column "on-overflow"
+        focus-ring.enable = false;
 
-        // Widths cycled through by "switch-preset-column-width" (Mod+R).
-        preset-column-widths {
-            proportion 0.33333
-            proportion 0.5
-            proportion 0.66667
-        }
+        border = {
+          enable = true;
+          width = 4;
+          active.color = "#${colors.baseB}";
+          inactive.color = "#${colors.base8}";
+          urgent.color = "#${colors.base1}";
+        };
 
-        default-column-width { proportion 0.5; }
-      '';
+        shadow = {
+          enable = true;
+          softness = 30;
+          spread = 5;
+          offset = {
+            x = 0;
+            y = 5;
+          };
+          color = "#${colors.base0}77";
+        };
 
-      binds = ''
-        Mod+Shift+Slash { show-hotkey-overlay; }
+        center-focused-column = "on-overflow";
 
-        Super+Return hotkey-overlay-title="Open Terminal: foot" { spawn ${spawn (getExe pkgs.foot) []}; }
-        Super+F hotkey-overlay-title="Open Firefox" { spawn "firefox"; }
-        Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn ${spawn (getExe' config.nyu.programs.swaylock.package "swaylock") []}; }
-        Mod+D hotkey-overlay-title="Open Application Launcher: fuzzel" { spawn ${spawn fuzzel []}; }
+        preset-column-widths = [
+          {proportion = 0.33333;}
+          {proportion = 0.5;}
+          {proportion = 0.66667;}
+        ];
 
-        // Brightness bindings
-        XF86MonBrightnessUp allow-when-locked=true { spawn ${spawn brightness ["2%+"]}; }
-        XF86MonBrightnessDown allow-when-locked=true { spawn ${spawn brightness ["2%-"]}; }
-        Shift+XF86MonBrightnessUp allow-when-locked=true { spawn ${spawn brightness ["20%+"]}; }
-        Shift+XF86MonBrightnessDown allow-when-locked=true { spawn ${spawn brightness ["20%-"]}; }
+        default-column-width = {proportion = 0.5;};
+      };
 
-        // Output audio control
-        XF86AudioRaiseVolume allow-when-locked=true { spawn ${spawn volume ["set-volume" "@DEFAULT_SINK@" "1%+"]}; }
-        XF86AudioLowerVolume allow-when-locked=true { spawn ${spawn volume ["set-volume" "@DEFAULT_SINK@" "1%-"]}; }
-        XF86AudioMute allow-when-locked=true { spawn ${spawn volume ["set-mute" "@DEFAULT_SINK@" "toggle"]}; }
+      binds = {
+        "Mod+Shift+Slash".action.show-hotkey-overlay = {};
 
-        // Input audio control
-        Alt+XF86AudioRaiseVolume allow-when-locked=true { spawn ${spawn volume ["set-volume" "@DEFAULT_SOURCE@" "1%+"]}; }
-        Alt+XF86AudioLowerVolume allow-when-locked=true { spawn ${spawn volume ["set-volume" "@DEFAULT_SOURCE@" "1%-"]}; }
-        Alt+XF86AudioMute allow-when-locked=true { spawn ${spawn volume ["set-mute" "@DEFAULT_SOURCE@" "toggle"]}; }
-        XF86AudioMicMute allow-when-locked=true { spawn ${spawn volume ["set-mute" "@DEFAULT_SOURCE@" "toggle"]}; }
+        "Super+Return" = {
+          hotkey-overlay.title = "Open Terminal: foot";
+          action.spawn = foot;
+        };
+        "Super+F" = {
+          hotkey-overlay.title = "Open Firefox";
+          action.spawn = "firefox";
+        };
+        "Super+Alt+L" = {
+          hotkey-overlay.title = "Lock the Screen: swaylock";
+          action.spawn = swaylock;
+        };
+        "Mod+D" = {
+          hotkey-overlay.title = "Open Application Launcher: fuzzel";
+          action.spawn = fuzzel;
+        };
 
-        // MPRIS media control
-        XF86AudioPlay allow-when-locked=true { spawn ${spawn playerctl ["play-pause"]}; }
-        XF86AudioStop allow-when-locked=true { spawn ${spawn playerctl ["stop"]}; }
-        XF86AudioPrev allow-when-locked=true { spawn ${spawn playerctl ["previous"]}; }
-        XF86AudioNext allow-when-locked=true { spawn ${spawn playerctl ["next"]}; }
+        "XF86MonBrightnessUp" = {
+          allow-when-locked = true;
+          action.spawn = [brightness "2%+"];
+        };
+        "XF86MonBrightnessDown" = {
+          allow-when-locked = true;
+          action.spawn = [brightness "2%-"];
+        };
+        "Shift+XF86MonBrightnessUp" = {
+          allow-when-locked = true;
+          action.spawn = [brightness "20%+"];
+        };
+        "Shift+XF86MonBrightnessDown" = {
+          allow-when-locked = true;
+          action.spawn = [brightness "20%-"];
+        };
 
-        // Screenshots, the niri screenshot UI is kept on Ctrl+Print.
-        Print { spawn ${spawn screenshot ["screen"]}; }
-        Alt+Print { spawn ${spawn screenshot ["area"]}; }
-        Ctrl+Print { screenshot; }
+        "XF86AudioRaiseVolume" = {
+          allow-when-locked = true;
+          action.spawn = [volume "set-volume" "@DEFAULT_SINK@" "1%+"];
+        };
+        "XF86AudioLowerVolume" = {
+          allow-when-locked = true;
+          action.spawn = [volume "set-volume" "@DEFAULT_SINK@" "1%-"];
+        };
+        "XF86AudioMute" = {
+          allow-when-locked = true;
+          action.spawn = [volume "set-mute" "@DEFAULT_SINK@" "toggle"];
+        };
 
-        // A zoomed out view of workspaces and windows.
-        Mod+O repeat=false { toggle-overview; }
-        Mod+Q repeat=false { close-window; }
+        "Alt+XF86AudioRaiseVolume" = {
+          allow-when-locked = true;
+          action.spawn = [volume "set-volume" "@DEFAULT_SOURCE@" "1%+"];
+        };
+        "Alt+XF86AudioLowerVolume" = {
+          allow-when-locked = true;
+          action.spawn = [volume "set-volume" "@DEFAULT_SOURCE@" "1%-"];
+        };
+        "Alt+XF86AudioMute" = {
+          allow-when-locked = true;
+          action.spawn = [volume "set-mute" "@DEFAULT_SOURCE@" "toggle"];
+        };
+        "XF86AudioMicMute" = {
+          allow-when-locked = true;
+          action.spawn = [volume "set-mute" "@DEFAULT_SOURCE@" "toggle"];
+        };
 
-        Mod+H { focus-column-left; }
-        Mod+J { focus-window-down; }
-        Mod+K { focus-window-up; }
-        Mod+L { focus-column-right; }
+        "XF86AudioPlay" = {
+          allow-when-locked = true;
+          action.spawn = [playerctl "play-pause"];
+        };
+        "XF86AudioStop" = {
+          allow-when-locked = true;
+          action.spawn = [playerctl "stop"];
+        };
+        "XF86AudioPrev" = {
+          allow-when-locked = true;
+          action.spawn = [playerctl "previous"];
+        };
+        "XF86AudioNext" = {
+          allow-when-locked = true;
+          action.spawn = [playerctl "next"];
+        };
 
-        Mod+Shift+H { move-column-left; }
-        Mod+Shift+J { move-window-down; }
-        Mod+Shift+K { move-window-up; }
-        Mod+Shift+L { move-column-right; }
+        "Print".action.spawn = [screenshot "screen"];
+        "Alt+Print".action.spawn = [screenshot "area"];
+        "Ctrl+Print".action.screenshot = {};
 
-        Mod+Home { focus-column-first; }
-        Mod+End { focus-column-last; }
-        Mod+Ctrl+Home { move-column-to-first; }
-        Mod+Ctrl+End { move-column-to-last; }
+        "Mod+O" = {
+          repeat = false;
+          action.toggle-overview = {};
+        };
+        "Mod+Q" = {
+          repeat = false;
+          action.close-window = {};
+        };
 
-        Mod+U { focus-workspace-down; }
-        Mod+I { focus-workspace-up; }
+        "Mod+H".action.focus-column-left = {};
+        "Mod+J".action.focus-window-down = {};
+        "Mod+K".action.focus-window-up = {};
+        "Mod+L".action.focus-column-right = {};
 
-        Mod+Shift+U { move-column-to-workspace-down; }
-        Mod+Shift+I { move-column-to-workspace-up; }
+        "Mod+Shift+H".action.move-column-left = {};
+        "Mod+Shift+J".action.move-window-down = {};
+        "Mod+Shift+K".action.move-window-up = {};
+        "Mod+Shift+L".action.move-column-right = {};
 
-        Mod+Shift+Page_Down { move-workspace-down; }
-        Mod+Shift+Page_Up { move-workspace-up; }
+        "Mod+Home".action.focus-column-first = {};
+        "Mod+End".action.focus-column-last = {};
+        "Mod+Ctrl+Home".action.move-column-to-first = {};
+        "Mod+Ctrl+End".action.move-column-to-last = {};
 
-        Mod+1 { focus-workspace 1; }
-        Mod+2 { focus-workspace 2; }
-        Mod+3 { focus-workspace 3; }
-        Mod+4 { focus-workspace 4; }
-        Mod+5 { focus-workspace 5; }
+        "Mod+U".action.focus-workspace-down = {};
+        "Mod+I".action.focus-workspace-up = {};
 
-        Mod+Shift+1 { move-column-to-workspace 1; }
-        Mod+Shift+2 { move-column-to-workspace 2; }
-        Mod+Shift+3 { move-column-to-workspace 3; }
-        Mod+Shift+4 { move-column-to-workspace 4; }
-        Mod+Shift+5 { move-column-to-workspace 5; }
+        "Mod+Shift+U".action.move-column-to-workspace-down = {};
+        "Mod+Shift+I".action.move-column-to-workspace-up = {};
 
-        Mod+BracketLeft { consume-or-expel-window-left; }
-        Mod+BracketRight { consume-or-expel-window-right; }
+        "Mod+Shift+Page_Down".action.move-workspace-down = {};
+        "Mod+Shift+Page_Up".action.move-workspace-up = {};
 
-        Mod+Comma { consume-window-into-column; }
-        Mod+Period { expel-window-from-column; }
+        "Mod+1".action.focus-workspace = 1;
+        "Mod+2".action.focus-workspace = 2;
+        "Mod+3".action.focus-workspace = 3;
+        "Mod+4".action.focus-workspace = 4;
+        "Mod+5".action.focus-workspace = 5;
 
-        Mod+R { switch-preset-column-width; }
-        Mod+Shift+R { switch-preset-column-width-back; }
+        "Mod+Shift+1".action.move-column-to-workspace = 1;
+        "Mod+Shift+2".action.move-column-to-workspace = 2;
+        "Mod+Shift+3".action.move-column-to-workspace = 3;
+        "Mod+Shift+4".action.move-column-to-workspace = 4;
+        "Mod+Shift+5".action.move-column-to-workspace = 5;
 
-        Mod+Ctrl+Shift+R { switch-preset-window-height; }
-        Mod+Ctrl+R { reset-window-height; }
+        "Mod+BracketLeft".action.consume-or-expel-window-left = {};
+        "Mod+BracketRight".action.consume-or-expel-window-right = {};
 
-        Mod+Space { maximize-column; }
-        Mod+M { maximize-window-to-edges; }
+        "Mod+Comma".action.consume-window-into-column = {};
+        "Mod+Period".action.expel-window-from-column = {};
 
-        Mod+Ctrl+F { expand-column-to-available-width; }
+        "Mod+R".action.switch-preset-column-width = {};
+        "Mod+Shift+R".action.switch-preset-column-width-back = {};
 
-        Mod+C { center-column; }
-        Mod+Ctrl+C { center-visible-columns; }
+        "Mod+Ctrl+Shift+R".action.switch-preset-window-height = {};
+        "Mod+Ctrl+R".action.reset-window-height = {};
 
-        Mod+Minus { set-column-width "-10%"; }
-        Mod+Equal { set-column-width "+10%"; }
+        "Mod+Space".action.maximize-column = {};
+        "Mod+M".action.maximize-window-to-edges = {};
 
-        Mod+Shift+Minus { set-window-height "-10%"; }
-        Mod+Shift+Equal { set-window-height "+10%"; }
+        "Mod+Ctrl+F".action.expand-column-to-available-width = {};
 
-        Mod+V { toggle-window-floating; }
-        Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+        "Mod+C".action.center-column = {};
+        "Mod+Ctrl+C".action.center-visible-columns = {};
 
-        Mod+W { toggle-column-tabbed-display; }
+        "Mod+Minus".action.set-column-width = "-10%";
+        "Mod+Equal".action.set-column-width = "+10%";
 
-        // Escape hatch for clients inhibiting the compositor shortcuts.
-        Mod+Escape allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-        Ctrl+Alt+Delete { quit; }
-      '';
+        "Mod+Shift+Minus".action.set-window-height = "-10%";
+        "Mod+Shift+Equal".action.set-window-height = "+10%";
+
+        "Mod+V".action.toggle-window-floating = {};
+        "Mod+Shift+V".action.switch-focus-between-floating-and-tiling = {};
+
+        "Mod+W".action.toggle-column-tabbed-display = {};
+
+        "Mod+Escape" = {
+          allow-inhibiting = false;
+          action.toggle-keyboard-shortcuts-inhibit = {};
+        };
+        "Ctrl+Alt+Delete".action.quit = {};
+      };
     };
   };
 }

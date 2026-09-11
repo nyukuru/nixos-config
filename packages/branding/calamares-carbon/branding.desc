@@ -1,0 +1,44 @@
+componentName: carbon
+
+welcomeStyleCalamares: false
+welcomeExpandingLogo: true
+
+windowExpanding: normal
+windowSize: 1000px,700px
+windowPlacement: center
+
+sidebar: widget
+navigation: widget
+
+strings:
+    productName:         carbon
+    shortProductName:    carbon
+    version:
+    shortVersion:
+    versionedName:       carbon
+    shortVersionedName:  carbon
+    bootloaderEntryName: NyuOS
+    productUrl:          https://nixos.org/
+    supportUrl:          https://nixos.org/manual/nixos
+    knownIssuesUrl:      https://github.com/NixOS/nixpkgs/issues
+    releaseNotesUrl:     https://nixos.org/manual/nixos/stable/release-notes.html
+    donateUrl:
+
+images:
+    productIcon:         "nixos-logomark-default-flat-none.svg"
+    productLogo:         "white.png"
+    productWelcome:      "nixos-logomark-default-flat-none.svg"
+
+style:
+   SidebarBackground:        "#1C1917"
+   SidebarText:              "#C8C4BE"
+   SidebarTextCurrent:       "#E8E5DF"
+   SidebarBackgroundCurrent: "#332F2C"
+
+slideshow:               "show.qml"
+slideshowAPI: 2
+
+uploadServer:
+    type: none
+    url:
+    sizeLimit: -1

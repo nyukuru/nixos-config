@@ -23,4 +23,10 @@
       "nintendo-switch"
     ];
   };
+
+  nixos = {
+    isNormalUser = true;
+    extraGroups = ["wheel" "networkmanager" "video"];
+    initialHashedPassword = "";
+  };
 }

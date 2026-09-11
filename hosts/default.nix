@@ -22,7 +22,6 @@ in {
         extraModules = [
           hw.dell-xps-15-9520-nvidia
           disko
-          #windex
         ];
       };
     };
@@ -35,7 +34,7 @@ in {
           hostname = "carbon";
           system = system;
           users = [
-            "nyu"
+            "nixos"
           ];
           modules = mkModules {
             form = ["iso" "graphical"];

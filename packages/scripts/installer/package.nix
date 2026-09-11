@@ -33,6 +33,10 @@ in
       -h, --help    Show this help message and exit.
       --dry-run     Validate and show the disko plan without formatting,
                     installing, or copying anything.
+      -y, --yes     Skip the "type yes to continue" confirmation before
+                    destroying the disk(s). For non-interactive callers
+                    (e.g. a Calamares job) that have already confirmed
+                    elsewhere.
 
     Arguments:
       <flake>#<hostname>   e.g. .#carbon - "." resolves to the live
@@ -43,6 +47,7 @@ in
     }
 
     DRY_RUN=0
+    SKIP_CONFIRM=0
     ARGS=()
 
     while [[ $# -gt 0 ]]; do
@@ -53,6 +58,10 @@ in
           ;;
         --dry-run)
           DRY_RUN=1
+          shift
+          ;;
+        -y|--yes)
+          SKIP_CONFIRM=1
           shift
           ;;
         -*)
@@ -100,7 +109,7 @@ in
     DISKO_ARGS=(--mode destroy,format,mount --yes-wipe-all-disks "$DISK_CONFIG")
     if [[ $DRY_RUN -eq 1 ]]; then
       DISKO_ARGS=(--dry-run "''${DISKO_ARGS[@]}")
-    else
+    elif [[ $SKIP_CONFIRM -ne 1 ]]; then
       echo
       echo "About to destroy, format and mount the disk(s) declared in $DISK_CONFIG."
       read -r -p "Type 'yes' to continue: " CONFIRM

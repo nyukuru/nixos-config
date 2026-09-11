@@ -6,7 +6,6 @@
 }: let
   inherit
     (lib.options)
-    mkPackageOption
     mkEnableOption
     mkOption
     ;
@@ -32,6 +31,8 @@
     (lib.types)
     listOf
     enum
+    nullOr
+    package
     str
     ;
 
@@ -46,8 +47,10 @@ in {
   options.nyu.boot.greetd = {
     enable = mkEnableOption "greetd." // {default = true;};
 
-    greeter = mkPackageOption pkgs "greetd" {
-      default = "tuigreet";
+    greeter = mkOption {
+      type = nullOr package;
+      default = pkgs.tuigreet;
+      description = "Greeter shown for interactive logins; null disables it (e.g. for an always-autologin session).";
     };
 
     greeterArgs = mkOption {
@@ -63,6 +66,7 @@ in {
 
     autologin = {
       enable = mkEnableOption "Autologin.";
+
       user = mkOption {
         type = enum (attrNames config.users.users);
         description = "Determines which user is automatically logged in.";
@@ -81,12 +85,15 @@ in {
       enable = true;
 
       settings = {
-        default_session = {
-          command = concatStringsSep " " (
-            [(getExe cfg.greeter)]
-            ++ cfg.greeterArgs
-          );
-        };
+        default_session =
+          if cfg.greeter == null
+          then {inherit (cfg.autologin) user command;}
+          else {
+            command = concatStringsSep " " (
+              [(getExe cfg.greeter)]
+              ++ cfg.greeterArgs
+            );
+          };
 
         # autologin start wm
         initial_session = mkIf cfg.autologin.enable {

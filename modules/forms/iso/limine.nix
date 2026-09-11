@@ -7,7 +7,10 @@
 }: let
   inherit (lib.strings) concatStringsSep optionalString;
   inherit (lib.modules) mkForce;
-  inherit (lib.attrsets) mapAttrsToList;
+  inherit (lib.options) mkOption;
+  inherit (lib.attrsets) mapAttrsToList attrNames;
+  inherit (lib.types) listOf nullOr str;
+  inherit (lib.lists) optional;
   inherit (builtins) baseNameOf;
 
   limineCd = pkgs.limine.override {buildCDs = true;};
@@ -20,11 +23,27 @@
     then "no"
     else toString config.boot.loader.timeout;
 
-  kernelImage = "/boot/" + (config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile);
-  initrdImage = "/boot/" + (config.system.build.initialRamdisk + "/" + config.system.boot.loader.initrdFile);
+  defaultLabel = config.nyu.iso.limine.defaultLabel;
+  specialisationOrder = config.nyu.iso.limine.specialisationOrder;
 
-  cmdline = concatStringsSep " " (
-    ["init=${config.system.build.toplevel}/init"] ++ config.boot.kernelParams
+  mkEntry = label: cfg: let
+    kernelImage = "/boot/" + (cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile);
+    initrdImage = "/boot/" + (cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile);
+
+    cmdline = concatStringsSep " " (
+      ["init=${cfg.system.build.toplevel}/init"] ++ cfg.boot.kernelParams
+    );
+  in ''
+    /${label}
+      protocol: linux
+      path: boot():${kernelImage}
+      module_path: boot():${initrdImage}
+      cmdline: ${cmdline}
+  '';
+
+  entries = concatStringsSep "\n" (
+    optional (defaultLabel != null) (mkEntry defaultLabel config)
+    ++ map (name: mkEntry name config.specialisation.${name}.configuration) specialisationOrder
   );
 
   wallpaperTarget = path: "/limine/wallpapers/" + baseNameOf "${path}";
@@ -32,11 +51,12 @@
   styleLine = name: value:
     optionalString (value != null) "${name}: ${
       if builtins.isBool value
-      then (
-        if value
-        then "yes"
-        else "no"
-      )
+      then
+        (
+          if value
+          then "yes"
+          else "no"
+        )
       else toString value
     }\n";
 
@@ -66,12 +86,7 @@
     timeout: ${timeout}
     ${limineCfg.extraConfig}
     ${styleLines}
-    /${config.system.nixos.distroName} ${config.system.nixos.label}
-      protocol: linux
-      path: boot():${kernelImage}
-      module_path: boot():${initrdImage}
-      cmdline: ${cmdline}
-
+    ${entries}
     ${limineCfg.extraEntries}
   '';
 
@@ -82,58 +97,75 @@
     })
     limineCfg.additionalFiles;
 
-  wallpaperEntries = map (w: {
-    source = w;
-    target = wallpaperTarget w;
-  })
-  style.wallpapers;
+  wallpaperEntries =
+    map (w: {
+      source = w;
+      target = wallpaperTarget w;
+    })
+    style.wallpapers;
 in {
-  isoImage = {
-    contents =
-      [
-        {
-          source = pkgs.emptyDirectory;
-          target = "/isolinux";
-        }
-        {
-          source = "${limineCd}/share/limine/limine-bios-cd.bin";
-          target = "/boot/limine/limine-bios-cd.bin";
-        }
-        {
-          source = "${limineCd}/share/limine/limine-bios.sys";
-          target = "/boot/limine/limine-bios.sys";
-        }
-        {
-          source = "${limineCd}/share/limine/limine-uefi-cd.bin";
-          target = "/boot/limine/limine-uefi-cd.bin";
-        }
-        {
-          source = "${limineCd}/share/limine/BOOTX64.EFI";
-          target = "/EFI/BOOT/BOOTX64.EFI";
-        }
-        {
-          source = limineConf;
-          target = "/boot/limine/limine.conf";
-        }
-      ]
-      ++ additionalFileEntries
-      ++ wallpaperEntries;
+  options.nyu.iso.limine = {
+    defaultLabel = mkOption {
+      type = nullOr str;
+      default = null;
+      description = "Label for a limine boot menu entry for the un-specialised (default) config; omitted if null.";
+    };
+
+    specialisationOrder = mkOption {
+      type = listOf str;
+      default = attrNames config.specialisation;
+      description = "Order (and labels) of specialisations shown as limine boot menu entries.";
+    };
   };
 
-  system.build.image = mkForce config.system.build.isoImage;
-  system.build.isoImage = mkForce (pkgs.callPackage "${modulesPath}/../lib/make-iso9660-image.nix" {
-    inherit (config.isoImage) compressImage volumeID contents squashfsCompression;
-    isoName = "${config.image.baseName}.iso";
+  config = {
+    isoImage = {
+      contents =
+        [
+          {
+            source = pkgs.emptyDirectory;
+            target = "/isolinux";
+          }
+          {
+            source = "${limineCd}/share/limine/limine-bios-cd.bin";
+            target = "/boot/limine/limine-bios-cd.bin";
+          }
+          {
+            source = "${limineCd}/share/limine/limine-bios.sys";
+            target = "/boot/limine/limine-bios.sys";
+          }
+          {
+            source = "${limineCd}/share/limine/limine-uefi-cd.bin";
+            target = "/boot/limine/limine-uefi-cd.bin";
+          }
+          {
+            source = "${limineCd}/share/limine/BOOTX64.EFI";
+            target = "/EFI/BOOT/BOOTX64.EFI";
+          }
+          {
+            source = limineConf;
+            target = "/boot/limine/limine.conf";
+          }
+        ]
+        ++ additionalFileEntries
+        ++ wallpaperEntries;
+    };
 
-    bootable = true;
-    bootImage = "/boot/limine/limine-bios-cd.bin";
+    system.build.image = mkForce config.system.build.isoImage;
+    system.build.isoImage = mkForce (pkgs.callPackage "${modulesPath}/../lib/make-iso9660-image.nix" {
+      inherit (config.isoImage) compressImage volumeID contents squashfsCompression;
+      isoName = "${config.image.baseName}.iso";
 
-    efiBootable = true;
-    efiBootImage = "/boot/limine/limine-uefi-cd.bin";
+      bootable = true;
+      bootImage = "/boot/limine/limine-bios-cd.bin";
 
-    usbBootable = true;
-    isohybridMbrImage = "${pkgs.syslinux}/share/syslinux/isohdpfx.bin";
+      efiBootable = true;
+      efiBootImage = "/boot/limine/limine-uefi-cd.bin";
 
-    squashfsContents = config.isoImage.storeContents;
-  });
+      usbBootable = true;
+      isohybridMbrImage = "${pkgs.syslinux}/share/syslinux/isohdpfx.bin";
+
+      squashfsContents = config.isoImage.storeContents;
+    });
+  };
 }
