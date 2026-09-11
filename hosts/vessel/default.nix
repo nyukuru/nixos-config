@@ -8,12 +8,6 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    # Utils
-    unzip
-    unrar
-    zip
-    rar
-
     openvpn
     filezilla
     obsidian

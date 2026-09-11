@@ -186,6 +186,11 @@ in {
       cifs-utils
       sbctl
 
+      unzip
+      unrar
+      zip
+      rar
+
       vim
     ]);
 
