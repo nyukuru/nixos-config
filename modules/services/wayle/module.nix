@@ -14,6 +14,7 @@
   inherit
     (lib.modules)
     mkIf
+    mkDefault
     ;
 
   inherit
@@ -24,6 +25,9 @@
 
   toml = pkgs.formats.toml {};
   cfg = config.nyu.services.wayle;
+  colors = config.style.colors;
+
+  hex = c: "#${c}";
 
   wrapConfigHome = package:
     pkgs.symlinkJoin {
@@ -68,6 +72,111 @@ in {
   };
 
   config = mkIf cfg.enable {
+    nyu.services.wayle = {
+      config = mkDefault {
+        bar = {
+          scale = 0.8;
+          bg = "bg";
+          border-location = "bottom";
+          border-width = 4;
+          border-color = hex colors.base8;
+          module-gap = 0.5;
+          button-group-module-gap = 0.5;
+
+          layout = [
+            {
+              monitor = "*";
+              left = ["dashboard" "clock" "bluetooth" "idle-inhibit" "systray"];
+              center = ["niri-workspaces"];
+              right = ["volume" "brightness" "battery"];
+            }
+          ];
+        };
+
+        modules = {
+          clock = {
+            format = "%b %d %I:%M %p";
+            border-show = true;
+            border-color = "border-accent";
+            icon-bg-color = "accent";
+            label-color = "accent";
+          };
+          dashboard = {
+            border-show = true;
+            border-color = "border-accent";
+            icon-bg-color = "accent";
+          };
+          bluetooth = {
+            border-show = true;
+            border-color = "border-accent";
+            icon-bg-color = "accent";
+            label-color = "accent";
+          };
+          systray = {
+            border-show = true;
+            border-color = "border-accent";
+          };
+          "idle-inhibit" = {
+            border-show = true;
+            border-color = "border-accent";
+            label-show = false;
+            icon-bg-color = "accent";
+          };
+          volume = {
+            border-show = true;
+            border-color = "border-accent";
+            icon-bg-color = "accent";
+            label-color = "accent";
+          };
+          brightness = {
+            border-show = true;
+            border-color = "border-accent";
+            icon-bg-color = "accent";
+            label-color = "accent";
+          };
+          battery = {
+            border-show = true;
+            border-color = "border-accent";
+            icon-bg-color = "accent";
+            label-color = "accent";
+          };
+          "niri-workspaces" = {
+            "min-workspace-count" = 5;
+            "display-mode" = "none";
+            "label-strategy" = "index";
+            "app-icons-show" = true;
+            "app-icons-dedupe" = true;
+            "border-show" = true;
+            "border-color" = hex colors.base8;
+            "workspace-padding" = 0.8;
+          };
+        };
+
+        styling.palette = {
+          bg = hex colors.background;
+          surface = hex colors.background;
+          elevated = hex colors.base8;
+          fg = hex colors.foreground;
+          "fg-muted" = hex colors.base6;
+          primary = hex colors.baseB;
+          red = hex colors.base1;
+          yellow = hex colors.base3;
+          green = hex colors.base2;
+          blue = hex colors.base4;
+        };
+      };
+
+      # min-workspace-count and border-color only apply to the workspaces
+      # container as a whole; the config has no per-button border/separator
+      # option, so give each workspace its own border here, reusing the same
+      # --ws-border-color/--ws-border-width the container itself is drawn with.
+      styles = mkDefault ''
+        .workspaces.niri .workspace {
+          border: var(--ws-border-width) solid var(--ws-border-color);
+        }
+      '';
+    };
+
     environment = {
       systemPackages = [cfg.package];
       etc = {
@@ -89,6 +198,11 @@ in {
         StartLimitIntervalSec = 30;
         StartLimitBurst = 5;
       };
+
+      # Without this, wayle only gets the minimal default PATH (coreutils,
+      # findutils, grep, sed, systemd) - no `sh`, so every dashboard button
+      # that shells out (lock, logout, reboot, poweroff) fails to spawn.
+      path = ["/run/current-system/sw"];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/wayle shell";

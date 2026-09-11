@@ -38,10 +38,10 @@
   cfg = config.nyu.programs.zsh;
 in {
   options.nyu.programs.zsh = {
-    enable = mkEnableOption "ZSH shell.";
+    enable = mkEnableOption "ZSH shell." // {default = true;};
 
     starship = {
-      enable = mkEnableOption "Starship prompt.";
+      enable = mkEnableOption "Starship prompt." // {default = true;};
       prompt = mkOption {
         type = str;
         default = "";

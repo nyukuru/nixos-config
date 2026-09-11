@@ -11,8 +11,6 @@
 in {
   imports = [
     ./nvim.nix
-    ./sway.nix
-    ./dunst.nix
     ./waybar.nix
   ];
 
@@ -43,8 +41,6 @@ in {
       baseF = "c1c1c1";
     };
   };
-
-  nyufox.enable = true;
 
   gtk = {
     /*

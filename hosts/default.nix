@@ -17,7 +17,7 @@ in {
         "nyu"
       ];
       modules = mkModules {
-        form = "laptop";
+        form = ["laptop" "graphical"];
         theme = "nyubones";
         extraModules = [
           hw.dell-xps-15-9520-nvidia
@@ -38,7 +38,7 @@ in {
             "nyu"
           ];
           modules = mkModules {
-            form = "iso";
+            form = ["iso" "graphical"];
             theme = "eumyangu";
           };
         }).config.system.build.image;

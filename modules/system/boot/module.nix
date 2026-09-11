@@ -8,15 +8,10 @@
     mkEnableOption
     ;
 
-  inherit
-    (lib.lists)
-    optionals
-    ;
-
   cfg = config.nyu.boot;
 in {
   imports = [
-    ./loaders.nix
+    ./limine.nix
     ./plymouth.nix
     ./greetd.nix
   ];
@@ -26,7 +21,7 @@ in {
   };
 
   config.boot = {
-    kernelParams = optionals cfg.silent.enable [
+    kernelParams = lib.lists.optionals cfg.silent.enable [
       "quiet"
 
       # Errors or worse

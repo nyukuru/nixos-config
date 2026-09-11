@@ -91,6 +91,7 @@ in {
   imports = [
     ./preferences.nix
     ./policies.nix
+    ./nyufox.nix
   ];
 
   options.nyu.programs.firefox = {

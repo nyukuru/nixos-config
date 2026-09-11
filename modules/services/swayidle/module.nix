@@ -83,7 +83,7 @@ in {
 
     waitForCommand = mkOption {
       type = bool;
-      default = false;
+      default = true;
       description = ''
         Pass swayidle `-w`: wait for each command to finish before
         continuing, so e.g. a `beforeSleep` lock command finishes before the
@@ -93,25 +93,40 @@ in {
 
     timeouts = mkOption {
       type = listOf timeoutModule;
-      default = [];
+      default = [
+        {
+          timeout = 100;
+          command = "brightnessctl -s set 10%";
+          resumeCommand = "brightnessctl -r";
+        }
+        {
+          timeout = 200;
+          command = "swaylock";
+        }
+        {
+          timeout = 220;
+          command = "niri msg action power-off-monitors";
+          resumeCommand = "niri msg action power-on-monitors";
+        }
+      ];
       description = "Idle timeout events, see the EVENTS section of swayidle(1).";
     };
 
     beforeSleep = mkOption {
       type = nullOr str;
-      default = null;
+      default = "swaylock";
       description = "Command to run before the system sleeps.";
     };
 
     afterResume = mkOption {
       type = nullOr str;
-      default = null;
+      default = "niri msg action power-on-monitors";
       description = "Command to run after the system resumes from sleep.";
     };
 
     lock = mkOption {
       type = nullOr str;
-      default = null;
+      default = "pidof swaylock || swaylock";
       description = "Command to run when logind signals the session should lock.";
     };
 

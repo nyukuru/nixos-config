@@ -44,7 +44,7 @@
   cfg = config.nyu.boot.greetd;
 in {
   options.nyu.boot.greetd = {
-    enable = mkEnableOption "greetd.";
+    enable = mkEnableOption "greetd." // {default = true;};
 
     greeter = mkPackageOption pkgs "greetd" {
       default = "tuigreet";

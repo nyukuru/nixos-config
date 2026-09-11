@@ -31,18 +31,11 @@
 in {
   imports = [
     ./nvim.nix
-    ./sway.nix
-    ./niri.nix
-    ./dunst.nix
-    ./wayle.nix
-    ./limine.nix
-    ./swaylock.nix
-    ./swayidle.nix
-    ./fuzzel.nix
   ];
 
   style = {
     wallpaper = ./sailor.png;
+    bootWallpaper = ./leaves.png;
 
     colors = {
       background = "1C1917";
@@ -67,8 +60,6 @@ in {
       baseF = "E8E5DF";
     };
   };
-
-  nyufox.enable = true;
 
   gtk = {
     theme = {

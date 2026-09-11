@@ -1,42 +1,4 @@
-{pkgs, ...}: {
-  programs = {
-    foot.enable = true;
-    nix-ld.enable = true;
-    thunar.enable = true;
-
-    git = {
-      enable = true;
-      config = {
-        init = {
-          defaultBranch = "main";
-        };
-
-        user = {
-          name = "nyukuru";
-          email = "nyu@nyuku.ru";
-        };
-
-      };
-    };
-
-    nh = {
-      enable = true;
-      flake = "/home/nyu/nixos-config";
-      clean = {
-        enable = true;
-        extraArgs = "--keep-since 3d --keep 5";
-        dates = "Sun";
-      };
-    };
-
-    obs-studio = {
-      enable = true;
-      plugins = with pkgs.obs-studio-plugins; [
-        wlrobs
-        obs-pipewire-audio-capture
-      ];
-    };
-  };
+{
   /*
     ____          _                    __  __           _       _
    / ___|   _ ___| |_ ___  _ __ ___   |  \/  | ___   __| |_   _| | ___  ___
@@ -46,16 +8,9 @@
   */
   nyu.programs = {
     niri.enable = true;
-    nvim.enable = true;
     fusee-nano.enable = true;
 
-    zsh = {
-      enable = true;
-      starship.enable = true;
-    };
-
     firefox = {
-      enable = true;
       languagePacks = ["en-US"];
 
       /*
@@ -65,10 +20,6 @@
       bento = "{cb7f7992-81db-492b-9354-99844440ff9b}";
       */
       extensions = [
-        {
-          shortID = "ublock-origin";
-          addonID = "uBlock0@raymondhill.net";
-        }
         {
           shortID = "skip-redirect";
           addonID = "skipredirect@sblask";

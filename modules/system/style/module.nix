@@ -12,7 +12,6 @@
     (lib.types)
     package
     nullOr
-    enum
     path
     str
     int
@@ -24,22 +23,17 @@
       inherit default;
     };
 in {
-  imports = [
-    ./foot.nix
-    ./tty.nix
-  ];
-
   options.style = {
-    theme = mkOption {
-      type = nullOr (enum ["eumyangu"]);
-      default = "eumyangu";
-      description = "Theme to import settings from";
-    };
-
     wallpaper = mkOption {
       type = nullOr path;
       default = null;
       description = "Wallpaper background image";
+    };
+
+    bootWallpaper = mkOption {
+      type = nullOr path;
+      default = null;
+      description = "Wallpaper shown by the bootloader.";
     };
 
     colors = {

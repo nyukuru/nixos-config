@@ -3,38 +3,29 @@
   lib,
   ...
 }: let
-  inherit
-    (lib.options)
-    mkOption
-    ;
-
-  inherit
-    (lib.modules)
-    mkIf
-    ;
-
-  inherit
-    (lib.types)
-    int
-    ;
-
-  colors = config.style.colors;
-  cfg = config.programs.foot;
+  inherit (config.style) font colors;
 in {
-  options.programs.foot = {
-    font = {
-      size = mkOption {
-        type = int;
-        default = config.style.font.size;
-        description = "Font size of the terminal";
+  programs = {
+    git = {
+      enable = true;
+      config.init.defaultBranch = "main";
+    };
+
+    nix-ld.enable = true;
+
+    nh = {
+      enable = true;
+      flake = "/home/nyu/nixos-config";
+      clean = {
+        enable = true;
+        extraArgs = "--keep-since 3d --keep 5";
+        dates = "Sun";
       };
     };
-  };
 
-  config = mkIf config.programs.foot.enable {
-    programs.foot.settings = {
+    foot.settings = {
       main = {
-        font = "monospace:size=${toString cfg.font.size}";
+        font = "monospace:size=${toString font.size}";
         pad = "4x4";
       };
 

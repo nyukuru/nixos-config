@@ -48,6 +48,7 @@
     ;
 
   cfg = config.nyu.programs.niri;
+  colors = config.style.colors;
 
   brightness = "${pkgs.scripts.brightness}";
   screenshot = "${pkgs.scripts.niri-screenshot}";
@@ -118,19 +119,19 @@ in {
 
     wallpaper = mkOption {
       type = nullOr path;
-      default = null;
+      default = config.style.wallpaper;
       description = ''
         Image displayed as the background through swaybg.
-        Usually set from {option}`style.wallpaper` by a theme.
+        Defaults to {option}`style.wallpaper`.
       '';
     };
 
     backgroundColor = mkOption {
       type = nullOr str;
-      default = null;
+      default = "#${colors.base0}";
       description = ''
         Solid color (`#rrggbb`) drawn behind the wallpaper through swaybg.
-        Usually set from {option}`style.colors` by a theme.
+        Defaults to {option}`style.colors.base0`.
       '';
     };
 
@@ -167,9 +168,17 @@ in {
     # The default config settings
     nyu.programs.niri = {
       settings = ''
+        prefer-no-csd
+
         spawn-at-startup "uwsm" "finalize"
         ${optionalString (swaybgArgs != [])
           ''spawn-at-startup ${spawn (getExe' pkgs.swaybg "swaybg") swaybgArgs}''}
+
+        workspace "1"
+        workspace "2"
+        workspace "3"
+        workspace "4"
+        workspace "5"
 
         input {
             touchpad {
@@ -225,6 +234,26 @@ in {
       '';
 
       layout = ''
+        gaps 8
+
+        focus-ring {
+            off
+        }
+
+        border {
+            width 4
+            active-color "#${colors.baseB}"
+            inactive-color "#${colors.base8}"
+            urgent-color "#${colors.base1}"
+        }
+
+        shadow {
+            softness 30
+            spread 5
+            offset x=0 y=5
+            color "#${colors.base0}77"
+        }
+
         center-focused-column "on-overflow"
 
         // Widths cycled through by "switch-preset-column-width" (Mod+R).

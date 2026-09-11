@@ -1,43 +1,26 @@
-{pkgs, ...}: {
+{
   services = {
-    printing.enable = true;
-    gvfs.enable = true;
-    udisks2.enable = true;
     btrfs.autoScrub.enable = true;
-    gnome.gnome-keyring.enable = true;
-    blueman.enable = true;
-
-    udev = {
-      enable = true;
-      packages = with pkgs; [
-        edl
-      ];
-    };
-
-    dbus = {
-      enable = true;
-      packages = with pkgs; [
-        dconf
-      ];
-    };
+    udev.enable = true;
   };
 
-  boot.kernel.sysctl."kernel.yama.ptrace_scope" = 1;
-  boot.kernel.sysctl."net.core.bpf_jit_enable" = 1;
-
-  systemd = {
-    settings.Manager = {
-      RebootWatchdogUSec = "0";
-      ShutdownWatchdogUSec = "0";
-    };
-    services = {
-      fstrim = {
-        unitConfig.ConditionACPower = true;
-        serviceConfig = {
-          Nice = 19;
-          IOSchedulingClass = "idle";
-        };
-      };
+  services.pipewire.wireplumber.extraConfig = {
+    "10-alsa" = {
+      "monitor.alsa.rules" = [
+        {
+          matches = [
+            {
+              # Dell XPS 15 mic
+              "node.name" = "alsa_input.pci-0000_00_1f.3.analog-stereo";
+            }
+          ];
+          actions = {
+            update-props = {
+              "node.disabled" = true;
+            };
+          };
+        }
+      ];
     };
   };
 

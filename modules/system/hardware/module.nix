@@ -61,10 +61,18 @@ in {
 
   config = mkMerge [
     {
-      warnings = [
-        (mkIf (cfg.cpu == null) "CPU Type is undefined")
-        (mkIf (config.hardware.graphics.enable && ((cfg.igpu == null) || (cfg.dgpu == null)))
-          "GPU is undefined while graphics is enabled.")
+      # enableAllHardware pulls in every driver/firmware indiscriminately
+      # (e.g. the carbon live/installer medium), so an undeclared
+      # cpu/igpu/dgpu is expected there rather than a real omission.
+      assertions = [
+        {
+          assertion = config.hardware.enableAllHardware || cfg.cpu != null;
+          message = "CPU Type is undefined";
+        }
+        {
+          assertion = config.hardware.enableAllHardware || !config.hardware.graphics.enable || (cfg.igpu != null && cfg.dgpu != null);
+          message = "GPU is undefined while graphics is enabled.";
+        }
       ];
     }
     (mkIf (cfg.igpu != null || cfg.dgpu != null) {

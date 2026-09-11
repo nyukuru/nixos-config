@@ -25,17 +25,9 @@ in {
 
     security.tpm2 = {
       enable = true;
-
-      # Makes /dev/tpm[0-9] accessible to tss user.
       applyUdevRules = true;
-
-      # Exports interface environment variables.
       tctiEnvironment.enable = true;
-
-      # Resource manager daemon.
       abrmd.enable = true;
-
-      # Cryptographic library and tooling.
       pkcs11.enable = true;
     };
 

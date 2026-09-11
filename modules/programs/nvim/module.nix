@@ -56,7 +56,7 @@ in {
   ];
 
   options.nyu.programs.nvim = {
-    enable = mkEnableOption "Neovim text editor";
+    enable = mkEnableOption "Neovim text editor" // {default = true;};
     package = mkPackageOption pkgs "neovim-unwrapped" {};
 
     viAlias = mkEnableOption "Neovim symlink over vi" // {default = true;};

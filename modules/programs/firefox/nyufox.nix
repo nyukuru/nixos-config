@@ -5,24 +5,9 @@
   ...
 }: let
   inherit (lib.modules) mkIf;
-
-  inherit
-    (lib.strings)
-    concatMapAttrsStringSep
-    toJSON
-    ;
-
-  inherit
-    (lib.options)
-    mkEnableOption
-    mkOption
-    ;
-
-  inherit
-    (lib.types)
-    str
-    int
-    ;
+  inherit (lib.strings) concatMapAttrsStringSep toJSON;
+  inherit (lib.options) mkEnableOption mkOption;
+  inherit (lib.types) str int;
 
   mkColorOption = default:
     mkOption {
@@ -30,12 +15,11 @@
       type = str;
     };
 
-  # TODO -- remove two way dependency
   inherit (config.style) colors;
-  cfg = config.nyufox;
+  cfg = config.nyu.programs.firefox.nyufox;
 in {
-  options.nyufox = {
-    enable = mkEnableOption "nyu's firefox css edits";
+  options.nyu.programs.firefox.nyufox = {
+    enable = mkEnableOption "nyu's firefox css edits" // {default = true;};
 
     color = {
       background = mkColorOption "#${colors.base0}";
@@ -78,8 +62,8 @@ in {
 
   config = mkIf cfg.enable {
     nyu.programs.firefox = {
-      userChrome = pkgs.writeText "userChrome.css" (import ./userChrome.nix {inherit cfg;});
-      userContent = pkgs.writeText "userContent.css" (import ./userContent.nix {inherit cfg;});
+      userChrome = pkgs.writeText "userChrome.css" (import ./nyufox/userChrome.nix {inherit cfg;});
+      userContent = pkgs.writeText "userContent.css" (import ./nyufox/userContent.nix {inherit cfg;});
 
       preferences =
         concatMapAttrsStringSep "\n"

@@ -4,7 +4,7 @@
   ...
 }: {
   imports = [
-    ./auto-cpufreq.nix
+    ./power-profiles.nix
     ./acpid.nix
     ./upower.nix
   ];
@@ -16,7 +16,6 @@
 
   boot = {
     kernelModules = ["acpi_call"];
-    kernelParams = ["intel_pstate=disabled"]; # reccomended for auto-cpufreq
     extraModulePackages = with config.boot.kernelPackages; [
       acpi_call
       cpupower

@@ -7,8 +7,6 @@
     ./services.nix
   ];
 
-  virtualisation.docker.enable = true;
-
   environment.systemPackages = with pkgs; [
     # Utils
     unzip
@@ -33,7 +31,6 @@
     fractal
 
     # Work
-    android-tools
     tmux
 
     # Classes
@@ -48,17 +45,6 @@
     mangohud
     prismlauncher
   ];
-
-  /*
-  windex = {
-    enable = true;
-    cpu = "intel";
-
-    vfio = {
-      deviceIds = ["10de:25a2"];
-    };
-  };
-  */
 
   system.stateVersion = "24.05";
 }

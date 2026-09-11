@@ -23,7 +23,7 @@
   modules = inputs.self.nixosModules;
 
   mkModules = {
-    form ? null,
+    form ? [],
     theme ? null,
     extraModules ? [],
     defaultModules ? [
@@ -32,8 +32,9 @@
   }:
     map (m: m.all or m) (
       defaultModules
+      ++ [modules.forms.common]
       ++ extraModules
-      ++ optional (form != null) (modules.forms.${form} or (throw "No such form ${form}!"))
+      ++ map (f: modules.forms.${f} or (throw "No such form ${f}!")) form
       ++ optional (theme != null) (modules.themes.${theme} or (throw "No such theme ${theme}!"))
     );
 

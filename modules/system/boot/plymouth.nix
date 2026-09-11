@@ -17,7 +17,7 @@ in {
 
     themePackage = mkOption {
       type = nullOr package;
-      default = null;
+      default = pkgs.plymouth-hellonavi-theme;
       description = ''
         Loads a package in which a theme can be sourced from.
       '';
@@ -25,7 +25,7 @@ in {
 
     theme = mkOption {
       type = str;
-      default = "spinner";
+      default = "hellonavi";
       description = ''
         Selects a plymouth boot splash theme.
       '';

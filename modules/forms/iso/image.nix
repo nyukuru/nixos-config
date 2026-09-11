@@ -29,7 +29,7 @@ in {
     contents = [
       {
         source = cleanSource self;
-        target = "/nixos-config";
+        target = "/nixos-config-snapshot";
       }
     ];
   };

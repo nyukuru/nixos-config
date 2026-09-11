@@ -1,8 +1,4 @@
 {
-  programs = {
-    foot.enable = true;
-    nix-ld.enable = true;
-  };
   /*
     ____          _                    __  __           _       _
    / ___|   _ ___| |_ ___  _ __ ___   |  \/  | ___   __| |_   _| | ___  ___
@@ -12,15 +8,8 @@
   */
   nyu.programs = {
     sway.enable = true;
-    nvim.enable = true;
-
-    zsh = {
-      enable = true;
-      starship.enable = true;
-    };
 
     firefox = {
-      enable = true;
       languagePacks = ["en-US"];
 
       /*
@@ -39,10 +28,6 @@
       bitwarden-password-manager = "{446900e4-71c2-419f-a6a7-df9c091e268b}";
       */
       extensions = [
-        {
-          shortID = "ublock-origin";
-          addonID = "uBlock0@raymondhill.net";
-        }
         {
           shortID = "skip-redirect";
           addonID = "skipredirect@sblask";

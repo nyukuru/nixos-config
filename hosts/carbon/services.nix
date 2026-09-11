@@ -1,13 +1,4 @@
-{pkgs, ...}: {
-  services = {
-    dbus = {
-      enable = true;
-      packages = with pkgs; [
-        dconf
-        gcr
-      ];
-    };
-  };
+{
   /*
     ____          _                    __  __           _       _
    / ___|   _ ___| |_ ___  _ __ ___   |  \/  | ___   __| |_   _| | ___  ___

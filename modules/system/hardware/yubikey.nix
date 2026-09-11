@@ -14,23 +14,10 @@
     mkIf
     ;
 
-  inherit
-    (lib.lists)
-    optionals
-    ;
-
   cfg = config.nyu.hardware.yubikey;
 in {
   options.nyu.hardware.yubikey = {
-    enable = mkEnableOption "Yubikey device support and tooling.";
-
-    cliTools = {
-      enable = mkEnableOption "CLI based yubikey tooling." // {default = true;};
-    };
-
-    guiTools = {
-      enable = mkEnableOption "GUI based yubikey tooling.";
-    };
+    enable = mkEnableOption "Yubikey device support and tooling." // {default = true;};
   };
 
   config = mkIf cfg.enable {
@@ -43,14 +30,11 @@ in {
       ];
     };
 
-    environment.systemPackages = with pkgs;
-      optionals cfg.cliTools.enable [
-        yubikey-manager
-        yubikey-personalization
-        yubico-piv-tool
-      ]
-      ++ optionals cfg.guiTools.enable [
-        yubioath-flutter
-      ];
+    environment.systemPackages = with pkgs; [
+      yubikey-manager
+      yubikey-personalization
+      yubico-piv-tool
+      yubioath-flutter
+    ];
   };
 }
