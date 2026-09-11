@@ -22,9 +22,9 @@ in {
     squashfsCompression = "zstd -Xcompression-level 19";
     appendToMenuLabel = "";
 
-    makeBiosBootable = true;
-    makeEfiBootable = true;
-    makeUsbBootable = true;
+    makeBiosBootable = false;
+    makeEfiBootable = false;
+    makeUsbBootable = false;
 
     contents = [
       {

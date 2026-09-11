@@ -151,7 +151,6 @@ in {
       "jffs2"
       "hfs"
       "hfsplus"
-      "squashfs"
       "udf"
       "hpfs"
       "jfs"

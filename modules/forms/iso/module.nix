@@ -13,9 +13,8 @@ in {
 
     ./image.nix
     ./installer.nix
+    ./limine.nix
   ];
-
-  boot.loader.grub.memtest86.enable = true;
 
   hardware = {
     enableRedistributableFirmware = true;
@@ -24,8 +23,6 @@ in {
     enableAllFirmware = true;
   };
 
-  # An installation medium cannot tolerate a host-defined filesystem layout
-  # on a fresh, unformatted machine.
   swapDevices = mkImageMediaOverride [];
   fileSystems = mkImageMediaOverride config.lib.isoFileSystems;
   boot.initrd.luks.devices = mkImageMediaOverride {};
