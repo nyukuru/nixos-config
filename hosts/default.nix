@@ -39,7 +39,7 @@ in {
           ];
           modules = mkModules {
             form = ["iso" "graphical"];
-            theme = "eumyangu";
+            theme = "nyubones";
           };
         }).config.system.build.image;
 
