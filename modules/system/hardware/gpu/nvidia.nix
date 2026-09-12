@@ -7,6 +7,7 @@
   inherit
     (lib.modules)
     mkDefault
+    mkOverride
     mkIf
     ;
 
@@ -34,7 +35,7 @@ in {
         modesetting.enable = mkDefault true;
 
         prime.offload = {
-          enable = mkDefault isHybrid;
+          enable = mkOverride 995 isHybrid;
           enableOffloadCmd = mkDefault isHybrid;
         };
 
