@@ -24,6 +24,10 @@ in {
   };
 
   swapDevices = mkImageMediaOverride [];
+  zramSwap = {
+    enable = true;
+    memoryPercent = 150;
+  };
   fileSystems = mkImageMediaOverride config.lib.isoFileSystems;
   boot.initrd.luks.devices = mkImageMediaOverride {};
   boot.loader.timeout = mkImageMediaOverride null;
