@@ -10,11 +10,13 @@ pkgs.writers.writePython3Bin "calamares-launcher" {flakeIgnore = ["E501"];} (
     "@calamares@"
     "@lspci@"
     "@lsblk@"
+    "@modulesdir@"
   ]
   [
-    "${branding.calamares-carbon}/bin/calamares"
+    "${branding.calamares-nyuos}/bin/calamares"
     "${pciutils}/bin/lspci"
     "${util-linux}/bin/lsblk"
+    "${branding.calamares-nyuos.extensions}/lib/calamares/modules"
   ]
   ''
 import json
@@ -25,6 +27,7 @@ import subprocess
 CALAMARES = "@calamares@"
 LSPCI = "@lspci@"
 LSBLK = "@lsblk@"
+MODULESDIR = "@modulesdir@"
 
 ETC = "/etc/calamares"
 
@@ -108,22 +111,31 @@ def detect_disks():
 
 
 def write_disk_conf(disks):
-    if not disks:
-        return
-    items = "\n".join(
-        f'    - id: "{esc(d["device"])}"\n'
-        "      packages: []\n"
-        f'      name: "{esc(d["label"])}"\n'
-        '      description: ""'
-        for d in disks
-    )
+    if disks:
+        default_line = f'default: "{esc(disks[0]["device"])}"'
+        items = "\n".join(
+            f'    - id: "{esc(d["device"])}"\n'
+            "      packages: []\n"
+            f'      name: "{esc(d["label"])}"\n'
+            '      description: ""'
+            for d in disks
+        )
+    else:
+        default_line = ""
+        items = (
+            '    - id: ""\n'
+            "      packages: []\n"
+            '      name: "No disks detected"\n'
+            '      description: "Hardware detection could not find any disks. '
+            'Go back and check the internet-help step, or report this as a bug."'
+        )
     content = f''''mode: required
 method: legacy
 
 labels:
     step: "Disk"
 
-default: "{esc(disks[0]["device"])}"
+{default_line}
 
 items:
 {items}
@@ -141,7 +153,9 @@ def write_settings_conf(show_cpu, show_gpu):
         hw_pages.append("  - packagechooser@gpu")
     hw_pages_yaml = "\n".join(hw_pages)
 
-    content = f''''instances:
+    content = f''''modules-search: [local, {MODULESDIR}]
+
+instances:
 - id: internet-help
   module: notesqml
   config: notesqml-internet-help.conf
@@ -183,7 +197,7 @@ sequence:
 - show:
   - finished
 
-branding: carbon
+branding: nyuos
 
 prompt-install: false
 dont-chroot: false

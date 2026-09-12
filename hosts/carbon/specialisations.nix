@@ -30,7 +30,7 @@
 
     (lib.mkIf (config.specialisation != {}) {
       environment.systemPackages = [
-        pkgs.branding.calamares-carbon
+        pkgs.branding.calamares-nyuos
         pkgs.scripts.calamares-launcher
         pkgs.nmgui
       ];

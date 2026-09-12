@@ -1,4 +1,4 @@
-componentName: carbon
+componentName: nyuos
 
 welcomeStyleCalamares: false
 welcomeExpandingLogo: true
@@ -11,12 +11,12 @@ sidebar: widget
 navigation: widget
 
 strings:
-    productName:         carbon
-    shortProductName:    carbon
+    productName:         NyuOS
+    shortProductName:    NyuOS
     version:
     shortVersion:
-    versionedName:       carbon
-    shortVersionedName:  carbon
+    versionedName:       NyuOS
+    shortVersionedName:  NyuOS
     bootloaderEntryName: NyuOS
     productUrl:          https://nixos.org/
     supportUrl:          https://nixos.org/manual/nixos

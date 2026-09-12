@@ -34,7 +34,7 @@ in {
 
   options.nyu.hardware = {
     cpu = mkOption {
-      type = nullOr (enum ["pi" "intel" "amd"]);
+      type = nullOr (enum ["intel" "amd"]);
       default = null;
       description = ''
         The vendor/architecture of the CPU. Determines drivers and specializations for that cpu.
