@@ -93,7 +93,20 @@ def render_hardware_block(cpu, gpu_choice, facts):
 
 
 def to_posix_locale(bcp47):
-    return bcp47.replace("-", "_") + ".UTF-8" if bcp47 else "en_US.UTF-8"
+    if not bcp47:
+        return "en_US.UTF-8"
+
+    posix = bcp47.replace("-", "_")
+    if "_" in posix:
+        return posix + ".UTF-8"
+
+    import locale as _locale
+
+    alias = _locale.locale_alias.get(posix.lower())
+    if alias and "_" in alias.split(".")[0]:
+        return alias.split(".")[0] + ".UTF-8"
+
+    return "en_US.UTF-8"
 
 
 BTRFS_DISK_CONFIG = """{{inputs, ...}}: {{
