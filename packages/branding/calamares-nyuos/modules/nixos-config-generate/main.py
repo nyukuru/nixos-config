@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+import re
 import subprocess
 
 import libcalamares
@@ -17,6 +18,19 @@ GPU_PAIRS = {
     "nvidia-intel": ("intel", "nvidia"),
     "nvidia-amd": ("amd", "nvidia"),
 }
+
+NEW_USER_EXTRA_GROUPS = [
+    "wheel",
+    "systemd-journal",
+    "audio",
+    "video",
+    "input",
+    "docker",
+    "power",
+    "network",
+    "nix",
+    "networkmanager",
+]
 
 
 def gs(key, default=None):
@@ -80,7 +94,7 @@ BTRFS_DISK_CONFIG = """{{inputs, ...}}: {{
           type = "gpt";
           partitions = {{
             ESP = {{
-              size = "1G";
+              size = "2G";
               type = "EF00";
               content = {{
                 type = "filesystem";
@@ -114,7 +128,7 @@ BTRFS_DISK_CONFIG = """{{inputs, ...}}: {{
                     }};
                     "/swap" = {{
                       mountpoint = "/.swapvol";
-                      swap.swapfile.size = "8G";
+                      swap.swapfile.size = "16G";
                     }};
                   }};
                 }};
@@ -140,7 +154,7 @@ PLAIN_DISK_CONFIG = """{{inputs, ...}}: {{
           type = "gpt";
           partitions = {{
             ESP = {{
-              size = "1G";
+              size = "2G";
               type = "EF00";
               content = {{
                 type = "filesystem";
@@ -170,6 +184,54 @@ PLAIN_DISK_CONFIG = """{{inputs, ...}}: {{
   }};
 }}
 """
+
+
+def find_attr_block(content, name):
+    """Locate `name = { ... };` in a Nix attrset's text and return (start, end)
+    spanning the whole block including the trailing ';', or None if absent."""
+    match = re.search(rf"(?m)^\s*{re.escape(name)}\s*=\s*\{{", content)
+    if not match:
+        return None
+
+    depth = 0
+    i = match.end() - 1
+    while i < len(content):
+        if content[i] == "{":
+            depth += 1
+        elif content[i] == "}":
+            depth -= 1
+            if depth == 0:
+                break
+        i += 1
+    end = i + 1
+    if end < len(content) and content[end] == ";":
+        end += 1
+    return match.start(), end
+
+
+def upsert_user(users_content, username, hashed_password, extra_groups):
+    block_span = find_attr_block(users_content, username)
+    if block_span is not None:
+        start, end = block_span
+        block = users_content[start:end]
+        pw_line = f'initialHashedPassword = "{hashed_password}";'
+        if re.search(r'initialHashedPassword\s*=\s*"[^"]*";', block):
+            block = re.sub(r'initialHashedPassword\s*=\s*"[^"]*";', pw_line, block)
+        else:
+            block = re.sub(r"\{\s*\n", "{\n    " + pw_line + "\n", block, count=1)
+        return users_content[:start] + block + users_content[end:]
+
+    if not users_content.rstrip().endswith("}"):
+        raise ValueError("hosts/users.nix did not end with '}' as expected.")
+    groups_nix = " ".join(f'"{g}"' for g in extra_groups)
+    new_user = (
+        f"\n\n  {username} = {{\n"
+        "    isNormalUser = true;\n"
+        f"    extraGroups = [{groups_nix}];\n"
+        f'    initialHashedPassword = "{hashed_password}";\n'
+        "  };\n"
+    )
+    return users_content.rstrip()[:-1] + new_user + "}\n"
 
 
 def run():
@@ -244,17 +306,11 @@ def run():
 
     users_path = os.path.join(NIXOS_CONFIG, "hosts", "users.nix")
     with open(users_path) as f:
-        users_content = f.read().rstrip()
-    new_user = (
-        f"\n\n  {username} = {{\n"
-        "    isNormalUser = true;\n"
-        '    extraGroups = ["wheel" "networkmanager"];\n'
-        f'    initialHashedPassword = "{hashed_password}";\n'
-        "  };\n"
-    )
-    if not users_content.endswith("}"):
-        return ("nixos-config-generate failed", "hosts/users.nix did not end with '}' as expected.")
-    users_content = users_content[:-1] + new_user + "}\n"
+        users_content = f.read()
+    try:
+        users_content = upsert_user(users_content, username, hashed_password, NEW_USER_EXTRA_GROUPS)
+    except ValueError as e:
+        return ("nixos-config-generate failed", str(e))
     with open(users_path, "w") as f:
         f.write(users_content)
 

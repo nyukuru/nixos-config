@@ -2,20 +2,27 @@
   lib,
   writeShellScriptBin,
   coreutils,
+  gnugrep,
   jq,
   sudo,
   nix,
   nixos-install-tools,
   disko,
+  cryptsetup,
+  systemd,
 }: let
   mkdir = lib.getExe' coreutils "mkdir";
   cp = lib.getExe' coreutils "cp";
+  grep' = lib.getExe gnugrep;
   jq' = lib.getExe jq;
   sudo' = lib.getExe sudo;
   nix' = lib.getExe' nix "nix";
   nixosInstall = lib.getExe' nixos-install-tools "nixos-install";
   nixosEnter = lib.getExe' nixos-install-tools "nixos-enter";
   disko' = lib.getExe disko;
+  cryptsetup' = lib.getExe cryptsetup;
+  cryptenroll = lib.getExe' systemd "systemd-cryptenroll";
+  luksTpmTargets = ./luks-tpm-targets.nix;
 in
   writeShellScriptBin "installer" ''
     set -euo pipefail
@@ -126,6 +133,30 @@ in
     fi
 
     ${sudo'} ${nixosInstall} --root /mnt --flake "$FLAKE_PATH#$HOSTNAME" --no-root-password
+
+    LUKS_TSV="$(
+      ${nix'} eval --raw "$FLAKE_PATH#nixosConfigurations.$HOSTNAME.config.disko.devices.disk" \
+        --apply "import ${luksTpmTargets}"
+    )"
+
+    while IFS=$'\t' read -r luks_name password_file; do
+      [[ -z "$luks_name" ]] && continue
+      if [[ -z "$password_file" ]]; then
+        echo "Warning: LUKS device '$luks_name' requests TPM2 auto-unlock but has no passwordFile; skipping TPM enrollment." >&2
+        continue
+      fi
+
+      luks_device="$(${sudo'} ${cryptsetup'} status "$luks_name" | ${grep'} -oE '/dev/\S+' | head -n1 || true)"
+      if [[ -z "$luks_device" ]]; then
+        echo "Warning: could not resolve the underlying device for LUKS mapping '$luks_name'; skipping TPM enrollment." >&2
+        continue
+      fi
+
+      echo "Enrolling $luks_device ('$luks_name') into the TPM so it unlocks automatically on boot..."
+      if ! ${sudo'} ${cryptenroll} --tpm2-device=auto --unlock-key-file="$password_file" "$luks_device"; then
+        echo "Warning: TPM2 enrollment failed for $luks_device; you'll need to enter the disk password at boot." >&2
+      fi
+    done <<<"$LUKS_TSV"
 
     USERS_TSV="$(
       ${nix'} eval --json "$FLAKE_PATH#nixosConfigurations.$HOSTNAME.config.users.users" \

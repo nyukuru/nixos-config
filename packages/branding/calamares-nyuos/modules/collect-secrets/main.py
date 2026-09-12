@@ -9,26 +9,18 @@ SECRETS_PATH = "/run/calamares-secrets.json"
 
 def ask_password(title, text):
     while True:
-        first = subprocess.run(
+        result = subprocess.run(
             ["zenity", "--password", "--title", title, "--text", text],
             capture_output=True,
         )
-        if first.returncode != 0:
+        if result.returncode != 0:
             return None
-        pw1 = first.stdout.decode().rstrip("\n")
+        password = result.stdout.decode().rstrip("\n")
 
-        second = subprocess.run(
-            ["zenity", "--password", "--title", title, "--text", f"Confirm: {text}"],
-            capture_output=True,
-        )
-        if second.returncode != 0:
-            return None
-        pw2 = second.stdout.decode().rstrip("\n")
+        if password:
+            return password
 
-        if pw1 and pw1 == pw2:
-            return pw1
-
-        subprocess.run(["zenity", "--error", "--text", "Passwords did not match, try again."])
+        subprocess.run(["zenity", "--error", "--text", "Password cannot be empty, try again."])
 
 
 def run():
