@@ -215,7 +215,11 @@ def main():
     )
     write_disk_conf(detect_disks())
 
-    os.execv(CALAMARES, [CALAMARES])
+    # calamares needs root to see real block devices
+    os.execvp(
+        "sudo",
+        ["sudo", "--preserve-env=WAYLAND_DISPLAY,XDG_RUNTIME_DIR", CALAMARES],
+    )
 
 
 if __name__ == "__main__":

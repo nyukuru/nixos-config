@@ -47,7 +47,11 @@
         spawn-at-startup = [{argv = ["${pkgs.scripts.calamares-launcher}/bin/calamares-launcher"];}];
         window-rules = [
           {
-            matches = [{app-id = "^calamares$";}];
+            matches = [{app-id = "^io\\.calamares\\.calamares$";}];
+            open-floating = true;
+          }
+          {
+            matches = [{app-id = "^com\\.network\\.manager$";}];
             open-floating = true;
           }
         ];
