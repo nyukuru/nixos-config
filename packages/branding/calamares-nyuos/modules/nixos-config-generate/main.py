@@ -296,8 +296,8 @@ def run():
             "    ./services.nix\n"
             "    ./system.nix\n"
             "  ];\n\n"
-            f'  i18n.defaultLocale = lib.mkDefault "{locale}";\n'
-            f'  console.keyMap = lib.mkDefault "{keymap}";\n\n'
+            f'  i18n.defaultLocale = "{locale}";\n'
+            f'  console.keyMap = "{keymap}";\n\n'
             "  system.stateVersion = lib.trivial.release;\n"
             "}\n"
         )
