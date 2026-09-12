@@ -1,5 +1,7 @@
 {
   runCommand,
+  symlinkJoin,
+  makeWrapper,
   calamares,
   calamares-nixos-extensions,
   glibcLocales,
@@ -51,15 +53,20 @@
       cp ${./notesqml-internet-help.qml} "$out/share/calamares/branding/nyuos/notesqml@internet-help.qml"
     '';
 in
-  (calamares.override {
-    extraWrapperArgs = [
-      "--prefix XDG_DATA_DIRS : ${extensions}/share"
-      "--prefix XDG_CONFIG_DIRS : ${extensions}/etc"
-      "--add-flag --xdg-config"
-      "--prefix PATH : ${zenity}/bin:${mkpasswd}/bin"
-    ];
-  })
-  // {
-    # so calamares-launcher can point modules-search at it
-    inherit extensions;
+  symlinkJoin {
+    name = "calamares-nyuos";
+    paths = [calamares];
+    nativeBuildInputs = [makeWrapper];
+    # wraps the already-built calamares binary instead of calamares.override,
+    # so editing branding/extensions never forces a Calamares C++ rebuild
+    postBuild = ''
+      wrapProgram $out/bin/calamares \
+        --prefix XDG_DATA_DIRS : ${extensions}/share \
+        --prefix XDG_CONFIG_DIRS : ${extensions}/etc \
+        --add-flag --xdg-config \
+        --prefix PATH : ${zenity}/bin:${mkpasswd}/bin
+    '';
+    passthru = {
+      inherit extensions;
+    };
   }
