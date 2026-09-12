@@ -69,13 +69,27 @@ def render_hardware_block(cpu, gpu_choice, facts):
     if not cpu or not igpu or not dgpu:
         return "hardware.enableAllHardware = true;"
 
-    return (
+    block = (
         "nyu.hardware = {\n"
         f'    cpu = "{cpu}";\n'
         f'    igpu = "{igpu}";\n'
         f'    dgpu = "{dgpu}";\n'
         "  };"
     )
+
+    if dgpu == "nvidia":
+        nvidia_bus_id = facts.get("nvidiaBusId")
+        igpu_bus_id = facts.get("igpuBusId")
+        if nvidia_bus_id and igpu_bus_id:
+            igpu_bus_id_key = "amdgpuBusId" if igpu == "amd" else "intelBusId"
+            block += (
+                "\n\n  hardware.nvidia.prime = {\n"
+                f'    nvidiaBusId = "{nvidia_bus_id}";\n'
+                f'    {igpu_bus_id_key} = "{igpu_bus_id}";\n'
+                "  };"
+            )
+
+    return block
 
 
 def to_posix_locale(bcp47):

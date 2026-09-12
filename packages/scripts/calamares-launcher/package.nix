@@ -58,32 +58,48 @@ GPU_CONTROLLER_KINDS = (
 )
 
 
+def to_bus_id(pci_addr):
+    """Convert an lspci "domain:bus:device.function" address (e.g.
+    "0000:01:00.0") to the NixOS X11 BusId format (e.g. "PCI:1:0:0")."""
+    _domain, bus, rest = pci_addr.split(":")
+    device, function = rest.split(".")
+    return f"PCI:{int(bus, 16)}:{int(device, 16)}:{int(function, 16)}"
+
+
 def detect_gpus():
     try:
         out = subprocess.run(
-            [LSPCI, "-nn"], capture_output=True, text=True, check=True
+            [LSPCI, "-Dnn"], capture_output=True, text=True, check=True
         ).stdout
     except (OSError, subprocess.CalledProcessError):
         return []
-    vendors = []
+    gpus = []
     for line in out.splitlines():
         if any(k in line for k in GPU_CONTROLLER_KINDS):
-            m = re.search(r"\[([0-9a-f]{4}):[0-9a-f]{4}\]", line)
-            if m and m.group(1) in GPU_VENDORS:
-                vendors.append(GPU_VENDORS[m.group(1)])
-    return vendors
+            addr_m = re.match(r"([0-9a-f]{4}:[0-9a-f]{2}:[0-9a-f]{2}\.[0-9a-f])", line)
+            vendor_m = re.search(r"\[([0-9a-f]{4}):[0-9a-f]{4}\]", line)
+            if addr_m and vendor_m and vendor_m.group(1) in GPU_VENDORS:
+                gpus.append((addr_m.group(1), GPU_VENDORS[vendor_m.group(1)]))
+    return gpus
 
 
-def gpu_facts(vendors):
-    vendors = [v for v in vendors if v]
-    if not vendors:
+def gpu_facts(gpus):
+    if not gpus:
         return {}
+    vendors = [v for _, v in gpus]
     if len(vendors) == 1:
         return {"igpu": vendors[0], "dgpu": vendors[0]}
     if "nvidia" in vendors:
-        others = [v for v in vendors if v != "nvidia"]
+        nvidia_addr = next(addr for addr, v in gpus if v == "nvidia")
+        others = [(addr, v) for addr, v in gpus if v != "nvidia"]
         if others:
-            return {"igpu": others[0], "dgpu": "nvidia"}
+            igpu_addr, igpu_vendor = others[0]
+            return {
+                "igpu": igpu_vendor,
+                "dgpu": "nvidia",
+                "nvidiaBusId": to_bus_id(nvidia_addr),
+                "igpuBusId": to_bus_id(igpu_addr),
+            }
     return {}
 
 
