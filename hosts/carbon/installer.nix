@@ -14,7 +14,7 @@ in {
 
   systemd.tmpfiles.rules =
     mapAttrsToList
-    (name: u: "C ${u.home}/nixos-config - - ${name} ${u.group} - /nixos-config-snapshot")
+    (name: u: "C ${u.home}/nixos-config - ${name} ${u.group} - /iso/nixos-config")
     normalUsers;
 
   users.motd = lib.mkDefault ''

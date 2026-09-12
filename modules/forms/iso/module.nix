@@ -26,6 +26,7 @@ in {
   swapDevices = mkImageMediaOverride [];
   fileSystems = mkImageMediaOverride config.lib.isoFileSystems;
   boot.initrd.luks.devices = mkImageMediaOverride {};
+  boot.loader.timeout = mkImageMediaOverride null;
 
   security.sudo.wheelNeedsPassword = mkImageMediaOverride false;
 

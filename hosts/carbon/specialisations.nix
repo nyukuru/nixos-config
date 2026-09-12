@@ -32,7 +32,13 @@
       environment.systemPackages = [
         pkgs.branding.calamares-carbon
         pkgs.scripts.calamares-launcher
-        pkgs.networkmanagerapplet
+        pkgs.nmgui
+      ];
+
+      systemd.tmpfiles.rules = [
+        "d /etc/calamares 0755 ${config.nyu.boot.greetd.autologin.user} root -"
+        "d /etc/calamares/modules 0755 ${config.nyu.boot.greetd.autologin.user} root -"
+        "f /run/detected-hardware.json 0644 ${config.nyu.boot.greetd.autologin.user} root -"
       ];
 
       nyu.services.wayle.enable = lib.mkForce false;
@@ -45,8 +51,30 @@
             open-floating = true;
           }
         ];
-        binds."Mod+I" = lib.mkForce {
-          action.spawn = lib.getExe' pkgs.networkmanagerapplet "nm-connection-editor";
+        binds = {
+          "Mod+I" = lib.mkForce {
+            hotkey-overlay.title = "Open Network Manager";
+            action.spawn = lib.getExe pkgs.nmgui;
+          };
+
+          "Super+Return".hotkey-overlay.title = lib.mkForce "Open Terminal";
+          "Super+F".hotkey-overlay.title = lib.mkForce "Open Browser";
+          "Super+Alt+L".hotkey-overlay.title = lib.mkForce "Lock Screen";
+          "Mod+D".hotkey-overlay.title = lib.mkForce "Open Application Launcher";
+
+          "Ctrl+Alt+Delete".hotkey-overlay.hidden = true;
+          "Mod+Shift+H".hotkey-overlay.hidden = true;
+          "Mod+Shift+L".hotkey-overlay.hidden = true;
+          "Mod+U".hotkey-overlay.hidden = true;
+          "Mod+Shift+U".hotkey-overlay.hidden = true;
+          "Mod+Shift+I".hotkey-overlay.hidden = true;
+          "Mod+R".hotkey-overlay.hidden = true;
+          "Mod+Space".hotkey-overlay.hidden = true;
+          "Mod+BracketLeft".hotkey-overlay.hidden = true;
+          "Mod+BracketRight".hotkey-overlay.hidden = true;
+          "Mod+V".hotkey-overlay.hidden = true;
+          "Mod+Shift+V".hotkey-overlay.hidden = true;
+          "Ctrl+Print".hotkey-overlay.hidden = true;
         };
       };
     })
