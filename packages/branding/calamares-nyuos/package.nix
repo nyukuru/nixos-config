@@ -57,12 +57,11 @@ in
     name = "calamares-nyuos";
     paths = [calamares];
     nativeBuildInputs = [makeWrapper];
-    # wraps the already-built calamares binary instead of calamares.override,
-    # so editing branding/extensions never forces a Calamares C++ rebuild
     postBuild = ''
       wrapProgram $out/bin/calamares \
         --prefix XDG_DATA_DIRS : ${extensions}/share \
         --prefix XDG_CONFIG_DIRS : ${extensions}/etc \
+        --prefix XDG_CONFIG_DIRS : /etc \
         --add-flag --xdg-config \
         --prefix PATH : ${zenity}/bin:${mkpasswd}/bin
     '';
