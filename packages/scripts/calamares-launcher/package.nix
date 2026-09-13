@@ -10,12 +10,14 @@ pkgs.writers.writePython3Bin "calamares-launcher" {flakeIgnore = ["E501"];} (
     "@calamares@"
     "@lspci@"
     "@lsblk@"
+    "@findmnt@"
     "@modulesdir@"
   ]
   [
     "${branding.calamares-nyuos}/bin/calamares"
     "${pciutils}/bin/lspci"
     "${util-linux}/bin/lsblk"
+    "${util-linux}/bin/findmnt"
     "${branding.calamares-nyuos.extensions}/lib/calamares/modules"
   ]
   ''
@@ -27,7 +29,11 @@ import subprocess
 CALAMARES = "@calamares@"
 LSPCI = "@lspci@"
 LSBLK = "@lsblk@"
+FINDMNT = "@findmnt@"
 MODULESDIR = "@modulesdir@"
+
+BY_ID_DIR = "/dev/disk/by-id"
+PREFERRED_ID_PREFIXES = ("nvme-", "ata-", "scsi-", "wwn-")
 
 ETC = "/etc/calamares"
 
@@ -103,26 +109,95 @@ def gpu_facts(gpus):
     return {}
 
 
+def boot_medium_disk():
+    """Name (e.g. "sda") of the disk backing the live installation medium,
+    so it never shows up as an install target. NixOS live ISOs mount the
+    medium itself at /iso."""
+    try:
+        src = subprocess.run(
+            [FINDMNT, "-no", "SOURCE", "/iso"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    if not src:
+        return None
+    try:
+        pkname = subprocess.run(
+            [LSBLK, "-dno", "PKNAME", src],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        pkname = ""
+    return pkname or os.path.basename(src)
+
+
+def stable_disk_path(name):
+    """Resolve a kernel disk name (e.g. "nvme1n1") to a stable
+    /dev/disk/by-id/... path. Kernel names like /dev/nvme0n1 aren't
+    guaranteed to enumerate in the same order every boot, so baking one
+    into a generated disk-config.nix can silently point at the wrong
+    physical disk later. Falls back to the kernel name if no by-id link
+    is found."""
+    devpath = f"/dev/{name}"
+    try:
+        entries = os.listdir(BY_ID_DIR)
+    except OSError:
+        return devpath
+
+    matches = []
+    for entry in entries:
+        if "-part" in entry:
+            continue
+        try:
+            target = os.path.realpath(os.path.join(BY_ID_DIR, entry))
+        except OSError:
+            continue
+        if os.path.basename(target) == name:
+            matches.append(entry)
+
+    if not matches:
+        return devpath
+
+    for prefix in PREFERRED_ID_PREFIXES:
+        preferred = sorted(e for e in matches if e.startswith(prefix))
+        if preferred:
+            return f"{BY_ID_DIR}/{preferred[0]}"
+    return f"{BY_ID_DIR}/{sorted(matches)[0]}"
+
+
 def detect_disks():
     try:
         out = subprocess.run(
-            [LSBLK, "-dno", "NAME,SIZE,MODEL", "-e", "7"],
+            [LSBLK, "-P", "-o", "NAME,SIZE,MODEL,TYPE", "-e", "7"],
             capture_output=True,
             text=True,
             check=True,
         ).stdout
     except (OSError, subprocess.CalledProcessError):
         return []
+
+    exclude = {boot_medium_disk()}
+
     disks = []
     for line in out.splitlines():
-        parts = line.split(None, 2)
-        if not parts:
+        fields = dict(re.findall(r'(\w+)="((?:[^"\\]|\\.)*)"', line))
+        if not fields:
             continue
-        name = parts[0]
-        size = parts[1] if len(parts) > 1 else ""
-        model = parts[2] if len(parts) > 2 else ""
-        label = f"/dev/{name} - {size} {model}".strip()
-        disks.append({"device": f"/dev/{name}", "label": label})
+        if fields.get("TYPE") != "disk":
+            continue
+        name = fields.get("NAME", "")
+        if not name or name in exclude or name.startswith("zram"):
+            continue
+        size = fields.get("SIZE", "")
+        model = fields.get("MODEL", "")
+        device = stable_disk_path(name)
+        label = f"{device} - {size} {model}".strip()
+        disks.append({"device": device, "label": label})
     return disks
 
 

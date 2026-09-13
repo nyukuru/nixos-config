@@ -4,7 +4,6 @@
   coreutils,
   gnugrep,
   jq,
-  sudo,
   nix,
   nixos-install-tools,
   disko,
@@ -15,7 +14,6 @@
   cp = lib.getExe' coreutils "cp";
   grep' = lib.getExe gnugrep;
   jq' = lib.getExe jq;
-  sudo' = lib.getExe sudo;
   nix' = lib.getExe' nix "nix";
   nixosInstall = lib.getExe' nixos-install-tools "nixos-install";
   nixosEnter = lib.getExe' nixos-install-tools "nixos-enter";
@@ -111,7 +109,7 @@ in
     fi
 
     echo "Validating $FLAKE_PATH#$HOSTNAME (building its toplevel closure)..."
-    ${nix'} build "$FLAKE_PATH#nixosConfigurations.$HOSTNAME.config.system.build.toplevel" --no-link
+    TOPLEVEL="$(${nix'} build "$FLAKE_PATH#nixosConfigurations.$HOSTNAME.config.system.build.toplevel" --no-link --print-out-paths)"
 
     DISKO_ARGS=(--mode destroy,format,mount --yes-wipe-all-disks "$DISK_CONFIG")
     if [[ $DRY_RUN -eq 1 ]]; then
@@ -126,13 +124,13 @@ in
       fi
     fi
 
-    ${sudo'} ${disko'} "''${DISKO_ARGS[@]}"
+    sudo ${disko'} "''${DISKO_ARGS[@]}"
 
     if [[ $DRY_RUN -eq 1 ]]; then
       exit 0
     fi
 
-    ${sudo'} ${nixosInstall} --root /mnt --flake "$FLAKE_PATH#$HOSTNAME" --no-root-password
+    sudo ${nixosInstall} --root /mnt --system "$TOPLEVEL" --no-root-password
 
     LUKS_TSV="$(
       ${nix'} eval --raw "$FLAKE_PATH#nixosConfigurations.$HOSTNAME.config.disko.devices.disk" \
@@ -146,14 +144,14 @@ in
         continue
       fi
 
-      luks_device="$(${sudo'} ${cryptsetup'} status "$luks_name" | ${grep'} -oE '/dev/\S+' | head -n1 || true)"
+      luks_device="$(sudo ${cryptsetup'} status "$luks_name" | ${grep'} -oE '/dev/\S+' | head -n1 || true)"
       if [[ -z "$luks_device" ]]; then
         echo "Warning: could not resolve the underlying device for LUKS mapping '$luks_name'; skipping TPM enrollment." >&2
         continue
       fi
 
       echo "Enrolling $luks_device ('$luks_name') into the TPM so it unlocks automatically on boot..."
-      if ! ${sudo'} ${cryptenroll} --tpm2-device=auto --unlock-key-file="$password_file" "$luks_device"; then
+      if ! sudo ${cryptenroll} --tpm2-device=auto --unlock-key-file="$password_file" "$luks_device"; then
         echo "Warning: TPM2 enrollment failed for $luks_device; you'll need to enter the disk password at boot." >&2
       fi
     done <<<"$LUKS_TSV"
@@ -166,9 +164,9 @@ in
     while IFS=$'\t' read -r user home group; do
       [[ -z "$user" ]] && continue
       echo "Copying nixos-config to $user's home ($home) on the new system..."
-      ${sudo'} ${mkdir} -p "/mnt$home"
-      ${sudo'} ${cp} -r "$FLAKE_PATH" "/mnt$home/nixos-config"
-      ${sudo'} ${nixosEnter} --root /mnt -c "chown -R $user:$group $home/nixos-config"
+      sudo ${mkdir} -p "/mnt$home"
+      sudo ${cp} -r "$FLAKE_PATH" "/mnt$home/nixos-config"
+      sudo ${nixosEnter} --root /mnt -c "chown -R $user:$group $home/nixos-config"
     done <<<"$USERS_TSV"
 
     echo

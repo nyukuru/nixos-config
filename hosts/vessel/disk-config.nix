@@ -1,6 +1,4 @@
-{inputs, ...}: {
-  imports = [inputs.disko.nixosModules.default];
-
+{
   disko.devices = {
     disk = {
       main = {

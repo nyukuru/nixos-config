@@ -117,9 +117,7 @@ def to_posix_locale(bcp47):
     return "en_US.UTF-8"
 
 
-BTRFS_DISK_CONFIG = """{{inputs, ...}}: {{
-  imports = [inputs.disko.nixosModules.default];
-
+BTRFS_DISK_CONFIG = """{{
   disko.devices = {{
     disk = {{
       main = {{
@@ -177,9 +175,7 @@ BTRFS_DISK_CONFIG = """{{inputs, ...}}: {{
 }}
 """
 
-PLAIN_DISK_CONFIG = """{{inputs, ...}}: {{
-  imports = [inputs.disko.nixosModules.default];
-
+PLAIN_DISK_CONFIG = """{{
   disko.devices = {{
     disk = {{
       main = {{
@@ -306,7 +302,27 @@ def run():
         pass
 
     host_dir = os.path.join(NIXOS_CONFIG, "hosts", hostname)
-    os.makedirs(host_dir, exist_ok=True)
+    if os.path.exists(host_dir):
+        return (
+            "nixos-config-generate failed",
+            f"hosts/{hostname} already exists. The graphical installer only "
+            "sets up brand-new hosts; reusing an existing hostname would "
+            "silently overwrite its disk-config.nix with whatever disk was "
+            "picked on this run and duplicate its entry in hosts/default.nix. "
+            f"Pick a different hostname, or reinstall {hostname} from its "
+            f"existing config with `installer .#{hostname}`.",
+        )
+
+    default_path = os.path.join(NIXOS_CONFIG, "hosts", "default.nix")
+    with open(default_path) as f:
+        default_content = f.read()
+    if re.search(rf"(?m)^\s*{re.escape(hostname)}\s*=\s*mkNixosSystem\s*\{{", default_content):
+        return (
+            "nixos-config-generate failed",
+            f"{hostname} is already registered in hosts/default.nix.",
+        )
+
+    os.makedirs(host_dir)
 
     with open(os.path.join(host_dir, "default.nix"), "w") as f:
         f.write(
@@ -349,9 +365,6 @@ def run():
     with open(users_path, "w") as f:
         f.write(users_content)
 
-    default_path = os.path.join(NIXOS_CONFIG, "hosts", "default.nix")
-    with open(default_path) as f:
-        default_content = f.read()
     marker = "\n  };\n\n  perSystem"
     if marker not in default_content:
         return (
