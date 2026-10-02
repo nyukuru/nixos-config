@@ -13,6 +13,9 @@
       options iwlwifi power_save=1 disable_11ax=1
     '';
 
+    resumeDevice = "/dev/disk/by-uuid/ac4f995d-f18b-4602-8670-841e829221c9";
+    kernelParams = ["resume_offset=533760"];
+
     loader.limine.extraEntries = ''
       /Windows 11
         protocol: efi
@@ -33,6 +36,8 @@
 
   # Permission for media drive
   users.extraGroups.media = {};
+
+  security.protectKernelImage = false;
 
   /*
     ____          _                    __  __           _       _

@@ -26,6 +26,7 @@
 
     # Work
     tmux
+    claude-code
 
     # Classes
     ghidra

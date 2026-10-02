@@ -101,12 +101,11 @@ in {
         }
         {
           timeout = 200;
-          command = "swaylock";
+          command = "pidof hyprlock || hyprlock &";
         }
         {
-          timeout = 220;
-          command = "niri msg action power-off-monitors";
-          resumeCommand = "niri msg action power-on-monitors";
+          timeout = 230;
+          command = "systemctl suspend-then-hibernate";
         }
       ];
       description = "Idle timeout events, see the EVENTS section of swayidle(1).";
@@ -114,7 +113,7 @@ in {
 
     beforeSleep = mkOption {
       type = nullOr str;
-      default = "swaylock";
+      default = "pidof hyprlock || hyprlock &";
       description = "Command to run before the system sleeps.";
     };
 
@@ -126,7 +125,7 @@ in {
 
     lock = mkOption {
       type = nullOr str;
-      default = "pidof swaylock || swaylock";
+      default = "pidof hyprlock || hyprlock &";
       description = "Command to run when logind signals the session should lock.";
     };
 

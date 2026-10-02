@@ -20,7 +20,7 @@
   playerctl = getExe pkgs.playerctl;
   fuzzel = getExe' config.nyu.programs.fuzzel.package "fuzzel";
   foot = getExe pkgs.foot;
-  swaylock = getExe' config.nyu.programs.swaylock.package "swaylock";
+  hyprlock = getExe' config.nyu.programs.hyprlock.package "hyprlock";
 
   swaybgArgs =
     optionals (cfg.backgroundColor != null) ["-c" cfg.backgroundColor]
@@ -209,8 +209,8 @@ in {
           action.spawn = "firefox";
         };
         "Super+Alt+L" = {
-          hotkey-overlay.title = "Lock the Screen: swaylock";
-          action.spawn = swaylock;
+          hotkey-overlay.title = "Lock the Screen: hyprlock";
+          action.spawn = hyprlock;
         };
         "Mod+D" = {
           hotkey-overlay.title = "Open Application Launcher: fuzzel";

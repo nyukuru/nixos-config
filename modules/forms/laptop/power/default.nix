@@ -7,6 +7,7 @@
     ./power-profiles.nix
     ./acpid.nix
     ./upower.nix
+    ./logind.nix
   ];
 
   environment.systemPackages = with pkgs; [

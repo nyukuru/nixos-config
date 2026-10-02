@@ -1,4 +1,10 @@
-{packages, ...}: {
+{pkgs, ...}: {
+  services.dbus.packages = [pkgs.fprintd];
+  environment.systemPackages = [pkgs.fprintd];
+  systemd.packages = [pkgs.fprintd];
+
+  security.pam.services.login.fprintAuth = true;
+
   services.libinput = {
     enable = true;
 
@@ -9,13 +15,10 @@
     };
 
     touchpad = {
-      naturalScrolling = true;
+      naturalScrolling = false;
       tapping = true;
       clickMethod = "clickfinger";
       disableWhileTyping = false;
     };
   };
-
-  #TODO: move keymappings here,
-  # I tried actkbd but it didnt work well
 }

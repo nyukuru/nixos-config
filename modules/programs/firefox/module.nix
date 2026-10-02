@@ -85,6 +85,14 @@
       };
     }) {}; #{"*".installation_mode = "blocked";};
 
+  noCudaSupport =
+    if pkgs.config.cudaSupport or false
+    then
+      import pkgs.path {
+        inherit (pkgs.stdenv.hostPlatform) system;
+      }
+    else pkgs;
+
   json = pkgs.formats.json {};
   cfg = config.nyu.programs.firefox;
 in {
@@ -97,7 +105,7 @@ in {
   options.nyu.programs.firefox = {
     enable = mkEnableOption "Firefox web browser.";
     package =
-      mkPackageOption pkgs "firefox-esr-140-unwrapped" {}
+      mkPackageOption noCudaSupport "firefox-esr-153-unwrapped" {}
       // {
         apply = p:
           pkgs.wrapFirefox p {
