@@ -110,6 +110,7 @@ in {
       input = {
         touchpad = {
           tap = true;
+          natural-scroll = false;
           scroll-method = "two-finger";
           disabled-on-external-mouse = true;
         };
