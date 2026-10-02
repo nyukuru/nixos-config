@@ -12,12 +12,14 @@
   border-rounding = toPixels cfg.border.rounding;
 
   margin = toPixels cfg.margin;
-  launcher-reserved = toPixels (2 * (cfg.margin + cfg.border.width));
+  # --sidebar-launcher-collapsed-width is measured on #sidebar-container,
+  # which already includes its border
+  launcher-reserved = toPixels (2 * cfg.margin);
 
   toPixels = x: "${toString x}px";
 in ''
   body {
-    background-color: ${background};
+    background-color: ${background} !important;
   }
 
   * {
@@ -138,14 +140,14 @@ in ''
   }
 
   :root {
-    --toolbar-color: currentColor !important;
+    --toolbar-text-color: currentColor !important;
     --link-color: white !important;
     --urlbarView-highlight-background: color-mix(
       in hsl,
-      var(--toolbar-field-color) 8%,
-      var(--toolbar-bgcolor)
+      var(--toolbar-field-text-color) 8%,
+      var(--toolbar-background-color)
     ) !important;
-    --urlbarView-highlight-color: var(--toolbar-field-color) !important;
+    --urlbarView-highlight-color: var(--toolbar-field-text-color) !important;
     --toolbox-non-lwt-bgcolor: ${background} !important;
     --toolbox-non-lwt-bgcolor-inactive: ${background} !important;
     --focus-outline-color: transparent !important;
@@ -159,23 +161,23 @@ in ''
 
     /* tabs */
     --tab-selected-outline-color: transparent !important;
-    --tab-selected-bgcolor: color-mix(
+    --tab-background-color-selected: color-mix(
       in hsl,
-      var(--toolbar-field-color) 8%,
-      var(--toolbar-bgcolor)
+      var(--toolbar-field-text-color) 8%,
+      var(--toolbar-background-color)
     ) !important;
-    --tab-hover-background-color: color-mix(
+    --tab-background-color-hover: color-mix(
       in hsl,
-      var(--toolbar-field-color) 4%,
-      var(--toolbar-bgcolor)
+      var(--toolbar-field-text-color) 4%,
+      var(--toolbar-background-color)
     ) !important;
 
     /* buttons */
-    --toolbarbutton-hover-background: var(
-      --tab-hover-background-color
+    --toolbarbutton-background-color-hover: var(
+      --tab-background-color-hover
     ) !important;
     --button-background-color-active: var(
-      --tab-hover-background-color
+      --tab-background-color-hover
     ) !important;
 
     /* opacity */
@@ -188,6 +190,12 @@ in ''
     border-radius: ${border-rounding} !important;
     border: ${border-width} solid ${border};
     background: ${background} !important;
+    padding-inline-end: var(--space-small);
+
+    &[sidebar-positionend] {
+      padding-inline: 0;
+      margin-inline-start: var(--space-small);
+    }
   }
 
   #sidebar {border-radius: ${border-rounding} !important;}
@@ -198,9 +206,18 @@ in ''
     display: none;
   }
 
+  /* overlap the launcher splitter with the sidebar, as esr 140 did */
+  #sidebar-launcher-splitter {
+    margin-inline: calc(-1 * var(--splitter-width)) 0;
+
+    #sidebar-container[sidebar-positionend] + & {
+      margin-inline: 0 calc(-1 * var(--splitter-width));
+    }
+  }
+
   /* TABS */
 
-  #sidebar-main {
+  #sidebar-container {
     margin-block: ${margin} !important;
     margin-inline: ${margin} 0 !important;
     border-radius: ${border-rounding} !important;
@@ -211,7 +228,7 @@ in ''
     &[sidebar-positionend] {margin-inline: 0 ${margin} !important;}
   }
 
-  #browser:has(#sidebar-main[sidebar-ongoing-animations]) {
+  #browser:has(#sidebar-container[sidebar-ongoing-animations]) {
     clip-path: inset(0 0 0 ${margin});
 
     &::after {
@@ -228,7 +245,7 @@ in ''
       border-end-start-radius: ${border-rounding};
     }
 
-    &:has(#sidebar-main[sidebar-positionend]) {
+    &:has(#sidebar-container[sidebar-positionend]) {
       clip-path: inset(0 ${margin} 0 0);
 
       &::after {

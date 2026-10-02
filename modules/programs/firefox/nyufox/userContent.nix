@@ -17,7 +17,7 @@ in ''
   }
 
   :root {
-    --toolbar-color: currentColor !important;
+    --toolbar-text-color: currentColor !important;
     --link-color: ${border} !important;
     --urlbarView-highlight-background: var(
       --toolbar-field-background-color
@@ -33,24 +33,24 @@ in ''
 
     /* tabs */
     --tab-selected-outline-color: transparent !important;
-    --tab-selected-bgcolor: color-mix(
+    --tab-background-color-selected: color-mix(
       in hsl,
-      var(--toolbar-field-color) 8%,
-      var(--toolbar-bgcolor)
+      var(--toolbar-field-text-color) 8%,
+      var(--toolbar-background-color)
     ) !important;
-    --tab-hover-background-color: color-mix(
+    --tab-background-color-hover: color-mix(
       in hsl,
-      var(--toolbar-field-color) 4%,
-      var(--toolbar-bgcolor)
+      var(--toolbar-field-text-color) 4%,
+      var(--toolbar-background-color)
     ) !important;
     --tab-min-height: 29px !important;
 
     /* buttons */
-    --toolbarbutton-hover-background: var(
-      --tab-hover-background-color
+    --toolbarbutton-background-color-hover: var(
+      --tab-background-color-hover
     ) !important;
     --button-background-color-active: var(
-      --tab-hover-background-color
+      --tab-background-color-hover
     ) !important;
   }
 ''
