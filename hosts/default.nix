@@ -25,6 +25,18 @@ in {
         ];
       };
     };
+
+    zinc = mkNixosSystem {
+      hostname = "zinc";
+      system = "x86_64-linux";
+      users = ["nyu"
+      ];
+      modules = mkModules {
+        form = ["graphical"];
+        theme = "nyubones";
+        extraModules = [ disko ];
+      };
+    };
   };
 
   perSystem = {system, ...}: {

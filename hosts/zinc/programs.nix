@@ -1,0 +1,42 @@
+{
+  /*
+    ____          _                    __  __           _       _
+   / ___|   _ ___| |_ ___  _ __ ___   |  \/  | ___   __| |_   _| | ___  ___
+  | |  | | | / __| __/ _ \| '_ ` _ \  | |\/| |/ _ \ / _` | | | | |/ _ \/ __|
+  | |__| |_| \__ \ || (_) | | | | | | | |  | | (_) | (_| | |_| | |  __/\__ \
+   \____\__,_|___/\__\___/|_| |_| |_| |_|  |_|\___/ \__,_|\__,_|_|\___||___/
+  */
+  nyu.programs = {
+    niri.enable = true;
+    fusee-nano.enable = true;
+
+    firefox = {
+      languagePacks = ["en-US"];
+
+      /*
+      clearurls = "{74145f27-f039-47ce-a470-a662b129930a}";
+      sponsorblock = "sponsorBlocker@ajay.app";
+      simple-translate = "simple-translate@sienori";
+      bento = "{cb7f7992-81db-492b-9354-99844440ff9b}";
+      */
+      extensions = [
+        {
+          shortID = "skip-redirect";
+          addonID = "skipredirect@sblask";
+        }
+        {
+          shortID = "frankerfacez";
+          addonID = "frankerfacez@frankerfacez.com";
+        }
+        {
+          shortID = "disable-twitch-extensions";
+          addonID = "disable-twitch-extensions@rootonline.de";
+        }
+        {
+          shortID = "bitwarden-password-manager";
+          addonID = "{446900e4-71c2-419f-a6a7-df9c091e268b}";
+        }
+      ];
+    };
+  };
+}

@@ -70,7 +70,7 @@ in {
           message = "CPU Type is undefined";
         }
         {
-          assertion = config.hardware.enableAllHardware || !config.hardware.graphics.enable || (cfg.igpu != null && cfg.dgpu != null);
+          assertion = config.hardware.enableAllHardware || !config.hardware.graphics.enable || (cfg.igpu != null || cfg.dgpu != null);
           message = "GPU is undefined while graphics is enabled.";
         }
       ];
