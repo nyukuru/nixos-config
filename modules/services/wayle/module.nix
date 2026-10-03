@@ -23,6 +23,9 @@
     str
     ;
 
+  inherit (lib.attrsets) attrNames;
+  inherit (lib.lists) length;
+
   toml = pkgs.formats.toml {};
   cfg = config.nyu.services.wayle;
   colors = config.style.colors;
@@ -73,7 +76,7 @@ in {
 
   config = mkIf cfg.enable {
     nyu.services.wayle = {
-      config = mkDefault {
+      config = {
         bar = {
           scale = 0.8;
           bg = "bg";
@@ -88,7 +91,7 @@ in {
               monitor = "*";
               left = ["dashboard" "clock" "bluetooth" "idle-inhibit" "systray"];
               center = ["niri-workspaces"];
-              right = ["volume" "brightness" "battery"];
+              right = ["volume" "brightness"];
             }
           ];
         };
@@ -141,7 +144,7 @@ in {
             label-color = "accent";
           };
           "niri-workspaces" = {
-            "min-workspace-count" = 5;
+            "min-workspace-count" = length (attrNames (config.programs.niri.settings.workspaces or {}));
             "display-mode" = "none";
             "label-strategy" = "index";
             "app-icons-show" = true;

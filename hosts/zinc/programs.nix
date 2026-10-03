@@ -2,6 +2,9 @@ let
   mainOutput = "ASUSTek COMPUTER INC VG248 LALMQS110173";
   sideOutput = "ASUSTek COMPUTER INC VG248 LALMQS110163";
 in {
+  # Fan curves for the motherboard headers (through it87) and the GPU
+  programs.coolercontrol.enable = true;
+
   programs.niri.settings = {
     outputs.${mainOutput}.focus-at-startup = true;
 
@@ -12,11 +15,26 @@ in {
       "4".open-on-output = mainOutput;
       "5".open-on-output = mainOutput;
 
-      "side-1".open-on-output = sideOutput;
-      "side-2".open-on-output = sideOutput;
-      "side-3".open-on-output = sideOutput;
-      "side-4".open-on-output = sideOutput;
-      "side-5".open-on-output = sideOutput;
+      "side-1" = {
+        name = "6";
+        open-on-output = sideOutput;
+      };
+      "side-2" = {
+        name = "7";
+        open-on-output = sideOutput;
+      };
+      "side-3" = {
+        name = "8";
+        open-on-output = sideOutput;
+      };
+      "side-4" = {
+        name = "9";
+        open-on-output = sideOutput;
+      };
+      "side-5" = {
+        name = "10";
+        open-on-output = sideOutput;
+      };
     };
   };
 

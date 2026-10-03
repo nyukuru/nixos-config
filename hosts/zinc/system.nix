@@ -10,6 +10,26 @@
         path: guid(614740dc-b9a7-4774-ac6e-32eae9d9fdbd):/EFI/Microsoft/Boot/bootmgfw.efi
     '';
 
+    # The X570 AORUS ELITE's fan headers sit on an IT8688E, which the in-tree
+    # it87 driver doesn't support; install the out-of-tree one under updates/
+    # so depmod prefers it over the in-tree module of the same name.
+    extraModulePackages = [
+      (config.boot.kernelPackages.it87.overrideAttrs (old: {
+        postInstall =
+          (old.postInstall or "")
+          + ''
+            dir=$(echo $out/lib/modules/*)
+            mkdir -p $dir/updates
+            mv $dir/kernel/drivers/hwmon/it87.ko $dir/updates/
+          '';
+      }))
+    ];
+    kernelModules = ["it87"];
+    # Gigabyte boards claim the Super I/O ports in ACPI
+    extraModprobeConfig = ''
+      options it87 ignore_resource_conflict=1
+    '';
+
     # From generated hardware-config
     initrd.availableKernelModules = [
       "xhci_pci"
