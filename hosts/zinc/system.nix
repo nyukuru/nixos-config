@@ -4,10 +4,11 @@
   ...
 }: {
   boot = {
+    loader.limine.secureBoot.enable = true;
     loader.limine.extraEntries = ''
       /Windows 11
         protocol: efi
-        path: guid(614740dc-b9a7-4774-ac6e-32eae9d9fdbd):/EFI/Microsoft/Boot/bootmgfw.efi
+        path: guid(2baae99d-beb1-4d79-8e35-daa5b93d30f2):/EFI/Microsoft/Boot/bootmgfw.efi
     '';
 
     # The X570 AORUS ELITE's fan headers sit on an IT8688E, which the in-tree
