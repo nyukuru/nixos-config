@@ -1,4 +1,25 @@
-{
+let
+  mainOutput = "ASUSTek COMPUTER INC VG248 LALMQS110173";
+  sideOutput = "ASUSTek COMPUTER INC VG248 LALMQS110163";
+in {
+  programs.niri.settings = {
+    outputs.${mainOutput}.focus-at-startup = true;
+
+    workspaces = {
+      "1".open-on-output = mainOutput;
+      "2".open-on-output = mainOutput;
+      "3".open-on-output = mainOutput;
+      "4".open-on-output = mainOutput;
+      "5".open-on-output = mainOutput;
+
+      "side-1".open-on-output = sideOutput;
+      "side-2".open-on-output = sideOutput;
+      "side-3".open-on-output = sideOutput;
+      "side-4".open-on-output = sideOutput;
+      "side-5".open-on-output = sideOutput;
+    };
+  };
+
   /*
     ____          _                    __  __           _       _
    / ___|   _ ___| |_ ___  _ __ ___   |  \/  | ___   __| |_   _| | ___  ___

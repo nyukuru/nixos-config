@@ -305,6 +305,11 @@ in {
         "Mod+Shift+K".action.move-window-up = {};
         "Mod+Shift+L".action.move-column-right = {};
 
+        "Mod+Ctrl+H".action.focus-monitor-left = {};
+        "Mod+Ctrl+J".action.focus-monitor-down = {};
+        "Mod+Ctrl+K".action.focus-monitor-up = {};
+        "Mod+Ctrl+L".action.focus-monitor-right = {};
+
         "Mod+Home".action.focus-column-first = {};
         "Mod+End".action.focus-column-last = {};
         "Mod+Ctrl+Home".action.move-column-to-first = {};
