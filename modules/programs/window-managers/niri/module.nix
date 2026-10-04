@@ -82,6 +82,22 @@ in {
       ++ optional cfg.xwayland.enable pkgs.xwayland-satellite
       ++ optional (swaybgArgs != []) pkgs.swaybg;
 
+    # niri implements the Mutter ScreenCast/Screenshot D-Bus APIs consumed by
+    # xdg-desktop-portal-gnome; wlr's portal can't do window capture on niri.
+    # niri-portals.conf in /etc/xdg takes precedence over the shared portals.conf
+    # whenever XDG_CURRENT_DESKTOP=niri.
+    xdg.portal = {
+      extraPortals = [pkgs.xdg-desktop-portal-gnome];
+      config.niri = {
+        default = ["gnome" "gtk"];
+        "org.freedesktop.impl.portal.Access" = "gtk";
+        "org.freedesktop.impl.portal.FileChooser" = "gtk";
+        "org.freedesktop.impl.portal.Notification" = "gtk";
+        "org.freedesktop.impl.portal.Inhibit" = "none";
+        "org.freedesktop.impl.portal.Secret" = "gnome-keyring";
+      };
+    };
+
     environment.etc."niri/config.kdl".source =
       pkgs.runCommand "config.kdl" {
         config = config.programs.niri.finalConfig;
@@ -94,6 +110,10 @@ in {
 
     programs.niri.settings = {
       prefer-no-csd = true;
+
+      # UWSM launches niri without --session, which would otherwise skip
+      # registering the D-Bus interfaces xdg-desktop-portal-gnome needs.
+      debug.dbus-interfaces-in-non-session-instances = [];
 
       spawn-at-startup =
         [{argv = ["uwsm" "finalize"];}]
@@ -309,6 +329,11 @@ in {
         "Mod+Ctrl+J".action.focus-monitor-down = {};
         "Mod+Ctrl+K".action.focus-monitor-up = {};
         "Mod+Ctrl+L".action.focus-monitor-right = {};
+
+        "Mod+Shift+Ctrl+H".action.move-column-to-monitor-left = {};
+        "Mod+Shift+Ctrl+J".action.move-column-to-monitor-down = {};
+        "Mod+Shift+Ctrl+K".action.move-column-to-monitor-up = {};
+        "Mod+Shift+Ctrl+L".action.move-column-to-monitor-right = {};
 
         "Mod+Home".action.focus-column-first = {};
         "Mod+End".action.focus-column-last = {};

@@ -42,7 +42,7 @@ in {
 
     config.common = {
       default = ["wlr" "gtk"];
-      "org.freedesktop.impl.portal.Screencast" = "wlr";
+      "org.freedesktop.impl.portal.ScreenCast" = "wlr";
       "org.freedesktop.impl.portal.Screenshot" = "wlr";
       "org.freedesktop.impl.portal.Inhibit" = "none";
     };

@@ -25,7 +25,7 @@
           '';
       }))
     ];
-    kernelModules = ["it87"];
+    kernelModules = ["it87" "bfq"];
     # Gigabyte boards claim the Super I/O ports in ACPI
     extraModprobeConfig = ''
       options it87 ignore_resource_conflict=1
@@ -38,6 +38,12 @@
       "nvme"
       "sd_mod"
     ];
+  };
+
+  fileSystems."/mnt/windows" = {
+    device = "/dev/disk/by-id/nvme-Samsung_SSD_970_EVO_Plus_250GB_S59BNJ0N304573R-part3";
+    fsType = "ntfs3";
+    options = ["rw" "uid=0" "gid=0" "nofail"];
   };
 
   /*

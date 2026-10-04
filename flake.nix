@@ -6,6 +6,7 @@
     nixos-hardware.url = "github:nixos/nixos-hardware";
     agenix.url = "github:ryantm/agenix";
     disko.url = "github:nix-community/disko";
+    bluesetta.url = "github:nyukuru/bluesetta";
 
     niri-flake = {
       url = "github:sodiboo/niri-flake";

@@ -34,7 +34,7 @@
 
     # Games
     godot
-    ddnet
+    taterclient-ddnet
 
     ns-usbloader
     mangohud

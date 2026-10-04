@@ -33,22 +33,22 @@
                   subvolumes = {
                     "/root" = {
                       mountpoint = "/";
-                      mountOptions = ["subvol=root" "compress=zstd" "noatime" "ssd"];
+                      mountOptions = ["subvol=root" "compress=zstd" "noatime" "nossd"];
                     };
 
                     "/home" = {
                       mountpoint = "/home";
-                      mountOptions = ["subvol=home" "compress=zstd" "noatime" "ssd"];
+                      mountOptions = ["subvol=home" "compress=zstd" "noatime" "nossd"];
                     };
 
                     "/nix" = {
                       mountpoint = "/nix";
-                      mountOptions = ["subvol=nix" "compress=zstd" "noatime" "ssd"];
+                      mountOptions = ["subvol=nix" "compress=zstd" "noatime" "nossd"];
                     };
 
                     "/libvirt" = {
                       mountpoint = "/libvirt";
-                      mountOptions = ["subvol=libvirt" "noatime" "ssd"];
+                      mountOptions = ["subvol=libvirt" "noatime" "nossd"];
                     };
 
                     "/swap" = {
