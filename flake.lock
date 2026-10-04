@@ -24,11 +24,11 @@
         "pre-commit-hooks": "pre-commit-hooks"
       },
       "locked": {
-        "lastModified": 1791136677,
-        "narHash": "sha256-PuvfZ5iadC3h17y+uasM+28Msp3hl8i+OVZPNGdqbFE=",
+        "lastModified": 1791152433,
+        "narHash": "sha256-HgFqocXqEDSdxF7DNCwB0tdz5Q2owigfBWfnim7Z2N0=",
         "owner": "nyukuru",
         "repo": "bluesetta",
-        "rev": "cb590f22ea5651e564999ca1512620bd9daa0882",
+        "rev": "3773c0beb7cf7a33ea22a0ca5e382b057f7a868f",
         "type": "github"
       },
       "original": {
