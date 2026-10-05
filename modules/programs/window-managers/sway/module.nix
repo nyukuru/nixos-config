@@ -179,10 +179,13 @@ in {
       titlebar_padding = "12 4";
       title_align = "center";
 
-      output."*".bg =
-        if (wallpaper != null)
+      # noctalia draws the wallpaper when it is enabled.
+      output = mkIf (!config.nyu.services.noctalia.enable) {
+        "*".bg =
+          if (wallpaper != null)
           then "${wallpaper} fill"
-        else "#${colors.base0} solid_color";
+          else "#${colors.base0} solid_color";
+      };
 
       "client.focused" = "#202020 #202020 #${colors.base7}";
       "client.focused_inactive" = "#161616 #161616 #${colors.base7}";

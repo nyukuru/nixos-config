@@ -41,7 +41,7 @@
         "f /run/detected-hardware.json 0644 ${config.nyu.boot.greetd.autologin.user} root -"
       ];
 
-      nyu.services.wayle.enable = lib.mkForce false;
+      nyu.services.noctalia.enable = lib.mkForce false;
 
       programs.niri.settings = {
         spawn-at-startup = [{argv = ["${pkgs.scripts.calamares-launcher}/bin/calamares-launcher"];}];
@@ -63,8 +63,6 @@
 
           "Super+Return".hotkey-overlay.title = lib.mkForce "Open Terminal";
           "Super+F".hotkey-overlay.title = lib.mkForce "Open Browser";
-          "Super+Alt+L".hotkey-overlay.title = lib.mkForce "Lock Screen";
-          "Mod+D".hotkey-overlay.title = lib.mkForce "Open Application Launcher";
 
           "Ctrl+Alt+Delete".hotkey-overlay.hidden = true;
           "Mod+Shift+H".hotkey-overlay.hidden = true;

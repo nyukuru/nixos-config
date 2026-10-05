@@ -7,9 +7,9 @@
 }: let
   inherit (lib.options) mkEnableOption mkOption;
   inherit (lib.modules) mkIf mkForce;
-  inherit (lib.types) nullOr path str bool;
-  inherit (lib.lists) optional optionals;
-  inherit (lib.meta) getExe getExe';
+  inherit (lib.types) bool;
+  inherit (lib.lists) optional;
+  inherit (lib.meta) getExe;
 
   cfg = config.nyu.programs.niri;
   colors = config.style.colors;
@@ -18,13 +18,7 @@
   screenshot = "${pkgs.scripts.niri-screenshot}";
   volume = "${pkgs.scripts.volume}";
   playerctl = getExe pkgs.playerctl;
-  fuzzel = getExe' config.nyu.programs.fuzzel.package "fuzzel";
   foot = getExe pkgs.foot;
-  hyprlock = getExe' config.nyu.programs.hyprlock.package "hyprlock";
-
-  swaybgArgs =
-    optionals (cfg.backgroundColor != null) ["-c" cfg.backgroundColor]
-    ++ optionals (cfg.wallpaper != null) ["-m" "fill" "-i" "${cfg.wallpaper}"];
 in {
   imports = [
     ../wayland-shared.nix
@@ -33,24 +27,6 @@ in {
 
   options.nyu.programs.niri = {
     enable = mkEnableOption "Niri window manager.";
-
-    wallpaper = mkOption {
-      type = nullOr path;
-      default = config.style.wallpaper;
-      description = ''
-        Image displayed as the background through swaybg.
-        Defaults to {option}`style.wallpaper`.
-      '';
-    };
-
-    backgroundColor = mkOption {
-      type = nullOr str;
-      default = "#${colors.base0}";
-      description = ''
-        Solid color (`#rrggbb`) drawn behind the wallpaper through swaybg.
-        Defaults to {option}`style.colors.base0`.
-      '';
-    };
 
     xwayland.enable = mkEnableOption "XWayland" // {default = true;};
 
@@ -79,8 +55,7 @@ in {
 
     environment.systemPackages =
       [config.programs.niri.package]
-      ++ optional cfg.xwayland.enable pkgs.xwayland-satellite
-      ++ optional (swaybgArgs != []) pkgs.swaybg;
+      ++ optional cfg.xwayland.enable pkgs.xwayland-satellite;
 
     # niri implements the Mutter ScreenCast/Screenshot D-Bus APIs consumed by
     # xdg-desktop-portal-gnome; wlr's portal can't do window capture on niri.
@@ -115,9 +90,7 @@ in {
       # registering the D-Bus interfaces xdg-desktop-portal-gnome needs.
       debug.dbus-interfaces-in-non-session-instances = [];
 
-      spawn-at-startup =
-        [{argv = ["uwsm" "finalize"];}]
-        ++ optional (swaybgArgs != []) {argv = [(getExe' pkgs.swaybg "swaybg")] ++ swaybgArgs;};
+      spawn-at-startup = [{argv = ["uwsm" "finalize"];}];
 
       workspaces = {
         "1" = {};
@@ -228,14 +201,6 @@ in {
         "Super+F" = {
           hotkey-overlay.title = "Open Firefox";
           action.spawn = "firefox";
-        };
-        "Super+Alt+L" = {
-          hotkey-overlay.title = "Lock the Screen: hyprlock";
-          action.spawn = hyprlock;
-        };
-        "Mod+D" = {
-          hotkey-overlay.title = "Open Application Launcher: fuzzel";
-          action.spawn = fuzzel;
         };
 
         "XF86MonBrightnessUp" = {

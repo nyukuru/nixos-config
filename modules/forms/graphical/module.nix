@@ -1,7 +1,5 @@
 {pkgs, ...}: {
   nyu.programs = {
-    fuzzel.enable = true;
-
     firefox = {
       enable = true;
 
@@ -16,7 +14,7 @@
     };
   };
 
-  nyu.services.wayle.enable = true;
+  nyu.services.noctalia.enable = true;
 
   nyu.boot = {
     silent.enable = true;
@@ -41,7 +39,6 @@
   # dbus; dconf.enable above does the same for dconf - no manual
   # services.dbus.packages needed.
   services = {
-    dunst.enable = true;
     printing.enable = true;
     gvfs.enable = true;
     udisks2.enable = true;
